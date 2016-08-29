@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:layout_marginBottom="8dp"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/include_word_section_title"
+        android:layout_marginBottom="8dp"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="This is a title"
+        style="@style/TextAppearance.AppCompat.Headline" />
+
+    <TextView
+        android:id="@+id/include_word_section_content"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="This is content"
+        style="@style/TextAppearance.AppCompat.Body1" />
+
+
+</LinearLayout>

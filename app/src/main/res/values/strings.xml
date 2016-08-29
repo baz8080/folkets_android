@@ -1,0 +1,34 @@
+<resources>
+    <string name="app_name">folkets</string>
+    <string name="action_settings">Settings</string>
+    <string name="main_search_title">Search</string>
+
+    <string name="word_type_noun">Noun</string>
+    <string name="word_type_adjective">Adjective</string>
+    <string name="word_type_pronoun">Prounoun</string>
+    <string name="word_type_pronoun_determiner">Pronoun (determiner)</string>
+    <string name="word_type_pronoun_possessive">Pronoun (possessive)</string>
+    <string name="word_type_proper_noun">Proper noun</string>
+    <string name="word_type_verb">Verb</string>
+    <string name="word_type_adverb">Adverb</string>
+    <string name="word_type_prefix">Prefix</string>
+    <string name="word_type_suffix">Suffix</string>
+    <string name="word_type_article">Article</string>
+    <string name="word_type_abbreviation">Abbreviation</string>
+    <string name="word_type_preposition">Preposition</string>
+    <string name="word_type_interjection">Interjection</string>
+    <string name="word_type_cardinal_number">Cardinal number</string>
+    <string name="word_type_conjunction">Conjunction</string>
+    <string name="word_type_infinitivial">Infinitivial marker</string>
+    <string name="word_type_subordinating_conjunction">Subjunction</string>
+    <string name="word_type_unknown">Unknown</string>
+
+    <string name="translations_header">Translations</string>
+    <string name="definition_header">Definition</string>
+    <string name="explanation_header">Explanation</string>
+    <string name="examples_header">Examples</string>
+    <string name="antonyms_header">Antonyms</string>
+    <string name="compounds_header">Compounds</string>
+    <string name="derivations_header">Derivations</string>
+    <string name="idioms_header">Idioms</string>
+</resources>

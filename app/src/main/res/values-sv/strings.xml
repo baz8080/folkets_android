@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="word_type_noun">Substantiv</string>
+    <string name="word_type_adjective">Adjektiv</string>
+    <string name="word_type_pronoun">Pronomen</string>
+    <string name="word_type_pronoun_determiner">Frågande / relativt pronomen</string>
+    <string name="word_type_pronoun_possessive">Possessiva pronomen</string>
+    <string name="word_type_proper_noun">Egennamn</string>
+    <string name="word_type_verb">Verb</string>
+    <string name="word_type_adverb">Adverb</string>
+    <string name="word_type_prefix">Förled</string>
+    <string name="word_type_suffix">Efterled</string>
+    <string name="word_type_article">Artikel</string>
+    <string name="word_type_abbreviation">Förkortning</string>
+    <string name="word_type_preposition">Preposition</string>
+    <string name="word_type_interjection">Interjektion</string>
+    <string name="word_type_cardinal_number">Grundtal</string>
+    <string name="word_type_conjunction">Bindeord</string>
+    <string name="word_type_infinitivial">Infinitivmärke</string>
+    <string name="word_type_subordinating_conjunction">Subjunktion</string>
+    <string name="word_type_unknown">Okänd</string>
+
+    <string name="translations_header">Translations</string>
+    <string name="definition_header">Definition</string>
+    <string name="explanation_header">Förklaring</string>
+    <string name="examples_header">Exempel</string>
+    <string name="antonyms_header">Antonyms</string>
+    <string name="compounds_header">Compounds</string>
+    <string name="derivations_header">Derivations</string>
+    <string name="idioms_header">Idioms</string>
+
+
+</resources>
