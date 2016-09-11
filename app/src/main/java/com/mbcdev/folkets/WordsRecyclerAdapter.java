@@ -11,7 +11,7 @@ import android.widget.TextView;
 import java.util.List;
 
 /**
- * RecyclerAdapter used in {@link SearchActivity}
+ * RecyclerAdapter for a list of words
  *
  * Created by barry on 21/08/2016.
  */
@@ -49,7 +49,9 @@ public class WordsRecyclerAdapter extends RecyclerView.Adapter<WordsRecyclerAdap
         });
 
         holder.wordTextView.setText(word.getWord());
-        holder.wordTypeTextView.setText(word.getWordType().getTextResourceId());
+
+        String wordTypes = Utils.formatWordTypesForDisplay(holder.holderView.getContext(), word.getWordTypes());
+        holder.wordTypeTextView.setText(wordTypes);
 
         StringBuilder stringBuilder = new StringBuilder();
 

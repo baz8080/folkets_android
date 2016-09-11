@@ -21,6 +21,10 @@
     <string name="word_type_conjunction">Conjunction</string>
     <string name="word_type_infinitivial">Infinitivial marker</string>
     <string name="word_type_subordinating_conjunction">Subjunction</string>
+    <string name="word_type_auxiliary_verb">Auxiliary Verb</string>
+    <string name="word_type_ordinal">Ordinal</string>
+    <string name="word_type_latin">Latin</string>
+    <string name="word_type_participle">Participle</string>
     <string name="word_type_unknown">Unknown</string>
 
     <string name="translations_header">Translations</string>
@@ -31,4 +35,11 @@
     <string name="compounds_header">Compounds</string>
     <string name="derivations_header">Derivations</string>
     <string name="idioms_header">Idioms</string>
+    <string name="usage_header">Usage</string>
+    <string name="variant_header">Variant</string>
+    <string name="phonetic_header">Pronunciation</string>
+    <string name="comment_header">Comment</string>
+    <string name="inflections_header">Inflections</string>
+    <string name="synonyms_header">Synonyms</string>
+    <string name="comparisons_header">See Also</string>
 </resources>

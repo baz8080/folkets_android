@@ -2,7 +2,6 @@ package com.mbcdev.folkets;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -18,11 +17,7 @@ import java.util.List;
 
 import timber.log.Timber;
 
-/**
- * This activity will show a list of words and translations, and allow users to tap on a result
- * to see the full definition of the word
- */
-public class SearchActivity extends AppCompatActivity implements SearchMvp.View {
+public class MainActivity extends AppCompatActivity implements SearchMvp.View {
 
     private RecyclerView recyclerView;
     private SearchMvp.Presenter presenter;
@@ -41,7 +36,7 @@ public class SearchActivity extends AppCompatActivity implements SearchMvp.View 
         recyclerView.addItemDecoration(new DividerItemDecoration(this));
         progressBar = (ProgressBar) findViewById(R.id.main_progressbar_view);
 
-        presenter = new SearchPresenter();
+        presenter = new MainPresenter();
         presenter.attachView(this);
         presenter.initialiseData();
     }
@@ -91,17 +86,17 @@ public class SearchActivity extends AppCompatActivity implements SearchMvp.View 
 
 
     @Override
-    public void showResults(@NonNull List<Word> words) {
+    public void showResults(List<Word> words) {
         recyclerView.setAdapter(new WordsRecyclerAdapter(words));
     }
 
     @Override
     public void onSearchError() {
-        // TODO
+
     }
 
     @Override
-    public void setToolbarText(@NonNull String text) {
+    public void setToolbarText(String text) {
 
         ActionBar actionBar = getSupportActionBar();
 
@@ -118,7 +113,6 @@ public class SearchActivity extends AppCompatActivity implements SearchMvp.View 
 
     @Override
     public void disableSearch() {
-        // TODO
         Timber.d("Disabling search");
     }
 
@@ -130,7 +124,6 @@ public class SearchActivity extends AppCompatActivity implements SearchMvp.View 
 
     @Override
     public void enableSearch() {
-        // TODO
         Timber.d("Enabling search");
     }
 

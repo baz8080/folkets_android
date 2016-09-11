@@ -5,19 +5,20 @@ import android.os.Parcelable;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Pattern;
 
 /**
- * Models a collection of {@link SaldoLink}
- *
  * Created by barry on 21/08/2016.
  */
 public class SaldoLinks implements Parcelable {
+
+    private static final String SEPARATOR = Pattern.quote("**");
 
     private final List<SaldoLink> links;
 
     public SaldoLinks(String rawValue) {
 
-        String[] rawLinks = rawValue.split(",");
+        String[] rawLinks = rawValue.split(SEPARATOR);
         links = new ArrayList<>();
 
         for (String rawLink : rawLinks) {
@@ -34,7 +35,7 @@ public class SaldoLinks implements Parcelable {
 
     protected SaldoLinks(Parcel in) {
         if (in.readByte() == 0x01) {
-            links = new ArrayList<>();
+            links = new ArrayList<SaldoLink>();
             in.readList(links, SaldoLink.class.getClassLoader());
         } else {
             links = null;

@@ -7,8 +7,6 @@ import android.support.annotation.NonNull;
 import java.util.regex.Pattern;
 
 /**
- * Models a value that has a translation
- *
  * Created by barry on 21/08/2016.
  */
 public class ValueWithTranslation implements Parcelable {

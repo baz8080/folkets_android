@@ -6,20 +6,18 @@ import android.support.annotation.NonNull;
 import java.util.List;
 
 /**
- * Default implementation of {@link com.mbcdev.folkets.SearchMvp.Model}
- *
  * Created by barry on 20/08/2016.
  */
-public class SearchModel implements SearchMvp.Model {
+public class MainModel implements SearchMvp.Model {
 
     private FolketsDatabase database = null;
 
-    public static void get(Context context, final Callback<SearchModel> callback) {
+    public static void get(Context context, final Callback<MainModel> callback) {
         FolketsDatabase.create(context.getApplicationContext(), new Callback<FolketsDatabase>() {
 
             @Override
             public void onSuccess(FolketsDatabase result) {
-                final SearchModel model = new SearchModel();
+                final MainModel model = new MainModel();
                 model.database = result;
 
                 Utils.runOnUiThread(new Runnable() {
@@ -35,6 +33,6 @@ public class SearchModel implements SearchMvp.Model {
 
     @Override
     public void search(@NonNull final String baseLanguage, final String query, @NonNull final Callback<List<Word>> callback) {
-        database.searchInexact(baseLanguage, query, callback);
+        database.search(baseLanguage, query, callback);
     }
 }

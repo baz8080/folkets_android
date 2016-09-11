@@ -1,7 +1,5 @@
 package com.mbcdev.folkets;
 
-import android.support.annotation.NonNull;
-
 import java.util.List;
 import java.util.Locale;
 
@@ -12,13 +10,16 @@ import timber.log.Timber;
  *
  * Created by barry on 21/08/2016.
  */
-public class SearchPresenter implements SearchMvp.Presenter {
+public class MainPresenter implements SearchMvp.Presenter {
 
     private static final String SWEDISH_LANGUAGE_CODE = "sv";
     private static final String ENGLISH_LANGUAGE_CODE = "en";
 
     private SearchMvp.Model model;
     private SearchMvp.View view;
+
+    public MainPresenter() {
+    }
 
     @Override
     public void attachView(SearchMvp.View view) {
@@ -35,7 +36,7 @@ public class SearchPresenter implements SearchMvp.Presenter {
     }
 
     @Override
-    public void search(@NonNull String query) {
+    public void search(String query) {
 
         if (view == null) {
             Timber.d("View is null. Will not search.");
@@ -61,9 +62,9 @@ public class SearchPresenter implements SearchMvp.Presenter {
         view.disableSearch();
         view.showProgress();
 
-        SearchModel.get(view.getContext().getApplicationContext(), new Callback<SearchModel>() {
+        MainModel.get(view.getContext().getApplicationContext(), new Callback<MainModel>() {
             @Override
-            public void onSuccess(SearchModel result) {
+            public void onSuccess(MainModel result) {
                 model = result;
                 view.enableSearch();
                 view.hideProgress();
@@ -72,11 +73,6 @@ public class SearchPresenter implements SearchMvp.Presenter {
         });
     }
 
-    /**
-     * Gets the base language based on the device locale
-     *
-     * @return "sv" if the device's language is Swedish, "en" otherwise
-     */
     private String getBaseLanguage() {
 
         if (Locale.getDefault().getLanguage().equalsIgnoreCase(SWEDISH_LANGUAGE_CODE)) {

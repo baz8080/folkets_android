@@ -7,8 +7,6 @@ import java.util.Locale;
 import java.util.regex.Pattern;
 
 /**
- * Models a link to Saldo, which contains a lot of metadata about a word
- *
  * Created by barry on 21/08/2016.
  */
 public class SaldoLink implements Parcelable {
