@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="app_name">folkets</string>
+    <string name="action_settings">Inställningar</string>
+    <string name="main_search_title">Sök</string>
 
     <string name="word_type_noun">Substantiv</string>
     <string name="word_type_adjective">Adjektiv</string>

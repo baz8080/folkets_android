@@ -19,6 +19,11 @@ public class SaldoLink implements Parcelable {
     private String associationsLink = "";
     private String inflectionsLink = "";
 
+    /**
+     * Creates an instance from the raw database value
+     *
+     * @param rawValue the raw database value
+     */
     public SaldoLink(String rawValue) {
 
         String[] rawLinks = rawValue.split(DELIMITER);

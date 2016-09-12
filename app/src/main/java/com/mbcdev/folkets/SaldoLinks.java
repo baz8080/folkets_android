@@ -18,6 +18,11 @@ public class SaldoLinks implements Parcelable {
 
     private final List<SaldoLink> links;
 
+    /**
+     * Creates an instance from the raw database value
+     *
+     * @param rawValue the raw database value
+     */
     public SaldoLinks(String rawValue) {
 
         String[] rawLinks = rawValue.split(SEPARATOR);
@@ -26,6 +31,15 @@ public class SaldoLinks implements Parcelable {
         for (String rawLink : rawLinks) {
             links.add(new SaldoLink(rawLink));
         }
+    }
+
+    /**
+     * Gets the saldo links
+     *
+     * @return the saldo links
+     */
+    public List<SaldoLink> getLinks() {
+        return links;
     }
 
     @Override

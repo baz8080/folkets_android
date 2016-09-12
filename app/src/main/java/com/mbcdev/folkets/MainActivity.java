@@ -97,7 +97,7 @@ public class MainActivity extends AppCompatActivity implements MainMvp.View {
 
     @Override
     public void onSearchError() {
-
+        // TODO
     }
 
     @Override
