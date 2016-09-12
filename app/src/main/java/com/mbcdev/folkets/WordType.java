@@ -4,6 +4,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
+ * Models the types of words in the database
+ *
  * Created by barry on 21/08/2016.
  */
 public enum WordType {

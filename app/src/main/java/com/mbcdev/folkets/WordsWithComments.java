@@ -9,6 +9,8 @@ import java.util.Locale;
 import java.util.regex.Pattern;
 
 /**
+ * Models a collection of words that have a comment
+ *
  * Created by barry on 21/08/2016.
  */
 public class WordsWithComments implements Parcelable {

@@ -6,24 +6,32 @@ import android.support.annotation.NonNull;
 import java.util.List;
 
 /**
+ * Default implementation of the {@link MainMvp.Model}
+ *
  * Created by barry on 20/08/2016.
  */
-public class MainModel implements SearchMvp.Model {
+public class MainModel implements MainMvp.Model {
 
     private FolketsDatabase database = null;
 
-    public static void get(Context context, final Callback<MainModel> callback) {
+    /**
+     * Gets an instance of the model
+     *
+     * @param context A valid context
+     * @param callback The callback to deliver the result to
+     */
+    public static void get(@NonNull Context context, @NonNull final Callback<MainModel> callback) {
         FolketsDatabase.create(context.getApplicationContext(), new Callback<FolketsDatabase>() {
 
             @Override
-            public void onSuccess(FolketsDatabase result) {
+            public void onResult(FolketsDatabase result) {
                 final MainModel model = new MainModel();
                 model.database = result;
 
                 Utils.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        callback.onSuccess(model);
+                        callback.onResult(model);
                     }
                 });
 

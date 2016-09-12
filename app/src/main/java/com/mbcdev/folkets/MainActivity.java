@@ -2,6 +2,7 @@ package com.mbcdev.folkets;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -17,10 +18,14 @@ import java.util.List;
 
 import timber.log.Timber;
 
-public class MainActivity extends AppCompatActivity implements SearchMvp.View {
+/**
+ * This activity will show a list of words and translations, and allow users to tap on a result
+ * to see the full definition of the word
+ */
+public class MainActivity extends AppCompatActivity implements MainMvp.View {
 
     private RecyclerView recyclerView;
-    private SearchMvp.Presenter presenter;
+    private MainMvp.Presenter presenter;
     private ProgressBar progressBar;
 
     @Override
@@ -86,7 +91,7 @@ public class MainActivity extends AppCompatActivity implements SearchMvp.View {
 
 
     @Override
-    public void showResults(List<Word> words) {
+    public void showResults(@NonNull List<Word> words) {
         recyclerView.setAdapter(new WordsRecyclerAdapter(words));
     }
 
@@ -96,7 +101,7 @@ public class MainActivity extends AppCompatActivity implements SearchMvp.View {
     }
 
     @Override
-    public void setToolbarText(String text) {
+    public void setToolbarText(@NonNull String text) {
 
         ActionBar actionBar = getSupportActionBar();
 

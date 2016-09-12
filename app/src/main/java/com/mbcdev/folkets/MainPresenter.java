@@ -1,28 +1,27 @@
 package com.mbcdev.folkets;
 
+import android.support.annotation.NonNull;
+
 import java.util.List;
 import java.util.Locale;
 
 import timber.log.Timber;
 
 /**
- * Default implementation of {@link com.mbcdev.folkets.SearchMvp.Presenter}
+ * Default implementation of {@link MainMvp.Presenter}
  *
  * Created by barry on 21/08/2016.
  */
-public class MainPresenter implements SearchMvp.Presenter {
+public class MainPresenter implements MainMvp.Presenter {
 
     private static final String SWEDISH_LANGUAGE_CODE = "sv";
     private static final String ENGLISH_LANGUAGE_CODE = "en";
 
-    private SearchMvp.Model model;
-    private SearchMvp.View view;
-
-    public MainPresenter() {
-    }
+    private MainMvp.Model model;
+    private MainMvp.View view;
 
     @Override
-    public void attachView(SearchMvp.View view) {
+    public void attachView(MainMvp.View view) {
         this.view = view;
 
         if (view != null) {
@@ -36,7 +35,7 @@ public class MainPresenter implements SearchMvp.Presenter {
     }
 
     @Override
-    public void search(String query) {
+    public void search(@NonNull String query) {
 
         if (view == null) {
             Timber.d("View is null. Will not search.");
@@ -45,7 +44,7 @@ public class MainPresenter implements SearchMvp.Presenter {
 
         model.search(getBaseLanguage(), query, new Callback<List<Word>>() {
             @Override
-            public void onSuccess(List<Word> result) {
+            public void onResult(List<Word> result) {
                 view.showResults(result);
             }
         });
@@ -64,7 +63,7 @@ public class MainPresenter implements SearchMvp.Presenter {
 
         MainModel.get(view.getContext().getApplicationContext(), new Callback<MainModel>() {
             @Override
-            public void onSuccess(MainModel result) {
+            public void onResult(MainModel result) {
                 model = result;
                 view.enableSearch();
                 view.hideProgress();

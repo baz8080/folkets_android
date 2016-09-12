@@ -9,7 +9,7 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * Model to convert a word from the database
+ * Model to convert a word from a database cursor
  *
  * Created by barry on 21/08/2016.
  */

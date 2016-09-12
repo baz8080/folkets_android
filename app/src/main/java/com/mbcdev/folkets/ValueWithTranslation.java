@@ -7,6 +7,8 @@ import android.support.annotation.NonNull;
 import java.util.regex.Pattern;
 
 /**
+ * Models a value that has a translation
+ *
  * Created by barry on 21/08/2016.
  */
 public class ValueWithTranslation implements Parcelable {
@@ -16,6 +18,11 @@ public class ValueWithTranslation implements Parcelable {
     private String value;
     private String translation;
 
+    /**
+     * Creates an instance using the raw value from the database
+     *
+     * @param rawValue The raw value from the database
+     */
     public ValueWithTranslation(@NonNull String rawValue) {
         String[] values = rawValue.split(DELIMITER);
 
@@ -29,10 +36,20 @@ public class ValueWithTranslation implements Parcelable {
 
     }
 
+    /**
+     * Gets the value of this value
+     *
+     * @return the value of this value
+     */
     public String getValue() {
         return value;
     }
 
+    /**
+     * Gets the translation of this value
+     *
+     * @return the translation of this value
+     */
     public String getTranslation() {
         return translation;
     }

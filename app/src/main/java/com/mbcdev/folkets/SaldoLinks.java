@@ -8,6 +8,8 @@ import java.util.List;
 import java.util.regex.Pattern;
 
 /**
+ * Models a collection of {@link SaldoLink}
+ *
  * Created by barry on 21/08/2016.
  */
 public class SaldoLinks implements Parcelable {
@@ -35,7 +37,7 @@ public class SaldoLinks implements Parcelable {
 
     protected SaldoLinks(Parcel in) {
         if (in.readByte() == 0x01) {
-            links = new ArrayList<SaldoLink>();
+            links = new ArrayList<>();
             in.readList(links, SaldoLink.class.getClassLoader());
         } else {
             links = null;
