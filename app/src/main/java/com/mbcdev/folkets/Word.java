@@ -9,7 +9,7 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * Creates and models a word from a cursor
+ * Model to convert a word from a database cursor
  *
  * Created by barry on 21/08/2016.
  */
@@ -17,7 +17,7 @@ public class Word implements Parcelable {
 
     private final String word;
     private final String comment;
-    private final WordType wordType;
+    private final List<WordType> wordTypes;
     private final WordsWithComments translations;
     private final List<String> inflections;
     private final ValuesWithTranslations examples;
@@ -34,10 +34,15 @@ public class Word implements Parcelable {
     private final ValuesWithTranslations derivations;
     private final ValuesWithTranslations compounds;
 
+    /**
+     * Creates an instance from the given cursor
+     *
+     * @param cursor the cursor containing the words.
+     */
     public Word(Cursor cursor) {
         word = cursor.getString(cursor.getColumnIndex("word"));
         comment = cursor.getString(cursor.getColumnIndex("comment"));
-        wordType = WordType.lookup(cursor.getString(cursor.getColumnIndex("type")));
+        wordTypes = compileWordTypes(cursor.getString(cursor.getColumnIndex("types")));
         translations = new WordsWithComments(cursor.getString(cursor.getColumnIndex("translations")));
         inflections = stringToList(cursor.getString(cursor.getColumnIndex("inflections")));
         examples = new ValuesWithTranslations(cursor.getString(cursor.getColumnIndex("examples")));
@@ -62,6 +67,17 @@ public class Word implements Parcelable {
         compounds = new ValuesWithTranslations(cursor.getString(cursor.getColumnIndex("compounds")));
     }
 
+    private List<WordType> compileWordTypes(String types) {
+
+        List<WordType> wordTypes = new ArrayList<>();
+
+        for (String type : types.split(",")) {
+            wordTypes.add(WordType.lookup(type));
+        }
+
+        return wordTypes;
+    }
+
     public String getWord() {
         return word;
     }
@@ -74,8 +90,8 @@ public class Word implements Parcelable {
         return comment;
     }
 
-    public WordType getWordType() {
-        return wordType;
+    public List<WordType> getWordTypes() {
+        return wordTypes;
     }
 
     public List<String> getInflections() {
@@ -139,7 +155,7 @@ public class Word implements Parcelable {
         return "Word{" +
                 "word='" + word + '\'' +
                 ", comment='" + comment + '\'' +
-                ", wordType=" + wordType +
+                ", wordTypes=" + wordTypes +
                 ", translations=" + translations +
                 ", inflections=" + inflections +
                 ", examples=" + examples +
@@ -158,28 +174,28 @@ public class Word implements Parcelable {
                 '}';
     }
 
-    @Override
-    public int describeContents() {
-        return 0;
+
+
+    private List<String> stringToList(String listCsv) {
+
+        List<String> strings = new ArrayList<>();
+
+        if (Utils.hasLength(listCsv)) {
+            strings = Arrays.asList(listCsv.split(","));
+        }
+
+        return strings;
     }
-
-    @SuppressWarnings("unused")
-    public static final Parcelable.Creator<Word> CREATOR = new Parcelable.Creator<Word>() {
-        @Override
-        public Word createFromParcel(Parcel in) {
-            return new Word(in);
-        }
-
-        @Override
-        public Word[] newArray(int size) {
-            return new Word[size];
-        }
-    };
 
     protected Word(Parcel in) {
         word = in.readString();
         comment = in.readString();
-        wordType = (WordType) in.readValue(WordType.class.getClassLoader());
+        if (in.readByte() == 0x01) {
+            wordTypes = new ArrayList<>();
+            in.readList(wordTypes, WordType.class.getClassLoader());
+        } else {
+            wordTypes = null;
+        }
         translations = (WordsWithComments) in.readValue(WordsWithComments.class.getClassLoader());
         if (in.readByte() == 0x01) {
             inflections = new ArrayList<>();
@@ -213,10 +229,20 @@ public class Word implements Parcelable {
     }
 
     @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(word);
         dest.writeString(comment);
-        dest.writeValue(wordType);
+        if (wordTypes == null) {
+            dest.writeByte((byte) (0x00));
+        } else {
+            dest.writeByte((byte) (0x01));
+            dest.writeList(wordTypes);
+        }
         dest.writeValue(translations);
         if (inflections == null) {
             dest.writeByte((byte) (0x00));
@@ -249,14 +275,16 @@ public class Word implements Parcelable {
         dest.writeValue(compounds);
     }
 
-    private List<String> stringToList(String listCsv) {
-
-        List<String> strings = new ArrayList<>();
-
-        if (Utils.hasLength(listCsv)) {
-            strings = Arrays.asList(listCsv.split(","));
+    @SuppressWarnings("unused")
+    public static final Parcelable.Creator<Word> CREATOR = new Parcelable.Creator<Word>() {
+        @Override
+        public Word createFromParcel(Parcel in) {
+            return new Word(in);
         }
 
-        return strings;
-    }
+        @Override
+        public Word[] newArray(int size) {
+            return new Word[size];
+        }
+    };
 }

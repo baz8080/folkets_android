@@ -37,8 +37,41 @@ public class FolketsDatabase extends SQLiteOpenHelper {
      * @param context A valid context
      * @param path The path to the folkets database
      */
-    private FolketsDatabase(@NonNull Context context, @NonNull String path) {
+    private FolketsDatabase(Context context, String path) {
         super(context, path, null, VERSION);
+    }
+
+    /**
+     * Factory method to create an instance of a {@link FolketsDatabase}.
+     *
+     * @param context A valid Context
+     * @param callback The callback which will deliver an instance of the database
+     */
+    public static void create(final Context context, final Callback<FolketsDatabase> callback) {
+
+        final File file = new File(context.getFilesDir(), FOLKETS_DB);
+
+        if (file.exists()) {
+            d("Database file already exists.");
+            callback.onResult(new FolketsDatabase(context, file.getPath()));
+            return;
+        }
+
+        d("Database file does not exist, so will copy to storage");
+        final InputStream inputstream = context.getResources().openRawResource(R.raw.folkets);
+
+        execute(new Runnable() {
+            @Override
+            public void run() {
+                try (Source a = Okio.source(inputstream); BufferedSink b = Okio.buffer(Okio.sink(file))) {
+                    b.writeAll(a);
+                    callback.onResult(new FolketsDatabase(context, file.getPath()));
+                } catch (final IOException e) {
+                    e(e);
+                    callback.onResult(null);
+                }
+            }
+        });
     }
 
     @Override
@@ -52,40 +85,6 @@ public class FolketsDatabase extends SQLiteOpenHelper {
     }
 
     /**
-     * Factory method to create an instance of a {@link FolketsDatabase}.
-     *
-     * @param context A valid Context
-     * @param callback The callback which will deliver an instance of the database
-     */
-    public static void create(@NonNull final Context context,
-                              @NonNull final Callback<FolketsDatabase> callback) {
-
-        final File file = new File(context.getFilesDir(), FOLKETS_DB);
-
-        if (file.exists()) {
-            d("Database file already exists.");
-            callback.onSuccess(new FolketsDatabase(context, file.getPath()));
-            return;
-        }
-
-        d("Database file does not exist, so will copy to storage");
-        final InputStream inputstream = context.getResources().openRawResource(R.raw.folkets);
-
-        execute(new Runnable() {
-            @Override
-            public void run() {
-                try (Source a = Okio.source(inputstream); BufferedSink b = Okio.buffer(Okio.sink(file))) {
-                    b.writeAll(a);
-                    callback.onSuccess(new FolketsDatabase(context, file.getPath()));
-                } catch (final IOException e) {
-                    e(e);
-                    callback.onSuccess(null); // FIXME
-                }
-            }
-        });
-    }
-
-    /**
      * Searches the database for
      *
      * @param baseLanguage "en" for an English to Swedish search. "sv" for a Swedish to English
@@ -93,7 +92,7 @@ public class FolketsDatabase extends SQLiteOpenHelper {
      * @param query The query. This will be appended with % to get inexact matches
      * @param callback The callback used to deliver the results.
      */
-    public void searchInexact(@NonNull final String baseLanguage, final String query, @NonNull final Callback<List<Word>> callback) {
+    public void search(@NonNull final String baseLanguage, final String query, @NonNull final Callback<List<Word>> callback) {
         execute(new Runnable() {
             @Override
             public void run() {
@@ -115,7 +114,7 @@ public class FolketsDatabase extends SQLiteOpenHelper {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        callback.onSuccess(words);
+                        callback.onResult(words);
                     }
                 });
             }

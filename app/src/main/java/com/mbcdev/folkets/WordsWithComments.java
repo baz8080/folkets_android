@@ -9,18 +9,19 @@ import java.util.Locale;
 import java.util.regex.Pattern;
 
 /**
- * Models a word that has a comment
+ * Models a collection of words that have a comment
  *
  * Created by barry on 21/08/2016.
  */
 public class WordsWithComments implements Parcelable {
 
     private static final String DELIMITER = Pattern.quote("||");
+    private static final String SEPARATOR = Pattern.quote("**");
 
     private final List<String> words;
 
     public WordsWithComments(String rawValues) {
-        String[] values = rawValues.split(",");
+        String[] values = rawValues.split(SEPARATOR);
         words = new ArrayList<>(values.length);
 
         int wordNumber = 0;
@@ -62,7 +63,7 @@ public class WordsWithComments implements Parcelable {
 
     protected WordsWithComments(Parcel in) {
         if (in.readByte() == 0x01) {
-            words = new ArrayList<>();
+            words = new ArrayList<String>();
             in.readList(words, String.class.getClassLoader());
         } else {
             words = null;

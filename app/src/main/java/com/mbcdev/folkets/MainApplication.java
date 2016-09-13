@@ -5,7 +5,7 @@ import android.app.Application;
 import timber.log.Timber;
 
 /**
- * Application class.
+ * Main application class. Installs a debug timber tree
  *
  * Created by barry on 20/08/2016.
  */

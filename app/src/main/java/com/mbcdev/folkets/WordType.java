@@ -8,7 +8,6 @@ import java.util.Map;
  *
  * Created by barry on 21/08/2016.
  */
-@SuppressWarnings("unused")
 public enum WordType {
     NOUN("nn", R.string.word_type_noun),
     ADJECTIVE("jj", R.string.word_type_adjective),
@@ -28,6 +27,10 @@ public enum WordType {
     CONJUNCTION("kn", R.string.word_type_conjunction),
     INFINITIVAL_MARKER("ie", R.string.word_type_infinitivial),
     SUBORDINATING_CONJUNCTION("sn", R.string.word_type_subordinating_conjunction),
+    AUXILIARY_VERB("hjälpverb", R.string.word_type_auxiliary_verb),
+    ORDINAL_NUMBER("ro", R.string.word_type_ordinal),
+    LATIN("latin", R.string.word_type_latin),
+    PARTICIPLE("pc", R.string.word_type_participle),
     UNKNOWN("", R.string.word_type_unknown);
 
     private final String rawType;
@@ -41,13 +44,16 @@ public enum WordType {
     }
 
     public static WordType lookup(String rawType) {
-        if (cache.containsKey(rawType)) {
-            return cache.get(rawType);
+
+        String trimmedRawType = rawType.trim();
+
+        if (cache.containsKey(trimmedRawType)) {
+            return cache.get(trimmedRawType);
         }
 
         for (WordType wordType : values()) {
-            if (wordType.rawType.equals(rawType)) {
-                cache.put(rawType, wordType);
+            if (wordType.rawType.equals(trimmedRawType)) {
+                cache.put(trimmedRawType, wordType);
                 return wordType;
             }
         }

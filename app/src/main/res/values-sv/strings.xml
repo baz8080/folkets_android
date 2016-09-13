@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="app_name">folkets</string>
+    <string name="action_settings">Inställningar</string>
+    <string name="main_search_title">Sök</string>
 
     <string name="word_type_noun">Substantiv</string>
     <string name="word_type_adjective">Adjektiv</string>
@@ -19,16 +22,27 @@
     <string name="word_type_conjunction">Bindeord</string>
     <string name="word_type_infinitivial">Infinitivmärke</string>
     <string name="word_type_subordinating_conjunction">Subjunktion</string>
+    <string name="word_type_auxiliary_verb">Hjälpverb</string>
+    <string name="word_type_ordinal">Ordningstal</string>
+    <string name="word_type_latin">Latin</string>
+    <string name="word_type_participle">Particip</string>
     <string name="word_type_unknown">Okänd</string>
 
-    <string name="translations_header">Translations</string>
+    <string name="translations_header">Översättningar</string>
     <string name="definition_header">Definition</string>
     <string name="explanation_header">Förklaring</string>
     <string name="examples_header">Exempel</string>
-    <string name="antonyms_header">Antonyms</string>
-    <string name="compounds_header">Compounds</string>
-    <string name="derivations_header">Derivations</string>
-    <string name="idioms_header">Idioms</string>
+    <string name="antonyms_header">Antonymer</string>
+    <string name="compounds_header">Sammansättning</string>
+    <string name="derivations_header">Avledningar</string>
+    <string name="idioms_header">Idiom</string>
+    <string name="usage_header">Användning</string>
+    <string name="variant_header">Variant</string>
+    <string name="phonetic_header">Uttal</string>
+    <string name="comment_header">Kommentar</string>
+    <string name="inflections_header">Böjningar</string>
+    <string name="synonyms_header">Synonymer</string>
+    <string name="comparisons_header">Se Även</string>
 
 
 </resources>

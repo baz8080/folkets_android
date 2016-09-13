@@ -5,6 +5,7 @@ import android.os.Parcelable;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Pattern;
 
 /**
  * Models a collection of {@link SaldoLink}
@@ -13,16 +14,32 @@ import java.util.List;
  */
 public class SaldoLinks implements Parcelable {
 
+    private static final String SEPARATOR = Pattern.quote("**");
+
     private final List<SaldoLink> links;
 
+    /**
+     * Creates an instance from the raw database value
+     *
+     * @param rawValue the raw database value
+     */
     public SaldoLinks(String rawValue) {
 
-        String[] rawLinks = rawValue.split(",");
+        String[] rawLinks = rawValue.split(SEPARATOR);
         links = new ArrayList<>();
 
         for (String rawLink : rawLinks) {
             links.add(new SaldoLink(rawLink));
         }
+    }
+
+    /**
+     * Gets the saldo links
+     *
+     * @return the saldo links
+     */
+    public List<SaldoLink> getLinks() {
+        return links;
     }
 
     @Override

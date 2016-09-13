@@ -5,6 +5,7 @@ import android.os.Parcelable;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Pattern;
 
 /**
  * Models a collection of {@link ValueWithTranslation}
@@ -13,10 +14,17 @@ import java.util.List;
  */
 public class ValuesWithTranslations implements Parcelable {
 
+    private static final String SEPARATOR = Pattern.quote("**");
+
     private final List<ValueWithTranslation> valuesWithTranslations;
 
+    /**
+     * Creates an instance from the raw database value
+     *
+     * @param rawValues the raw database value
+     */
     public ValuesWithTranslations(String rawValues) {
-        String[] values = rawValues.split(",");
+        String[] values = rawValues.split(SEPARATOR);
         valuesWithTranslations = new ArrayList<>(values.length);
 
         for (String valueWithTranslation : values) {
@@ -33,6 +41,11 @@ public class ValuesWithTranslations implements Parcelable {
                 '}';
     }
 
+    /**
+     * Gets the list of {@link ValueWithTranslation}
+     *
+     * @return the list of {@link ValueWithTranslation}
+     */
     public List<ValueWithTranslation> getValuesWithTranslations() {
         return valuesWithTranslations;
     }

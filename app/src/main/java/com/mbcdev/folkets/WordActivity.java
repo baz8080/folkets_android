@@ -29,7 +29,8 @@ public class WordActivity extends AppCompatActivity {
 
         TextView wordExtraDataTextView = (TextView) findViewById(R.id.activity_word_extra_data);
 
-        wordExtraDataTextView.setText(getString(word.getWordType().getTextResourceId()));
+        String wordTypes = Utils.formatWordTypesForDisplay(this, word.getWordTypes());
+        wordExtraDataTextView.setText(wordTypes);
 
         container = (ViewGroup) findViewById(R.id.activity_word_container);
         inflater = LayoutInflater.from(this);
@@ -42,13 +43,13 @@ public class WordActivity extends AppCompatActivity {
         addSection(getString(R.string.compounds_header), word.getCompounds());
         addSection(getString(R.string.derivations_header), word.getDerivations());
         addSection(getString(R.string.idioms_header), word.getIdioms());
-        addSection("Usage", word.getUsage());
-        addSection("Variant", word.getVariant());
-        addSection("Phonetic", word.getPhonetic());
-        addSection("Phonetic", word.getComment());
-        addSection("Inflections", word.getInflections());
-        addSection("Synonyms", word.getSynonyms());
-        addSection("Comparisons", word.getCompareWith());
+        addSection(getString(R.string.usage_header), word.getUsage());
+        addSection(getString(R.string.variant_header), word.getVariant());
+        addSection(getString(R.string.phonetic_header), word.getPhonetic());
+        addSection(getString(R.string.comment_header), word.getComment());
+        addSection(getString(R.string.inflections_header), word.getInflections());
+        addSection(getString(R.string.synonyms_header), word.getSynonyms());
+        addSection(getString(R.string.comparisons_header), word.getCompareWith());
     }
 
     private void addSection(String title, List<String> list) {
@@ -93,7 +94,6 @@ public class WordActivity extends AppCompatActivity {
             SectionLinearLayout section = new SectionLinearLayout(title, content);
             container.addView(section.getLayout());
         }
-
     }
 
     private void addSection(String title, ValuesWithTranslations valuesWithTranslation) {

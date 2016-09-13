@@ -18,6 +18,11 @@ public class ValueWithTranslation implements Parcelable {
     private String value;
     private String translation;
 
+    /**
+     * Creates an instance using the raw value from the database
+     *
+     * @param rawValue The raw value from the database
+     */
     public ValueWithTranslation(@NonNull String rawValue) {
         String[] values = rawValue.split(DELIMITER);
 
@@ -31,10 +36,20 @@ public class ValueWithTranslation implements Parcelable {
 
     }
 
+    /**
+     * Gets the value of this value
+     *
+     * @return the value of this value
+     */
     public String getValue() {
         return value;
     }
 
+    /**
+     * Gets the translation of this value
+     *
+     * @return the translation of this value
+     */
     public String getTranslation() {
         return translation;
     }
