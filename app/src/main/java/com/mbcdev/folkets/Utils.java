@@ -1,10 +1,7 @@
 package com.mbcdev.folkets;
 
-import android.content.Context;
 import android.os.Handler;
 import android.os.Looper;
-
-import java.util.List;
 
 /**
  * Utility methods
@@ -45,29 +42,5 @@ public class Utils {
      */
     public static boolean isEmpty(String string) {
         return !hasLength(string);
-    }
-
-    /**
-     * Formats word types for display
-     *
-     * @param context A context used to resolve strings
-     * @param wordTypes The types of words to format
-     * @return A formatted string containing the string representations of the words
-     */
-    public static String formatWordTypesForDisplay(Context context, List<WordType> wordTypes) {
-
-        StringBuilder wordTypeBuilder = new StringBuilder();
-
-        for (int i = 0, size = wordTypes.size(); i < size; i++) {
-
-            String wordType = context.getString(wordTypes.get(i).getTextResourceId());
-            wordTypeBuilder.append(wordType);
-
-            if (i < size - 1) {
-                wordTypeBuilder.append(", ");
-            }
-        }
-
-        return wordTypeBuilder.toString();
     }
 }
