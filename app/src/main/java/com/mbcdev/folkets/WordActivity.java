@@ -3,11 +3,13 @@ package com.mbcdev.folkets;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.util.List;
+import java.util.Locale;
 
 import timber.log.Timber;
 
@@ -27,10 +29,17 @@ public class WordActivity extends AppCompatActivity {
         TextView wordTextView = (TextView) findViewById(R.id.activity_word_word);
         wordTextView.setText(word.getWord());
 
-        TextView wordExtraDataTextView = (TextView) findViewById(R.id.activity_word_extra_data);
+        TextView wordIpaTextView = (TextView) findViewById(R.id.activity_word_ipa);
 
-        String wordTypes = Utils.formatWordTypesForDisplay(this, word.getWordTypes());
-        wordExtraDataTextView.setText(wordTypes);
+        if (Utils.hasLength(word.getPhonetic())) {
+            wordIpaTextView.setText(String.format(Locale.US, "/%s/", word.getPhonetic()));
+        } else {
+            wordIpaTextView.setVisibility(View.GONE);
+        }
+
+        TextView wordTypesTextView = (TextView) findViewById(R.id.activity_word_types);
+        String wordTypes = WordType.formatWordTypesForDisplay(this, word.getWordTypes());
+        wordTypesTextView.setText(wordTypes);
 
         container = (ViewGroup) findViewById(R.id.activity_word_container);
         inflater = LayoutInflater.from(this);
@@ -45,7 +54,6 @@ public class WordActivity extends AppCompatActivity {
         addSection(getString(R.string.idioms_header), word.getIdioms());
         addSection(getString(R.string.usage_header), word.getUsage());
         addSection(getString(R.string.variant_header), word.getVariant());
-        addSection(getString(R.string.phonetic_header), word.getPhonetic());
         addSection(getString(R.string.comment_header), word.getComment());
         addSection(getString(R.string.inflections_header), word.getInflections());
         addSection(getString(R.string.synonyms_header), word.getSynonyms());
