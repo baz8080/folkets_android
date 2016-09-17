@@ -174,14 +174,12 @@ public class Word implements Parcelable {
                 '}';
     }
 
-
-
     private List<String> stringToList(String listCsv) {
 
         List<String> strings = new ArrayList<>();
 
         if (Utils.hasLength(listCsv)) {
-            strings = Arrays.asList(listCsv.split(","));
+            strings = Arrays.asList(listCsv.split(Utils.ASTERISK_SEPARATOR));
         }
 
         return strings;

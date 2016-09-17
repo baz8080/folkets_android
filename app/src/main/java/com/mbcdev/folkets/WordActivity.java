@@ -1,7 +1,11 @@
 package com.mbcdev.folkets;
 
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.text.Html;
+import android.text.method.LinkMovementMethod;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -58,6 +62,7 @@ public class WordActivity extends AppCompatActivity {
         addSection(getString(R.string.inflections_header), word.getInflections());
         addSection(getString(R.string.synonyms_header), word.getSynonyms());
         addSection(getString(R.string.comparisons_header), word.getCompareWith());
+        addSection(getString(R.string.saldo_header), word.getSaldoLinks());
     }
 
     private void addSection(String title, List<String> list) {
@@ -100,7 +105,7 @@ public class WordActivity extends AppCompatActivity {
         if (stringBuilder.length() > 0) {
             String content = stringBuilder.toString().trim();
             SectionLinearLayout section = new SectionLinearLayout(title, content);
-            container.addView(section.getLayout());
+            container.addView(section.layout);
         }
     }
 
@@ -122,7 +127,7 @@ public class WordActivity extends AppCompatActivity {
 
         if (builder.length() > 0) {
             SectionLinearLayout section = new SectionLinearLayout(title, builder.toString().trim());
-            container.addView(section.getLayout());
+            container.addView(section.layout);
         }
     }
 
@@ -139,7 +144,7 @@ public class WordActivity extends AppCompatActivity {
         }
 
         SectionLinearLayout section = new SectionLinearLayout(title, context);
-        container.addView(section.getLayout());
+        container.addView(section.layout);
     }
 
     private void addSection(String title, String content) {
@@ -149,7 +154,52 @@ public class WordActivity extends AppCompatActivity {
         }
 
         SectionLinearLayout section = new SectionLinearLayout(title, content);
-        container.addView(section.getLayout());
+        container.addView(section.layout);
+    }
+
+    private void addSection(String title, SaldoLinks links) {
+
+        if (Utils.isEmpty(title) || links == null || Utils.isEmpty(links.getLinks())) {
+            return;
+        }
+
+        StringBuilder stringBuilder = new StringBuilder();
+
+        int linkNumber = 1;
+        for (SaldoLink link : links.getLinks()) {
+
+            stringBuilder.append(linkNumber++).append(": ");
+
+            if (Utils.hasLength(link.getWordLink())) {
+                stringBuilder.append(link.getWordLink()).append(",&nbsp;&nbsp;");
+            }
+
+            if (Utils.hasLength(link.getInflectionsLink())) {
+                stringBuilder.append(link.getInflectionsLink()).append(",&nbsp;&nbsp;");
+            }
+
+            if (Utils.hasLength(link.getAssociationsLink())) {
+                stringBuilder.append(link.getAssociationsLink());
+            }
+
+            if (stringBuilder.length() > 0) {
+                stringBuilder.append("<br/><br/>");
+            }
+        }
+
+        if (stringBuilder.length() == 0) {
+            return;
+        }
+
+
+        SectionLinearLayout section = new SectionLinearLayout(title, stringBuilder.toString());
+        section.contentTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 14);
+        section.contentTextView.setTypeface(Typeface.DEFAULT_BOLD);
+        section.contentTextView.setLinkTextColor(getResources().getColor(R.color.colorPrimary));
+        section.contentTextView.setText(Html.fromHtml(stringBuilder.toString()));
+        section.contentTextView.setMovementMethod(LinkMovementMethod.getInstance());
+
+        container.addView(section.layout);
     }
 
     private String buildValueWithTranslation (ValueWithTranslation valueWithTranslation) {
@@ -159,13 +209,12 @@ public class WordActivity extends AppCompatActivity {
             builder.append(valueWithTranslation.getValue());
         }
 
-        if (builder.length() > 0) {
-            builder.append("\n\n");
-        }
-
         if (Utils.hasLength(valueWithTranslation.getTranslation())) {
+            builder.append(" - ");
             builder.append(valueWithTranslation.getTranslation());
         }
+
+        builder.append("\n\n");
 
         return builder.toString().trim();
     }
@@ -173,6 +222,7 @@ public class WordActivity extends AppCompatActivity {
     class SectionLinearLayout {
 
         private final LinearLayout layout;
+        private final TextView contentTextView;
 
         public SectionLinearLayout(String title, String content) {
             this.layout = (LinearLayout) inflater.inflate(R.layout.include_word_section, container, false);
@@ -183,15 +233,11 @@ public class WordActivity extends AppCompatActivity {
                 titleTextView.setText(title);
             }
 
-            TextView contentTextView = (TextView) layout.findViewById(R.id.include_word_section_content);
+            contentTextView = (TextView) layout.findViewById(R.id.include_word_section_content);
 
             if (contentTextView != null) {
                 contentTextView.setText(content);
             }
-        }
-
-        LinearLayout getLayout() {
-            return this.layout;
         }
     }
 }

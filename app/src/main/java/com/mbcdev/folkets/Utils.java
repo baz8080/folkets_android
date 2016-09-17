@@ -3,6 +3,9 @@ package com.mbcdev.folkets;
 import android.os.Handler;
 import android.os.Looper;
 
+import java.util.Collection;
+import java.util.regex.Pattern;
+
 /**
  * Utility methods
  *
@@ -13,6 +16,9 @@ public class Utils {
     private Utils() {
         // Intentionally empty
     }
+
+    public static final String ASTERISK_SEPARATOR = Pattern.quote("**");
+    public static final String PIPE_SEPARATOR = Pattern.quote("||");
 
     /**
      * Runs a runnable on the UI thread
@@ -42,5 +48,15 @@ public class Utils {
      */
     public static boolean isEmpty(String string) {
         return !hasLength(string);
+    }
+
+    /**
+     * Checks if a collection is empty or not.
+     *
+     * @param collection The collection to check
+     * @return true if the collection is empty, false otherwise
+     */
+    public static boolean isEmpty(Collection collection) {
+        return collection != null && collection.size() == 0;
     }
 }
