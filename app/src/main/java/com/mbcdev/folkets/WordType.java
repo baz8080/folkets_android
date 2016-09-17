@@ -1,6 +1,9 @@
 package com.mbcdev.folkets;
 
+import android.content.Context;
+
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -63,5 +66,29 @@ public enum WordType {
 
     public int getTextResourceId() {
         return textResourceId;
+    }
+
+    /**
+     * Formats word types for display
+     *
+     * @param context A context used to resolve strings
+     * @param wordTypes The types of words to format
+     * @return A formatted string containing the string representations of the words
+     */
+    public static String formatWordTypesForDisplay(Context context, List<WordType> wordTypes) {
+
+        StringBuilder wordTypeBuilder = new StringBuilder();
+
+        for (int i = 0, size = wordTypes.size(); i < size; i++) {
+
+            String wordType = context.getString(wordTypes.get(i).getTextResourceId());
+            wordTypeBuilder.append(wordType);
+
+            if (i < size - 1) {
+                wordTypeBuilder.append(", ");
+            }
+        }
+
+        return wordTypeBuilder.toString();
     }
 }

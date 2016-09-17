@@ -42,4 +42,9 @@
     <string name="inflections_header">Inflections</string>
     <string name="synonyms_header">Synonyms</string>
     <string name="comparisons_header">See Also</string>
+    <string name="saldo_header">Saldo Links</string>
+
+    <string name="link_word">WORD</string>
+    <string name="link_associations">ASSOCIATIONS</string>
+    <string name="link_inflections">INFLECTIONS</string>
 </resources>

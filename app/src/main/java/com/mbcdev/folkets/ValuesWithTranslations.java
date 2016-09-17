@@ -14,8 +14,6 @@ import java.util.regex.Pattern;
  */
 public class ValuesWithTranslations implements Parcelable {
 
-    private static final String SEPARATOR = Pattern.quote("**");
-
     private final List<ValueWithTranslation> valuesWithTranslations;
 
     /**
@@ -24,7 +22,7 @@ public class ValuesWithTranslations implements Parcelable {
      * @param rawValues the raw database value
      */
     public ValuesWithTranslations(String rawValues) {
-        String[] values = rawValues.split(SEPARATOR);
+        String[] values = rawValues.split(Utils.ASTERISK_SEPARATOR);
         valuesWithTranslations = new ArrayList<>(values.length);
 
         for (String valueWithTranslation : values) {

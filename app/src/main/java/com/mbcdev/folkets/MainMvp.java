@@ -104,5 +104,7 @@ public interface MainMvp {
          * @param query the query to search for
          */
         void search(@NonNull String query);
+
+        void switchBaseLanguage();
     }
 }

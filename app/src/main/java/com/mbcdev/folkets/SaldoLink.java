@@ -13,8 +13,6 @@ import java.util.regex.Pattern;
  */
 public class SaldoLink implements Parcelable {
 
-    private static final String DELIMITER = Pattern.quote("||");
-
     private String wordLink = "";
     private String associationsLink = "";
     private String inflectionsLink = "";
@@ -26,12 +24,18 @@ public class SaldoLink implements Parcelable {
      */
     public SaldoLink(String rawValue) {
 
-        String[] rawLinks = rawValue.split(DELIMITER);
+        String[] rawLinks = rawValue.split(Utils.PIPE_SEPARATOR);
 
         if (rawLinks.length == 3) {
-            wordLink = String.format(Locale.US, "https://spraakbanken.gu.se/ws/saldo-ws/fl/html/%s", rawLinks[0]);
-            associationsLink = String.format(Locale.US, "https://spraakbanken.gu.se/ws/saldo-ws/lid/html/%s", rawLinks[1]);
-            inflectionsLink = String.format(Locale.US, "https://spraakbanken.gu.se/ws/saldo-ws/lid/html/%s", rawLinks[2]);
+
+            String label = MainApplication.getInstance().getString(R.string.link_word);
+            wordLink = String.format(Locale.US, "<a href=\"https://spraakbanken.gu.se/ws/saldo-ws/fl/html/%s\">%s</a>", rawLinks[0], label);
+
+            label = MainApplication.getInstance().getString(R.string.link_associations);
+            associationsLink = String.format(Locale.US, "<a href=\"https://spraakbanken.gu.se/ws/saldo-ws/lid/html/%s\">%s</a>", rawLinks[1], label);
+
+            label = MainApplication.getInstance().getString(R.string.link_inflections);
+            inflectionsLink = String.format(Locale.US, "<a href=\"https://spraakbanken.gu.se/ws/saldo-ws/lid/html/%s\">%s</a>", rawLinks[2], label);
         }
     }
 
@@ -42,6 +46,18 @@ public class SaldoLink implements Parcelable {
                 ", associationsLink='" + associationsLink + '\'' +
                 ", inflectionsLink='" + inflectionsLink + '\'' +
                 '}';
+    }
+
+    public String getWordLink() {
+        return wordLink;
+    }
+
+    public String getInflectionsLink() {
+        return inflectionsLink;
+    }
+
+    public String getAssociationsLink() {
+        return associationsLink;
     }
 
     protected SaldoLink(Parcel in) {

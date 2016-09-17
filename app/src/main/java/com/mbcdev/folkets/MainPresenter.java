@@ -20,6 +20,8 @@ public class MainPresenter implements MainMvp.Presenter {
     private MainMvp.Model model;
     private MainMvp.View view;
 
+    private boolean switchMainLanguage;
+
     @Override
     public void attachView(MainMvp.View view) {
         this.view = view;
@@ -72,12 +74,19 @@ public class MainPresenter implements MainMvp.Presenter {
         });
     }
 
+    @Override
+    public void switchBaseLanguage() {
+        switchMainLanguage = !switchMainLanguage;
+
+        search("");
+    }
+
     private String getBaseLanguage() {
 
         if (Locale.getDefault().getLanguage().equalsIgnoreCase(SWEDISH_LANGUAGE_CODE)) {
-            return SWEDISH_LANGUAGE_CODE;
+            return switchMainLanguage ? ENGLISH_LANGUAGE_CODE : SWEDISH_LANGUAGE_CODE;
         } else {
-            return ENGLISH_LANGUAGE_CODE;
+            return switchMainLanguage ? SWEDISH_LANGUAGE_CODE : ENGLISH_LANGUAGE_CODE;
         }
     }
 }

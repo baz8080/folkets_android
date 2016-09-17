@@ -50,7 +50,8 @@ public class WordsRecyclerAdapter extends RecyclerView.Adapter<WordsRecyclerAdap
 
         holder.wordTextView.setText(word.getWord());
 
-        String wordTypes = Utils.formatWordTypesForDisplay(holder.holderView.getContext(), word.getWordTypes());
+        String wordTypes = WordType.formatWordTypesForDisplay(
+                holder.holderView.getContext(), word.getWordTypes());
         holder.wordTypeTextView.setText(wordTypes);
 
         StringBuilder stringBuilder = new StringBuilder();
@@ -60,9 +61,12 @@ public class WordsRecyclerAdapter extends RecyclerView.Adapter<WordsRecyclerAdap
         }
 
         if (stringBuilder.length() > 0) {
+            holder.translationTextView.setVisibility(View.VISIBLE);
             holder.translationTextView.setText(
                     stringBuilder.subSequence(0, stringBuilder.length() - 1)
             );
+        } else {
+            holder.translationTextView.setVisibility(View.GONE);
         }
     }
 

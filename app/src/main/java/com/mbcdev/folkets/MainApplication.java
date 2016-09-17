@@ -11,10 +11,16 @@ import timber.log.Timber;
  */
 public class MainApplication extends Application {
 
+    private static MainApplication instance;
+
     @Override
     public void onCreate() {
         super.onCreate();
-
+        instance = this;
         Timber.plant(new Timber.DebugTree());
+    }
+
+    public static MainApplication getInstance() {
+        return instance;
     }
 }

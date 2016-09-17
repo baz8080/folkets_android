@@ -1,10 +1,10 @@
 package com.mbcdev.folkets;
 
-import android.content.Context;
 import android.os.Handler;
 import android.os.Looper;
 
-import java.util.List;
+import java.util.Collection;
+import java.util.regex.Pattern;
 
 /**
  * Utility methods
@@ -16,6 +16,9 @@ public class Utils {
     private Utils() {
         // Intentionally empty
     }
+
+    public static final String ASTERISK_SEPARATOR = Pattern.quote("**");
+    public static final String PIPE_SEPARATOR = Pattern.quote("||");
 
     /**
      * Runs a runnable on the UI thread
@@ -48,26 +51,12 @@ public class Utils {
     }
 
     /**
-     * Formats word types for display
+     * Checks if a collection is empty or not.
      *
-     * @param context A context used to resolve strings
-     * @param wordTypes The types of words to format
-     * @return A formatted string containing the string representations of the words
+     * @param collection The collection to check
+     * @return true if the collection is empty, false otherwise
      */
-    public static String formatWordTypesForDisplay(Context context, List<WordType> wordTypes) {
-
-        StringBuilder wordTypeBuilder = new StringBuilder();
-
-        for (int i = 0, size = wordTypes.size(); i < size; i++) {
-
-            String wordType = context.getString(wordTypes.get(i).getTextResourceId());
-            wordTypeBuilder.append(wordType);
-
-            if (i < size - 1) {
-                wordTypeBuilder.append(", ");
-            }
-        }
-
-        return wordTypeBuilder.toString();
+    public static boolean isEmpty(Collection collection) {
+        return collection != null && collection.size() == 0;
     }
 }

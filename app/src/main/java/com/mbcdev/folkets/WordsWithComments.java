@@ -6,7 +6,6 @@ import android.os.Parcelable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
-import java.util.regex.Pattern;
 
 /**
  * Models a collection of words that have a comment
@@ -15,13 +14,10 @@ import java.util.regex.Pattern;
  */
 public class WordsWithComments implements Parcelable {
 
-    private static final String DELIMITER = Pattern.quote("||");
-    private static final String SEPARATOR = Pattern.quote("**");
-
     private final List<String> words;
 
     public WordsWithComments(String rawValues) {
-        String[] values = rawValues.split(SEPARATOR);
+        String[] values = rawValues.split(Utils.ASTERISK_SEPARATOR);
         words = new ArrayList<>(values.length);
 
         int wordNumber = 0;
@@ -30,7 +26,7 @@ public class WordsWithComments implements Parcelable {
 
             wordNumber++;
 
-            String[] components = wordWithComment.split(DELIMITER);
+            String[] components = wordWithComment.split(Utils.PIPE_SEPARATOR);
 
             String word = components[0].trim();
             String comment = "";
@@ -63,7 +59,7 @@ public class WordsWithComments implements Parcelable {
 
     protected WordsWithComments(Parcel in) {
         if (in.readByte() == 0x01) {
-            words = new ArrayList<String>();
+            words = new ArrayList<>();
             in.readList(words, String.class.getClassLoader());
         } else {
             words = null;

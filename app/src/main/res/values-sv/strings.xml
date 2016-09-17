@@ -43,6 +43,10 @@
     <string name="inflections_header">Böjningar</string>
     <string name="synonyms_header">Synonymer</string>
     <string name="comparisons_header">Se Även</string>
+    <string name="saldo_header">Saldo Länkar</string>
 
+    <string name="link_word">ORD</string>
+    <string name="link_associations">ASSOCIATIONER</string>
+    <string name="link_inflections">BÖJNINGAR</string>
 
 </resources>

@@ -4,16 +4,12 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import android.support.annotation.NonNull;
 
-import java.util.regex.Pattern;
-
 /**
  * Models a value that has a translation
  *
  * Created by barry on 21/08/2016.
  */
 public class ValueWithTranslation implements Parcelable {
-
-    private static final String DELIMITER = Pattern.quote("||");
 
     private String value;
     private String translation;
@@ -24,7 +20,7 @@ public class ValueWithTranslation implements Parcelable {
      * @param rawValue The raw value from the database
      */
     public ValueWithTranslation(@NonNull String rawValue) {
-        String[] values = rawValue.split(DELIMITER);
+        String[] values = rawValue.split(Utils.PIPE_SEPARATOR);
 
         if (values.length == 1) {
             value = values[0].trim();

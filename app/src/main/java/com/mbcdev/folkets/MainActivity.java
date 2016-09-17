@@ -83,6 +83,7 @@ public class MainActivity extends AppCompatActivity implements MainMvp.View {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
+            presenter.switchBaseLanguage();
             return true;
         }
 
