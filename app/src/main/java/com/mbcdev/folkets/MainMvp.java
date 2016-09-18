@@ -19,12 +19,14 @@ public interface MainMvp {
         /**
          * Searches the model for words and definitions
          *
-         * @param baseLanguage The language to search in, "en" for English to Swedish, "sv" for
-         *                     Swedish to English
          * @param query The query to make
          * @param callback The callback used to deliver results
          */
-        void search(String baseLanguage, String query, Callback<List<Word>> callback);
+        void search(String query, Callback<List<Word>> callback);
+
+        void switchBaseLangauge();
+
+        String getBaseLanguage();
     }
 
     /**
@@ -105,6 +107,10 @@ public interface MainMvp {
          */
         void search(@NonNull String query);
 
+        /**
+         * Switches the base language. If the device has an swedish locale, then this will
+         * switch the app to search the english database.
+         */
         void switchBaseLanguage();
     }
 }

@@ -14,21 +14,12 @@ import timber.log.Timber;
  */
 public class MainPresenter implements MainMvp.Presenter {
 
-    private static final String SWEDISH_LANGUAGE_CODE = "sv";
-    private static final String ENGLISH_LANGUAGE_CODE = "en";
-
     private MainMvp.Model model;
     private MainMvp.View view;
-
-    private boolean switchMainLanguage;
 
     @Override
     public void attachView(MainMvp.View view) {
         this.view = view;
-
-        if (view != null) {
-            view.setToolbarText(getBaseLanguage().toUpperCase(Locale.US));
-        }
     }
 
     @Override
@@ -44,7 +35,7 @@ public class MainPresenter implements MainMvp.Presenter {
             return;
         }
 
-        model.search(getBaseLanguage(), query, new Callback<List<Word>>() {
+        model.search(query, new Callback<List<Word>>() {
             @Override
             public void onResult(List<Word> result) {
                 view.showResults(result);
@@ -66,21 +57,14 @@ public class MainPresenter implements MainMvp.Presenter {
         model = new MainModel(view.getContext());
         view.enableSearch();
         view.hideProgress();
+        view.setToolbarText(model.getBaseLanguage());
         search("");
     }
 
     @Override
     public void switchBaseLanguage() {
-        switchMainLanguage = !switchMainLanguage;
+        model.switchBaseLangauge();
+        view.setToolbarText(model.getBaseLanguage());
         search("");
-    }
-
-    private String getBaseLanguage() {
-
-        if (Locale.getDefault().getLanguage().equalsIgnoreCase(SWEDISH_LANGUAGE_CODE)) {
-            return switchMainLanguage ? ENGLISH_LANGUAGE_CODE : SWEDISH_LANGUAGE_CODE;
-        } else {
-            return switchMainLanguage ? SWEDISH_LANGUAGE_CODE : ENGLISH_LANGUAGE_CODE;
-        }
     }
 }
