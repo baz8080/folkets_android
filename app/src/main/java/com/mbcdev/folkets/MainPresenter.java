@@ -63,21 +63,15 @@ public class MainPresenter implements MainMvp.Presenter {
         view.disableSearch();
         view.showProgress();
 
-        MainModel.get(view.getContext().getApplicationContext(), new Callback<MainModel>() {
-            @Override
-            public void onResult(MainModel result) {
-                model = result;
-                view.enableSearch();
-                view.hideProgress();
-                search("");
-            }
-        });
+        model = new MainModel(view.getContext());
+        view.enableSearch();
+        view.hideProgress();
+        search("");
     }
 
     @Override
     public void switchBaseLanguage() {
         switchMainLanguage = !switchMainLanguage;
-
         search("");
     }
 

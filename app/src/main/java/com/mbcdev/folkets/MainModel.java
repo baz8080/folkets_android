@@ -15,28 +15,12 @@ public class MainModel implements MainMvp.Model {
     private FolketsDatabase database = null;
 
     /**
-     * Gets an instance of the model
+     * Creates an instance of the model
      *
      * @param context A valid context
-     * @param callback The callback to deliver the result to
      */
-    public static void get(@NonNull Context context, @NonNull final Callback<MainModel> callback) {
-        FolketsDatabase.create(context.getApplicationContext(), new Callback<FolketsDatabase>() {
-
-            @Override
-            public void onResult(FolketsDatabase result) {
-                final MainModel model = new MainModel();
-                model.database = result;
-
-                Utils.runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        callback.onResult(model);
-                    }
-                });
-
-            }
-        });
+    public MainModel(Context context) {
+        this.database = new FolketsDatabase(context);
     }
 
     @Override

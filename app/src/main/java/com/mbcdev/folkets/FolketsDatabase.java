@@ -1,9 +1,11 @@
 package com.mbcdev.folkets;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 
 import java.io.File;
@@ -13,8 +15,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import okio.BufferedSink;
+import okio.HashingSource;
 import okio.Okio;
-import okio.Source;
 
 import static android.os.AsyncTask.execute;
 import static com.mbcdev.folkets.Utils.runOnUiThread;
@@ -26,62 +28,23 @@ import static timber.log.Timber.e;
  *
  * Created by barry on 20/08/2016.
  */
-public class FolketsDatabase extends SQLiteOpenHelper {
+public class FolketsDatabase {
 
-    private static final int VERSION = 1;
     private static final String FOLKETS_DB = "folkets.db";
+    private SQLiteDatabase database;
+    private SharedPreferences preferences;
 
     /**
      * Creates an instance of the SQLiteOpenHelper. Intentionally private
      *
      * @param context A valid context
-     * @param path The path to the folkets database
      */
-    private FolketsDatabase(Context context, String path) {
-        super(context, path, null, VERSION);
-    }
+    public FolketsDatabase(Context context) {
+        preferences = PreferenceManager.getDefaultSharedPreferences(context);
 
-    /**
-     * Factory method to create an instance of a {@link FolketsDatabase}.
-     *
-     * @param context A valid Context
-     * @param callback The callback which will deliver an instance of the database
-     */
-    public static void create(final Context context, final Callback<FolketsDatabase> callback) {
-
-        final File file = new File(context.getFilesDir(), FOLKETS_DB);
-
-        if (file.exists()) {
-            d("Database file already exists.");
-            callback.onResult(new FolketsDatabase(context, file.getPath()));
-            return;
+        synchronized (this) {
+            initialiseDatabase(context);
         }
-
-        d("Database file does not exist, so will copy to storage");
-        final InputStream inputstream = context.getResources().openRawResource(R.raw.folkets);
-
-        execute(new Runnable() {
-            @Override
-            public void run() {
-                try (Source a = Okio.source(inputstream); BufferedSink b = Okio.buffer(Okio.sink(file))) {
-                    b.writeAll(a);
-                    callback.onResult(new FolketsDatabase(context, file.getPath()));
-                } catch (final IOException e) {
-                    e(e);
-                    callback.onResult(null);
-                }
-            }
-        });
-    }
-
-    @Override
-    public void onCreate(SQLiteDatabase sqLiteDatabase) {
-        // Intentionally empty
-    }
-
-    @Override
-    public void onUpgrade(SQLiteDatabase sqLiteDatabase, int i, int i1) {
-        // Intentionally empty
     }
 
     /**
@@ -93,10 +56,17 @@ public class FolketsDatabase extends SQLiteOpenHelper {
      * @param callback The callback used to deliver the results.
      */
     public void search(@NonNull final String baseLanguage, final String query, @NonNull final Callback<List<Word>> callback) {
+
+        if (this.database == null) {
+            callback.onResult(new ArrayList<Word>());
+            return;
+        }
+
         execute(new Runnable() {
             @Override
             public void run() {
-                Cursor cursor = getReadableDatabase().query(
+
+                Cursor cursor = database.query(
                         getTableName(baseLanguage), null, "word like ?",
                         new String[] { query + "%" }, null, null, "word asc limit 0,100");
 
@@ -121,6 +91,70 @@ public class FolketsDatabase extends SQLiteOpenHelper {
         });
     }
 
+    private void initialiseDatabase(Context context) {
+        d("initialiseDatabase: Start");
+
+        final File file = new File(context.getFilesDir(), FOLKETS_DB);
+
+        if (file.exists()) {
+            d("initialiseDatabase: DB already exists.");
+            String storedHash = preferences.getString("db_hash", "");
+
+            try (InputStream inputStream = context.getResources().openRawResource(R.raw.folkets);
+                 HashingSource hashingSource = HashingSource.md5(Okio.source(inputStream))) {
+
+                Okio.buffer(hashingSource).readAll(Okio.blackhole());
+                String currentHash = hashingSource.hash().hex();
+
+                d("initialiseDatabase: Stored hash %s, current DB hash %s", storedHash, currentHash);
+
+                if (!storedHash.equals(currentHash)) {
+                    d("initialiseDatabase: New database detected");
+                    copyDbToStorage(context, file);
+                } else {
+                    d("initialiseDatabase: Database is unchanged");
+                    database = getDatabase(file);
+                }
+
+            } catch (IOException e) {
+                e(e, "initialiseDatabase: Error computing hash for file %s", file.getPath());
+            }
+
+
+        } else {
+            d("initialiseDatabase: DB does not exist.");
+            copyDbToStorage(context, file);
+        }
+    }
+
+    private SQLiteDatabase getDatabase(File file) {
+        return SQLiteDatabase.openDatabase(
+                file.getPath(), null,
+                SQLiteDatabase.NO_LOCALIZED_COLLATORS | SQLiteDatabase.OPEN_READONLY);
+    }
+
+    private void copyDbToStorage(Context context, File file) {
+        d("copyDbToStorage: Start");
+
+        InputStream inputStream = context.getResources().openRawResource(R.raw.folkets);
+
+        try (
+                HashingSource hashingSource = HashingSource.md5(Okio.source(inputStream));
+                BufferedSink bufferedSink = Okio.buffer(Okio.sink(file))) {
+
+            bufferedSink.writeAll(hashingSource);
+
+            String hash = hashingSource.hash().hex();
+            d("copyDbToStorage: Saving hash of db as %s", hash);
+            preferences.edit().putString("db_hash", hash).apply();
+
+            database = getDatabase(file);
+
+        } catch (final IOException e) {
+            e(e, "copyDbToStorage: Error copying database.");
+        }
+    }
+
     /**
      * Gets the table name for the given base language
      *
@@ -135,3 +169,4 @@ public class FolketsDatabase extends SQLiteOpenHelper {
         }
     }
 }
+
