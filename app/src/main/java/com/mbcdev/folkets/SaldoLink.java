@@ -48,6 +48,12 @@ public class SaldoLink implements Parcelable {
                 '}';
     }
 
+    public boolean hasValidLinks() {
+        return Utils.hasLength(wordLink) &&
+                Utils.hasLength(associationsLink) &&
+                Utils.hasLength(inflectionsLink);
+    }
+
     public String getWordLink() {
         return wordLink;
     }

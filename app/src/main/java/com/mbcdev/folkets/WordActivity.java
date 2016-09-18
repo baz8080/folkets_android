@@ -168,29 +168,20 @@ public class WordActivity extends AppCompatActivity {
         int linkNumber = 1;
         for (SaldoLink link : links.getLinks()) {
 
-            stringBuilder.append(linkNumber++).append(": ");
+            if (link.hasValidLinks()) {
 
-            if (Utils.hasLength(link.getWordLink())) {
-                stringBuilder.append(link.getWordLink()).append(",&nbsp;&nbsp;");
-            }
-
-            if (Utils.hasLength(link.getInflectionsLink())) {
-                stringBuilder.append(link.getInflectionsLink()).append(",&nbsp;&nbsp;");
-            }
-
-            if (Utils.hasLength(link.getAssociationsLink())) {
-                stringBuilder.append(link.getAssociationsLink());
-            }
-
-            if (stringBuilder.length() > 0) {
-                stringBuilder.append("<br/><br/>");
+                stringBuilder
+                        .append(linkNumber++).append(": ")
+                        .append(link.getWordLink()).append(",&nbsp;&nbsp;")
+                        .append(link.getInflectionsLink()).append(",&nbsp;&nbsp;")
+                        .append(link.getAssociationsLink())
+                        .append("<br/><br/>");
             }
         }
 
         if (stringBuilder.length() == 0) {
             return;
         }
-
 
         SectionLinearLayout section = new SectionLinearLayout(title, stringBuilder.toString());
         section.contentTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 14);

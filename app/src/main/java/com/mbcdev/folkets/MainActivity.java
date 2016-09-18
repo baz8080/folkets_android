@@ -15,6 +15,7 @@ import android.widget.ProgressBar;
 import android.widget.SearchView;
 
 import java.util.List;
+import java.util.Locale;
 
 import timber.log.Timber;
 
@@ -57,7 +58,10 @@ public class MainActivity extends AppCompatActivity implements MainMvp.View {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
 
-        ((SearchView)menu.findItem(R.id.main_search).getActionView()).setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+        SearchView searchView = (SearchView) menu.findItem(R.id.main_search).getActionView();
+        searchView.setQueryHint(getString(R.string.main_search_title));
+
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
                 presenter.search(query);
@@ -82,7 +86,7 @@ public class MainActivity extends AppCompatActivity implements MainMvp.View {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == R.id.action_switch_language) {
             presenter.switchBaseLanguage();
             return true;
         }
@@ -107,7 +111,7 @@ public class MainActivity extends AppCompatActivity implements MainMvp.View {
         ActionBar actionBar = getSupportActionBar();
 
         if (actionBar != null) {
-            actionBar.setTitle(text);
+            actionBar.setTitle(text.toUpperCase(Locale.US));
         }
     }
 
