@@ -10,7 +10,7 @@ import java.util.List;
  *
  * Created by barry on 20/08/2016.
  */
-public interface MainMvp {
+interface MainMvp {
 
     /**
      * Defines model operations
@@ -22,11 +22,11 @@ public interface MainMvp {
          * @param query The query to make
          * @param callback The callback used to deliver results
          */
-        void search(String query, Callback<List<Word>> callback);
+        void search(@NonNull String query, @NonNull Callback<List<Word>> callback);
 
-        void switchBaseLangauge();
+        void switchBaseLanguage();
 
-        String getBaseLanguage();
+        @NonNull String getLanguageCode();
     }
 
     /**
@@ -42,8 +42,10 @@ public interface MainMvp {
 
         /**
          * Shows an error encountered when searching
+         *
+         * @param error The error type
          */
-        void onSearchError();
+        void onError(@NonNull ErrorType error);
 
         /**
          * Sets the toolbar text
@@ -52,31 +54,11 @@ public interface MainMvp {
         void setToolbarText(@NonNull String text);
 
         /**
-         * Shows a progress indicator
-         */
-        void showProgress();
-
-        /**
-         * Disables the search component
-         */
-        void disableSearch();
-
-        /**
-         * Hides the progress indicator
-         */
-        void hideProgress();
-
-        /**
-         * Enables the search component
-         */
-        void enableSearch();
-
-        /**
          * Gets the Context
          *
          * @return the Context
          */
-        Context getContext();
+        @NonNull Context getContext();
     }
 
     /**
@@ -88,12 +70,7 @@ public interface MainMvp {
          *
          * @param view the view to attach
          */
-        void attachView(View view);
-
-        /**
-         * Initialises the data for searching
-         */
-        void initialiseData();
+        void attachView(@NonNull View view);
 
         /**
          * Detaches the view from the presenter

@@ -20,6 +20,11 @@ public class MainApplication extends Application {
         Timber.plant(new Timber.DebugTree());
     }
 
+    /**
+     * Gets the instance of the Application
+     *
+     * @return The instance of the application
+     */
     public static MainApplication getInstance() {
         return instance;
     }

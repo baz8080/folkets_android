@@ -9,17 +9,17 @@ import android.support.annotation.NonNull;
  *
  * Created by barry on 21/08/2016.
  */
-public class ValueWithTranslation implements Parcelable {
+class ValueWithTranslation implements Parcelable {
 
-    private String value;
-    private String translation;
+    private String value = "";
+    private String translation = "";
 
     /**
      * Creates an instance using the raw value from the database
      *
      * @param rawValue The raw value from the database
      */
-    public ValueWithTranslation(@NonNull String rawValue) {
+    ValueWithTranslation(@NonNull String rawValue) {
         String[] values = rawValue.split(Utils.PIPE_SEPARATOR);
 
         if (values.length == 1) {
@@ -35,18 +35,18 @@ public class ValueWithTranslation implements Parcelable {
     /**
      * Gets the value of this value
      *
-     * @return the value of this value
+     * @return the value of this value, or the empty string
      */
-    public String getValue() {
+    @NonNull String getValue() {
         return value;
     }
 
     /**
      * Gets the translation of this value
      *
-     * @return the translation of this value
+     * @return the translation of this value, or the empty string
      */
-    public String getTranslation() {
+    @NonNull String getTranslation() {
         return translation;
     }
 
@@ -58,7 +58,12 @@ public class ValueWithTranslation implements Parcelable {
                 '}';
     }
 
-    protected ValueWithTranslation(Parcel in) {
+
+    /////////////////////////////////////////
+    //  And now, for the parcelable crap!  //
+    /////////////////////////////////////////
+
+    ValueWithTranslation(Parcel in) {
         value = in.readString();
         translation = in.readString();
     }

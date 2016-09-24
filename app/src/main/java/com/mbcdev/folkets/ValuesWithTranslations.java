@@ -2,17 +2,17 @@ package com.mbcdev.folkets;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.support.annotation.NonNull;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.regex.Pattern;
 
 /**
  * Models a collection of {@link ValueWithTranslation}
  *
  * Created by barry on 21/08/2016.
  */
-public class ValuesWithTranslations implements Parcelable {
+class ValuesWithTranslations implements Parcelable {
 
     private final List<ValueWithTranslation> valuesWithTranslations;
 
@@ -21,7 +21,7 @@ public class ValuesWithTranslations implements Parcelable {
      *
      * @param rawValues the raw database value
      */
-    public ValuesWithTranslations(String rawValues) {
+    ValuesWithTranslations(@NonNull String rawValues) {
         String[] values = rawValues.split(Utils.ASTERISK_SEPARATOR);
         valuesWithTranslations = new ArrayList<>(values.length);
 
@@ -44,11 +44,18 @@ public class ValuesWithTranslations implements Parcelable {
      *
      * @return the list of {@link ValueWithTranslation}
      */
-    public List<ValueWithTranslation> getValuesWithTranslations() {
+     @NonNull List<ValueWithTranslation> getValuesWithTranslations() {
         return valuesWithTranslations;
     }
 
-    protected ValuesWithTranslations(Parcel in) {
+
+
+
+    /////////////////////////////////////////
+    //  And now, for the parcelable crap!  //
+    /////////////////////////////////////////
+
+    ValuesWithTranslations(Parcel in) {
         if (in.readByte() == 0x01) {
             valuesWithTranslations = new ArrayList<>();
             in.readList(valuesWithTranslations, ValueWithTranslation.class.getClassLoader());

@@ -1,7 +1,10 @@
 package com.mbcdev.folkets;
 
+import android.content.Context;
+import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Html;
 import android.text.method.LinkMovementMethod;
@@ -17,17 +20,37 @@ import java.util.Locale;
 
 import timber.log.Timber;
 
+/**
+ * An activity to dump the full contents of a Word. At the moment no great amount of attention has
+ * gone into this apart from dumping all of the data.
+ *
+ */
 public class WordActivity extends AppCompatActivity {
+
+    static final String EXTRA_WORD = "extra_word";
 
     private ViewGroup container;
     private LayoutInflater inflater;
+
+    /**
+     * Starts this activity to show the given word
+     *
+     * @param context A context used to start the activity
+     * @param word The word to display
+     */
+    static void startWithWord(@NonNull Context context, @NonNull Word word) {
+        Intent intent = new Intent();
+        intent.setClass(context, WordActivity.class);
+        intent.putExtra(EXTRA_WORD, word);
+        context.startActivity(intent);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_word);
 
-        final Word word = getIntent().getParcelableExtra("extra_word");
+        final Word word = getIntent().getParcelableExtra(EXTRA_WORD);
         Timber.d(word.toString());
 
         TextView wordTextView = (TextView) findViewById(R.id.activity_word_word);
@@ -215,7 +238,7 @@ public class WordActivity extends AppCompatActivity {
         private final LinearLayout layout;
         private final TextView contentTextView;
 
-        public SectionLinearLayout(String title, String content) {
+        SectionLinearLayout(String title, String content) {
             this.layout = (LinearLayout) inflater.inflate(R.layout.include_word_section, container, false);
 
             TextView titleTextView = (TextView) layout.findViewById(R.id.include_word_section_title);

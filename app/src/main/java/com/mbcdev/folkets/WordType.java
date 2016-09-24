@@ -11,7 +11,7 @@ import java.util.Map;
  *
  * Created by barry on 21/08/2016.
  */
-public enum WordType {
+enum WordType {
     NOUN("nn", R.string.word_type_noun),
     ADJECTIVE("jj", R.string.word_type_adjective),
     PRONOUN("pn", R.string.word_type_pronoun),

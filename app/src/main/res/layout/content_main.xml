@@ -9,14 +9,6 @@
     tools:context="com.mbcdev.folkets.MainActivity"
     tools:showIn="@layout/activity_main">
 
-    <ProgressBar
-        android:id="@+id/main_progressbar_view"
-        android:layout_centerInParent="true"
-        android:visibility="gone"
-        android:layout_width="96dp"
-        android:layout_height="96dp"
-        android:indeterminate="true"/>
-
     <android.support.v7.widget.RecyclerView
         android:id="@+id/main_recycler_view"
         android:layout_width="match_parent"
