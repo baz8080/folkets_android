@@ -1,7 +1,5 @@
 package com.mbcdev.folkets;
 
-import android.content.Context;
-import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,11 +13,16 @@ import java.util.List;
  *
  * Created by barry on 21/08/2016.
  */
-public class WordsRecyclerAdapter extends RecyclerView.Adapter<WordsRecyclerAdapter.ViewHolder> {
+class WordsRecyclerAdapter extends RecyclerView.Adapter<WordsRecyclerAdapter.ViewHolder> {
 
     private final List<Word> wordList;
 
-    public WordsRecyclerAdapter(List<Word> wordList) {
+    /**
+     * Creates an instance with the given list of words
+     *
+     * @param wordList the list of words to display
+     */
+    WordsRecyclerAdapter(List<Word> wordList) {
         this.wordList = wordList;
     }
 
@@ -40,11 +43,7 @@ public class WordsRecyclerAdapter extends RecyclerView.Adapter<WordsRecyclerAdap
         holder.holderView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent();
-                Context context = holder.holderView.getContext();
-                intent.setClass(context, WordActivity.class);
-                intent.putExtra("extra_word", word);
-                context.startActivity(intent);
+                WordActivity.startWithWord(holder.holderView.getContext(), word);
             }
         });
 
@@ -75,14 +74,17 @@ public class WordsRecyclerAdapter extends RecyclerView.Adapter<WordsRecyclerAdap
         return wordList.size();
     }
 
+    /**
+     * Viewholder for the recyclerview
+     */
     static class ViewHolder extends RecyclerView.ViewHolder {
 
-        View holderView;
-        TextView wordTextView;
-        TextView wordTypeTextView;
-        TextView translationTextView;
+        final View holderView;
+        final TextView wordTextView;
+        final TextView wordTypeTextView;
+        final TextView translationTextView;
 
-        public ViewHolder(View v) {
+        ViewHolder(View v) {
             super(v);
 
             holderView = v;

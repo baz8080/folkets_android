@@ -17,15 +17,15 @@ public class Utils {
         // Intentionally empty
     }
 
-    public static final String ASTERISK_SEPARATOR = Pattern.quote("**");
-    public static final String PIPE_SEPARATOR = Pattern.quote("||");
+    static final String ASTERISK_SEPARATOR = Pattern.quote("**");
+    static final String PIPE_SEPARATOR = Pattern.quote("||");
 
     /**
      * Runs a runnable on the UI thread
      *
      * @param runnable the runnable to run
      */
-    public static void runOnUiThread(Runnable runnable) {
+    static void runOnUiThread(Runnable runnable) {
         Handler handler = new Handler(Looper.getMainLooper());
         handler.post(runnable);
     }
@@ -36,7 +36,7 @@ public class Utils {
      * @param string The string to check
      * @return true if the string has length, false otherwise
      */
-    public static boolean hasLength(String string) {
+    static boolean hasLength(String string) {
         return string != null && string.trim().length() > 0;
     }
 
@@ -46,7 +46,7 @@ public class Utils {
      * @param string The string to check
      * @return true if the string is empty, false otherwise
      */
-    public static boolean isEmpty(String string) {
+    static boolean isEmpty(String string) {
         return !hasLength(string);
     }
 
@@ -56,7 +56,7 @@ public class Utils {
      * @param collection The collection to check
      * @return true if the collection is empty, false otherwise
      */
-    public static boolean isEmpty(Collection collection) {
+    static boolean isEmpty(Collection collection) {
         return collection != null && collection.size() == 0;
     }
 }

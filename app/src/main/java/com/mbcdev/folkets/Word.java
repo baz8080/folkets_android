@@ -3,6 +3,8 @@ package com.mbcdev.folkets;
 import android.database.Cursor;
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -13,7 +15,7 @@ import java.util.List;
  *
  * Created by barry on 21/08/2016.
  */
-public class Word implements Parcelable {
+class Word implements Parcelable {
 
     private final String word;
     private final String comment;
@@ -39,7 +41,7 @@ public class Word implements Parcelable {
      *
      * @param cursor the cursor containing the words.
      */
-    public Word(Cursor cursor) {
+    Word(@NonNull Cursor cursor) {
         word = cursor.getString(cursor.getColumnIndex("word"));
         comment = cursor.getString(cursor.getColumnIndex("comment"));
         wordTypes = compileWordTypes(cursor.getString(cursor.getColumnIndex("types")));
@@ -67,7 +69,7 @@ public class Word implements Parcelable {
         compounds = new ValuesWithTranslations(cursor.getString(cursor.getColumnIndex("compounds")));
     }
 
-    private List<WordType> compileWordTypes(String types) {
+    @NonNull private List<WordType> compileWordTypes(@NonNull String types) {
 
         List<WordType> wordTypes = new ArrayList<>();
 
@@ -78,75 +80,165 @@ public class Word implements Parcelable {
         return wordTypes;
     }
 
-    public String getWord() {
+    /**
+     * Returns the word, like 'barn'
+     *
+     * @return the word
+     */
+    String getWord() {
         return word;
     }
 
-    public WordsWithComments getTranslations() {
+    /**
+     * Gets the translations for the word, like 'child'
+     *
+     * @return the translations for the word
+     */
+    WordsWithComments getTranslations() {
         return translations;
     }
 
-    public String getComment() {
+    /**
+     * Gets the comment for the word
+     *
+     * @return the comment for the word
+     */
+    String getComment() {
         return comment;
     }
 
-    public List<WordType> getWordTypes() {
+    /**
+     * Gets a list of types of this word, like noun, adjective
+     *
+     * @return a list of types of this word
+     */
+    List<WordType> getWordTypes() {
         return wordTypes;
     }
 
-    public List<String> getInflections() {
+    /**
+     * Gets a list of the inflected values of this word
+     *
+     * @return a list of the inflected values of this word
+     */
+    List<String> getInflections() {
         return inflections;
     }
 
-    public ValuesWithTranslations getExamples() {
+    /**
+     * Gets the example usages of this word
+     *
+     * @return the example usages of this word
+     */
+    ValuesWithTranslations getExamples() {
         return examples;
     }
 
-    public ValueWithTranslation getDefinition() {
+    /**
+     * Gets the definition of this word
+     *
+     * @return the definition of this word
+     */
+    ValueWithTranslation getDefinition() {
         return definition;
     }
 
-    public ValueWithTranslation getExplanation() {
+    /**
+     * Gets the explanation of this word
+     *
+     * @return the explanation of this word
+     */
+    ValueWithTranslation getExplanation() {
         return explanation;
     }
 
-    public String getPhonetic() {
+    /**
+     * Gets the phonetic of this word
+     *
+     * @return the phonetic of this word
+     */
+    String getPhonetic() {
         return phonetic;
     }
 
-    public List<String> getSynonyms() {
+    /**
+     * Gets this word's synonyms
+     *
+     * @return this word's synonyms
+     */
+    List<String> getSynonyms() {
         return synonyms;
     }
 
-    public SaldoLinks getSaldoLinks() {
+    /**
+     * Gets this word's links to Saldo
+     *
+     * @return this word's links to Saldo
+     */
+    SaldoLinks getSaldoLinks() {
         return saldoLinks;
     }
 
-    public List<String> getCompareWith() {
+    /**
+     * Gets a list of words to compare with this word
+     *
+     * @return a list of words to compare with this word
+     */
+    List<String> getCompareWith() {
         return compareWith;
     }
 
-    public ValuesWithTranslations getAntonyms() {
+    /**
+     * Gets a list of antonyms of this word
+     *
+     * @return a list of antonyms of this word
+     */
+    ValuesWithTranslations getAntonyms() {
         return antonyms;
     }
 
-    public String getUsage() {
+    /**
+     * Gets the usage of this word
+     *
+     * @return the usage of this word
+     */
+    String getUsage() {
         return usage;
     }
 
-    public String getVariant() {
+    /**
+     * Gets the variant of this word
+     *
+     * @return the variant of this word
+     */
+    String getVariant() {
         return variant;
     }
 
-    public ValuesWithTranslations getIdioms() {
+    /**
+     * Gets the idioms of this word
+     *
+     * @return the idioms of this word
+     */
+    ValuesWithTranslations getIdioms() {
         return idioms;
     }
 
-    public ValuesWithTranslations getDerivations() {
+    /**
+     * Gets the derivations of this word
+     *
+     * @return the derivations of this word
+     */
+    ValuesWithTranslations getDerivations() {
         return derivations;
     }
 
-    public ValuesWithTranslations getCompounds() {
+    /**
+     * Gets a list of words that feature this word as a part of a compound word
+     *
+     * @return a list of words that feature this word as a part of a compound word
+     */
+    ValuesWithTranslations getCompounds() {
         return compounds;
     }
 
@@ -174,18 +266,28 @@ public class Word implements Parcelable {
                 '}';
     }
 
-    private List<String> stringToList(String listCsv) {
+    /**
+     * Converts a csv string to a list
+     *
+     * @param csvString a csv string
+     * @return A list of Strings, or an empty list
+     */
+    @NonNull private List<String> stringToList(@Nullable String csvString) {
 
         List<String> strings = new ArrayList<>();
 
-        if (Utils.hasLength(listCsv)) {
-            strings = Arrays.asList(listCsv.split(Utils.ASTERISK_SEPARATOR));
+        if (Utils.hasLength(csvString)) {
+            strings = Arrays.asList(csvString.split(Utils.ASTERISK_SEPARATOR));
         }
 
         return strings;
     }
 
-    protected Word(Parcel in) {
+    /////////////////////////////////////////
+    //  And now, for the parcelable crap!  //
+    /////////////////////////////////////////
+
+    Word(Parcel in) {
         word = in.readString();
         comment = in.readString();
         if (in.readByte() == 0x01) {

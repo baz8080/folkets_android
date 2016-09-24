@@ -2,6 +2,7 @@ package com.mbcdev.folkets;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.support.annotation.NonNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,11 +13,11 @@ import java.util.Locale;
  *
  * Created by barry on 21/08/2016.
  */
-public class WordsWithComments implements Parcelable {
+class WordsWithComments implements Parcelable {
 
     private final List<String> words;
 
-    public WordsWithComments(String rawValues) {
+    WordsWithComments(@NonNull String rawValues) {
         String[] values = rawValues.split(Utils.ASTERISK_SEPARATOR);
         words = new ArrayList<>(values.length);
 
@@ -24,29 +25,30 @@ public class WordsWithComments implements Parcelable {
 
         for (String wordWithComment : values) {
 
-            wordNumber++;
-
             String[] components = wordWithComment.split(Utils.PIPE_SEPARATOR);
 
-            String word = components[0].trim();
-            String comment = "";
+            if (components.length > 0) {
 
-            if (components.length == 2) {
-                comment = components[1].trim();
-            }
+                wordNumber++;
 
-            if (Utils.hasLength(word)) {
-                words.add(String.format(Locale.US, "%s:\t%s", wordNumber, components[0].trim()));
-            } else if (Utils.hasLength(comment)) {
-                words.add(
-                        String.format(Locale.US, "%s:\t%s (%s)",
-                                wordNumber, components[0].trim(), components[1].trim())
-                );
+                if (components.length == 1) {
+                    String word = components[0].trim();
+                    words.add(String.format(Locale.US, "%s:\t%s", wordNumber, word));
+                } else if (components.length == 2) {
+                    String word = components[0].trim();
+                    String comment = components[1].trim();
+                    words.add(String.format(Locale.US, "%s:\t%s (%s)", wordNumber, word, comment));
+                }
             }
         }
     }
 
-    public List<String> getWords() {
+    /**
+     * Gets the list of words and comments
+     *
+     * @return the list of words and comments
+     */
+    List<String> getWords() {
         return words;
     }
 
@@ -57,7 +59,12 @@ public class WordsWithComments implements Parcelable {
                 '}';
     }
 
-    protected WordsWithComments(Parcel in) {
+
+    /////////////////////////////////////////
+    //  And now, for the parcelable crap!  //
+    /////////////////////////////////////////
+
+    WordsWithComments(Parcel in) {
         if (in.readByte() == 0x01) {
             words = new ArrayList<>();
             in.readList(words, String.class.getClassLoader());

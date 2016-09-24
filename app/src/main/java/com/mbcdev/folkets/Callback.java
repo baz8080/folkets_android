@@ -7,12 +7,14 @@ import android.support.annotation.Nullable;
  *
  * Created by barry on 20/08/2016.
  */
-public interface Callback<T> {
+interface Callback<T> {
 
     /**
      * Called when a result is available
      *
      * @param result The result, may be null
      */
-    void onResult(@Nullable T result);
+    void onSuccess(@Nullable T result);
+
+    void onError(ErrorType errorType);
 }

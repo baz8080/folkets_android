@@ -3,6 +3,7 @@ package com.mbcdev.folkets;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -10,14 +11,11 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.ProgressBar;
+import android.view.inputmethod.EditorInfo;
 import android.widget.SearchView;
 
 import java.util.List;
 import java.util.Locale;
-
-import timber.log.Timber;
 
 /**
  * This activity will show a list of words and translations, and allow users to tap on a result
@@ -27,7 +25,6 @@ public class MainActivity extends AppCompatActivity implements MainMvp.View {
 
     private RecyclerView recyclerView;
     private MainMvp.Presenter presenter;
-    private ProgressBar progressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,11 +37,9 @@ public class MainActivity extends AppCompatActivity implements MainMvp.View {
         recyclerView = (RecyclerView) findViewById(R.id.main_recycler_view);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.addItemDecoration(new DividerItemDecoration(this));
-        progressBar = (ProgressBar) findViewById(R.id.main_progressbar_view);
 
         presenter = new MainPresenter();
         presenter.attachView(this);
-        presenter.initialiseData();
     }
 
     @Override
@@ -59,6 +54,7 @@ public class MainActivity extends AppCompatActivity implements MainMvp.View {
         getMenuInflater().inflate(R.menu.menu_main, menu);
 
         SearchView searchView = (SearchView) menu.findItem(R.id.main_search).getActionView();
+        searchView.setImeOptions(searchView.getImeOptions() | EditorInfo.IME_FLAG_NO_EXTRACT_UI);
         searchView.setQueryHint(getString(R.string.main_search_title));
 
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
@@ -101,8 +97,9 @@ public class MainActivity extends AppCompatActivity implements MainMvp.View {
     }
 
     @Override
-    public void onSearchError() {
-        // TODO
+    public void onError(@NonNull ErrorType errorType) {
+        String error = getString(errorType.getStringResourceId());
+        Snackbar.make(recyclerView, error, Snackbar.LENGTH_SHORT).show();
     }
 
     @Override
@@ -115,28 +112,7 @@ public class MainActivity extends AppCompatActivity implements MainMvp.View {
         }
     }
 
-    @Override
-    public void showProgress() {
-        Timber.d("Showing progress indicator");
-        progressBar.setVisibility(View.VISIBLE);
-    }
-
-    @Override
-    public void disableSearch() {
-        Timber.d("Disabling search");
-    }
-
-    @Override
-    public void hideProgress() {
-        Timber.d("Hiding progress indicator");
-        progressBar.setVisibility(View.GONE);
-    }
-
-    @Override
-    public void enableSearch() {
-        Timber.d("Enabling search");
-    }
-
+    @NonNull
     @Override
     public Context getContext() {
         return this;

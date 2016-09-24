@@ -3,7 +3,6 @@ package com.mbcdev.folkets;
 import android.support.annotation.NonNull;
 
 import java.util.List;
-import java.util.Locale;
 
 import timber.log.Timber;
 
@@ -12,14 +11,17 @@ import timber.log.Timber;
  *
  * Created by barry on 21/08/2016.
  */
-public class MainPresenter implements MainMvp.Presenter {
+class MainPresenter implements MainMvp.Presenter {
 
     private MainMvp.Model model;
     private MainMvp.View view;
 
     @Override
-    public void attachView(MainMvp.View view) {
+    public void attachView(@NonNull MainMvp.View view) {
         this.view = view;
+        model = new MainModel(view.getContext());
+        view.setToolbarText(model.getLanguageCode());
+        search("");
     }
 
     @Override
@@ -37,34 +39,21 @@ public class MainPresenter implements MainMvp.Presenter {
 
         model.search(query, new Callback<List<Word>>() {
             @Override
-            public void onResult(List<Word> result) {
+            public void onSuccess(List<Word> result) {
                 view.showResults(result);
+            }
+
+            @Override
+            public void onError(ErrorType errorType) {
+                view.onError(errorType);
             }
         });
     }
 
     @Override
-    public void initialiseData() {
-
-        if (view == null) {
-            Timber.d("The data cannot be initialised if the view is null");
-            return;
-        }
-
-        view.disableSearch();
-        view.showProgress();
-
-        model = new MainModel(view.getContext());
-        view.enableSearch();
-        view.hideProgress();
-        view.setToolbarText(model.getBaseLanguage());
-        search("");
-    }
-
-    @Override
     public void switchBaseLanguage() {
-        model.switchBaseLangauge();
-        view.setToolbarText(model.getBaseLanguage());
+        model.switchBaseLanguage();
+        view.setToolbarText(model.getLanguageCode());
         search("");
     }
 }

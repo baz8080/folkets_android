@@ -2,6 +2,7 @@ package com.mbcdev.folkets;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.support.annotation.NonNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,7 +12,7 @@ import java.util.List;
  *
  * Created by barry on 21/08/2016.
  */
-public class SaldoLinks implements Parcelable {
+class SaldoLinks implements Parcelable {
 
     private final List<SaldoLink> links;
 
@@ -20,7 +21,7 @@ public class SaldoLinks implements Parcelable {
      *
      * @param rawValue the raw database value
      */
-    public SaldoLinks(String rawValue) {
+    SaldoLinks(@NonNull String rawValue) {
 
         String[] rawLinks = rawValue.split(Utils.ASTERISK_SEPARATOR);
         links = new ArrayList<>();
@@ -35,12 +36,7 @@ public class SaldoLinks implements Parcelable {
      *
      * @return the saldo links
      */
-    public List<SaldoLink> getLinks() {
-
-        if (links.size() > 0) {
-            System.out.println();
-        }
-
+    @NonNull List<SaldoLink> getLinks() {
         return links;
     }
 
@@ -51,7 +47,12 @@ public class SaldoLinks implements Parcelable {
                 '}';
     }
 
-    protected SaldoLinks(Parcel in) {
+
+    /////////////////////////////////////////
+    //  And now, for the parcelable crap!  //
+    /////////////////////////////////////////
+
+    SaldoLinks(Parcel in) {
         if (in.readByte() == 0x01) {
             links = new ArrayList<>();
             in.readList(links, SaldoLink.class.getClassLoader());

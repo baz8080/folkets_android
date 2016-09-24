@@ -2,16 +2,16 @@ package com.mbcdev.folkets;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.support.annotation.NonNull;
 
 import java.util.Locale;
-import java.util.regex.Pattern;
 
 /**
  * Models a link to Saldo, which contains a lot of metadata about a word
  *
  * Created by barry on 21/08/2016.
  */
-public class SaldoLink implements Parcelable {
+class SaldoLink implements Parcelable {
 
     private String wordLink = "";
     private String associationsLink = "";
@@ -22,7 +22,7 @@ public class SaldoLink implements Parcelable {
      *
      * @param rawValue the raw database value
      */
-    public SaldoLink(String rawValue) {
+    SaldoLink(@NonNull String rawValue) {
 
         String[] rawLinks = rawValue.split(Utils.PIPE_SEPARATOR);
 
@@ -48,25 +48,45 @@ public class SaldoLink implements Parcelable {
                 '}';
     }
 
-    public boolean hasValidLinks() {
+    boolean hasValidLinks() {
         return Utils.hasLength(wordLink) &&
                 Utils.hasLength(associationsLink) &&
                 Utils.hasLength(inflectionsLink);
     }
 
-    public String getWordLink() {
+    /**
+     * Gets a URL to a page which has details about the word
+     *
+     * @return a URL to a page which has details about the word, or the empty string
+     */
+    @NonNull String getWordLink() {
         return wordLink;
     }
 
-    public String getInflectionsLink() {
+    /**
+     * Gets a URL to a page which has details about a word's inflections
+     *
+     * @return a URL to a page which has details about a word's inflections, or the empty string
+     */
+    @NonNull String getInflectionsLink() {
         return inflectionsLink;
     }
 
-    public String getAssociationsLink() {
+    /**
+     * Gets a URL to a page which has details about a word's associations
+     *
+     * @return a URL to a page which has details about a word's associations, or the empty string
+     */
+    @NonNull String getAssociationsLink() {
         return associationsLink;
     }
 
-    protected SaldoLink(Parcel in) {
+
+    /////////////////////////////////////////
+    //  And now, for the parcelable crap!  //
+    /////////////////////////////////////////
+
+    SaldoLink(Parcel in) {
         wordLink = in.readString();
         associationsLink = in.readString();
         inflectionsLink = in.readString();

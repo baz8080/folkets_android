@@ -5,7 +5,7 @@
 
     <string name="word_type_noun">Noun</string>
     <string name="word_type_adjective">Adjective</string>
-    <string name="word_type_pronoun">Prounoun</string>
+    <string name="word_type_pronoun">Pronoun</string>
     <string name="word_type_pronoun_determiner">Pronoun (determiner)</string>
     <string name="word_type_pronoun_possessive">Pronoun (possessive)</string>
     <string name="word_type_proper_noun">Proper noun</string>
@@ -19,7 +19,7 @@
     <string name="word_type_interjection">Interjection</string>
     <string name="word_type_cardinal_number">Cardinal number</string>
     <string name="word_type_conjunction">Conjunction</string>
-    <string name="word_type_infinitivial">Infinitivial marker</string>
+    <string name="word_type_infinitivial">Infinitival marker</string>
     <string name="word_type_subordinating_conjunction">Subjunction</string>
     <string name="word_type_auxiliary_verb">Auxiliary Verb</string>
     <string name="word_type_ordinal">Ordinal</string>
@@ -37,7 +37,7 @@
     <string name="idioms_header">Idioms</string>
     <string name="usage_header">Usage</string>
     <string name="variant_header">Variant</string>
-    <string name="phonetic_header">Pronunciation</string>
+
     <string name="comment_header">Comment</string>
     <string name="inflections_header">Inflections</string>
     <string name="synonyms_header">Synonyms</string>
@@ -47,4 +47,6 @@
     <string name="link_word">WORD</string>
     <string name="link_associations">ASSOCIATIONS</string>
     <string name="link_inflections">INFLECTIONS</string>
+
+    <string name="error_database_null">Oops!, seems like the database is missing.</string>
 </resources>

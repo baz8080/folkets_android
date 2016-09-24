@@ -38,7 +38,7 @@
     <string name="idioms_header">Idiom</string>
     <string name="usage_header">Användning</string>
     <string name="variant_header">Variant</string>
-    <string name="phonetic_header">Uttal</string>
+
     <string name="comment_header">Kommentar</string>
     <string name="inflections_header">Böjningar</string>
     <string name="synonyms_header">Synonymer</string>
@@ -48,5 +48,7 @@
     <string name="link_word">ORD</string>
     <string name="link_associations">ASSOCIATIONER</string>
     <string name="link_inflections">BÖJNINGAR</string>
+
+    <string name="error_database_null">Hoppsan! Det verkar som att något är fel i databasen.</string>
 
 </resources>
