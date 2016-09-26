@@ -14,6 +14,6 @@ android:
   licenses:
   - android-sdk-license-[0-9a-f]{8}
 script:
-  ./gradlew clean assemble lint
+  ./gradlew build
 after_failure:
   - cat app/build/outputs/lint-results-*.xml

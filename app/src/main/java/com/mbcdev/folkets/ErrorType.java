@@ -12,10 +12,20 @@ enum ErrorType {
 
     private final int stringResourceId;
 
+    /**
+     * Configures the enum constant with the correct error message
+     *
+     * @param stringResourceId The resourceId of the string for this ErrorType
+     */
     ErrorType(@StringRes int stringResourceId) {
         this.stringResourceId = stringResourceId;
     }
 
+    /**
+     * Gets the resource ID of the string for this ErrorType
+     *
+     * @return
+     */
     int getStringResourceId() {
         return stringResourceId;
     }

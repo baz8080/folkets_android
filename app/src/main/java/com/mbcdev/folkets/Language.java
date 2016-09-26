@@ -1,5 +1,10 @@
 package com.mbcdev.folkets;
 
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+
+import java.util.Locale;
+
 import timber.log.Timber;
 
 /**
@@ -49,11 +54,17 @@ enum Language {
      * @param code The language code to look for
      * @return The language code, or ENGLISH if not found
      */
-    static Language fromLanguageCode(String code) {
+    @NonNull static Language fromLanguageCode(@Nullable String code) {
 
-        if (ENGLISH.getCode().equals(code)) {
+        if (code == null) {
+            return Language.ENGLISH;
+        }
+
+        String lowercaseCode = code.toLowerCase(Locale.US);
+
+        if (ENGLISH.getCode().equals(lowercaseCode)) {
             return ENGLISH;
-        } else if (SWEDISH.getCode().equals(code)) {
+        } else if (SWEDISH.getCode().equals(lowercaseCode)) {
             return SWEDISH;
         } else {
             Timber.d("Code unknown or invalid. Returning ENGLISH");
