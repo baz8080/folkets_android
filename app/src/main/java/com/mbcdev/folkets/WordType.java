@@ -1,6 +1,9 @@
 package com.mbcdev.folkets;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import android.support.annotation.StringRes;
 
 import java.util.HashMap;
 import java.util.List;
@@ -41,12 +44,28 @@ enum WordType {
     private static final Map<String, WordType> cache = new HashMap<>(values().length);
     private final int textResourceId;
 
-    WordType(String rawType, int textResourceId) {
+    /**
+     * Initialises the WordType
+     *
+     * @param rawType The raw database value
+     * @param textResourceId The string resource id describing the WordType
+     */
+    WordType(@NonNull String rawType, @StringRes int textResourceId) {
         this.rawType = rawType;
         this.textResourceId = textResourceId;
     }
 
-    public static WordType lookup(String rawType) {
+    /**
+     * Looks up a WordType from it's raw database value
+     *
+     * @param rawType The raw database value
+     * @return The WordType if found, or {@link WordType#UNKNOWN} if unknown
+     */
+    @NonNull public static WordType lookup(@Nullable String rawType) {
+
+        if (rawType == null) {
+            return UNKNOWN;
+        }
 
         String trimmedRawType = rawType.trim();
 
@@ -64,7 +83,12 @@ enum WordType {
         return UNKNOWN;
     }
 
-    public int getTextResourceId() {
+    /**
+     * Gets the string resource id of the string describing the WordType
+     *
+     * @return the string resource id of the string describing the WordType
+     */
+    @StringRes public int getTextResourceId() {
         return textResourceId;
     }
 
@@ -75,7 +99,12 @@ enum WordType {
      * @param wordTypes The types of words to format
      * @return A formatted string containing the string representations of the words
      */
-    public static String formatWordTypesForDisplay(Context context, List<WordType> wordTypes) {
+    @NonNull public static String formatWordTypesForDisplay(
+            @Nullable Context context, @Nullable List<WordType> wordTypes) {
+
+        if (context == null || wordTypes == null) {
+            return Utils.EMPTY_STRING;
+        }
 
         StringBuilder wordTypeBuilder = new StringBuilder();
 

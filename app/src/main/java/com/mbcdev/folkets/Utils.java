@@ -19,6 +19,7 @@ public class Utils {
 
     static final String ASTERISK_SEPARATOR = Pattern.quote("**");
     static final String PIPE_SEPARATOR = Pattern.quote("||");
+    static final String EMPTY_STRING = "";
 
     /**
      * Runs a runnable on the UI thread
