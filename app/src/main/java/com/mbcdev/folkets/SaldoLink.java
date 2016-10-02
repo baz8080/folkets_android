@@ -15,16 +15,16 @@ import timber.log.Timber;
  */
 class SaldoLink implements Serializable {
 
-    private String wordLink = "";
-    private String associationsLink = "";
-    private String inflectionsLink = "";
+    private String wordTarget;
+    private String associationsTarget;
+    private String inflectionsTarget;
 
     /**
      * Creates an instance from the raw database value
      *
      * @param rawValue the raw database value
      */
-    SaldoLink(@NonNull Context context, @Nullable String rawValue) {
+    SaldoLink(@Nullable String rawValue) {
 
         if (rawValue == null) {
             Timber.d("rawValue was null, cannot parse saldo links.");
@@ -39,32 +39,25 @@ class SaldoLink implements Serializable {
                 Utils.hasLength(rawLinks[2]);
 
         if (allLinksArePresent) {
-
-            wordLink = context.getString(R.string.link_word_format,
-                    rawLinks[0], context.getString(R.string.link_word));
-
-            associationsLink = context.getString(R.string.link_associations_format,
-                    rawLinks[1], context.getString(R.string.link_associations));
-
-            inflectionsLink = context.getString(R.string.link_inflections_format,
-                    rawLinks[2], context.getString(R.string.link_inflections)
-            );
+            wordTarget = rawLinks[0];
+            associationsTarget = rawLinks[1];
+            inflectionsTarget = rawLinks[2];
         }
     }
 
-    @Override
-    public String toString() {
-        return "SaldoLink{" +
-                "wordLink='" + wordLink + '\'' +
-                ", associationsLink='" + associationsLink + '\'' +
-                ", inflectionsLink='" + inflectionsLink + '\'' +
-                '}';
+    boolean hasValidLinks() {
+        return Utils.hasLength(wordTarget) &&
+                Utils.hasLength(associationsTarget) &&
+                Utils.hasLength(inflectionsTarget);
     }
 
-    boolean hasValidLinks() {
-        return Utils.hasLength(wordLink) &&
-                Utils.hasLength(associationsLink) &&
-                Utils.hasLength(inflectionsLink);
+    private Object[] adultValues() {
+        return new Object[]{
+                new Object[]{13, false},
+                new Object[]{17, false},
+                new Object[]{18, true},
+                new Object[]{22, true}
+        };
     }
 
     /**
@@ -72,8 +65,14 @@ class SaldoLink implements Serializable {
      *
      * @return a URL to a page which has details about the word, or the empty string
      */
-    @NonNull String getWordLink() {
-        return wordLink;
+    @NonNull String getWordLink(Context context) {
+
+        if (context == null || wordTarget == null) {
+            return Utils.EMPTY_STRING;
+        }
+
+        String label = context.getString(R.string.link_word);
+        return context.getString(R.string.link_word_format, wordTarget, label);
     }
 
     /**
@@ -81,8 +80,14 @@ class SaldoLink implements Serializable {
      *
      * @return a URL to a page which has details about a word's inflections, or the empty string
      */
-    @NonNull String getInflectionsLink() {
-        return inflectionsLink;
+    @NonNull String getInflectionsLink(Context context) {
+
+        if (context == null || inflectionsTarget == null) {
+            return Utils.EMPTY_STRING;
+        }
+
+        String label = context.getString(R.string.link_inflections);
+        return context.getString(R.string.link_inflections_format, inflectionsTarget, label);
     }
 
     /**
@@ -90,8 +95,14 @@ class SaldoLink implements Serializable {
      *
      * @return a URL to a page which has details about a word's associations, or the empty string
      */
-    @NonNull String getAssociationsLink() {
-        return associationsLink;
+    @NonNull String getAssociationsLink(Context context) {
+
+        if (context == null || associationsTarget == null) {
+            return Utils.EMPTY_STRING;
+        }
+
+        String label = context.getString(R.string.link_associations);
+        return context.getString(R.string.link_associations_format, associationsTarget, label);
     }
 
 }

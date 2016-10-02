@@ -15,7 +15,6 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import java.io.Serializable;
 import java.util.List;
 import java.util.Locale;
 
@@ -50,8 +49,6 @@ public class WordActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_word);
-
-        Serializable wordSerializable = getIntent().getSerializableExtra(EXTRA_WORD);
 
         if (!(getIntent().getSerializableExtra(EXTRA_WORD) instanceof Word)) {
             Timber.d("Supplied extra was not a word");
@@ -204,9 +201,9 @@ public class WordActivity extends AppCompatActivity {
 
                 stringBuilder
                         .append(linkNumber++).append(": ")
-                        .append(link.getWordLink()).append(",&nbsp;&nbsp;")
-                        .append(link.getInflectionsLink()).append(",&nbsp;&nbsp;")
-                        .append(link.getAssociationsLink())
+                        .append(link.getWordLink(this)).append(",&nbsp;&nbsp;")
+                        .append(link.getInflectionsLink(this)).append(",&nbsp;&nbsp;")
+                        .append(link.getAssociationsLink(this))
                         .append("<br/><br/>");
             }
         }
