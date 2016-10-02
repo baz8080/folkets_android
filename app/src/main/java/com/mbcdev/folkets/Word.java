@@ -2,11 +2,10 @@ package com.mbcdev.folkets;
 
 import android.content.Context;
 import android.database.Cursor;
-import android.os.Parcel;
-import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -16,7 +15,7 @@ import java.util.List;
  *
  * Created by barry on 21/08/2016.
  */
-class Word implements Parcelable {
+class Word implements Serializable {
 
     private final String word;
     private final String comment;
@@ -70,7 +69,8 @@ class Word implements Parcelable {
         compounds = new ValuesWithTranslations(cursor.getString(cursor.getColumnIndex("compounds")));
     }
 
-    @NonNull private List<WordType> compileWordTypes(@NonNull String types) {
+    @NonNull
+    private List<WordType> compileWordTypes(@NonNull String types) {
 
         List<WordType> wordTypes = new ArrayList<>();
 
@@ -273,7 +273,8 @@ class Word implements Parcelable {
      * @param csvString a csv string
      * @return A list of Strings, or an empty list
      */
-    @NonNull private List<String> stringToList(@Nullable String csvString) {
+    @NonNull
+    private List<String> stringToList(@Nullable String csvString) {
 
         List<String> strings = new ArrayList<>();
 
@@ -284,108 +285,4 @@ class Word implements Parcelable {
         return strings;
     }
 
-    /////////////////////////////////////////
-    //  And now, for the parcelable crap!  //
-    /////////////////////////////////////////
-
-    Word(Parcel in) {
-        word = in.readString();
-        comment = in.readString();
-        if (in.readByte() == 0x01) {
-            wordTypes = new ArrayList<>();
-            in.readList(wordTypes, WordType.class.getClassLoader());
-        } else {
-            wordTypes = null;
-        }
-        translations = (WordsWithComments) in.readValue(WordsWithComments.class.getClassLoader());
-        if (in.readByte() == 0x01) {
-            inflections = new ArrayList<>();
-            in.readList(inflections, String.class.getClassLoader());
-        } else {
-            inflections = null;
-        }
-        examples = (ValuesWithTranslations) in.readValue(ValuesWithTranslations.class.getClassLoader());
-        definition = (ValueWithTranslation) in.readValue(ValueWithTranslation.class.getClassLoader());
-        explanation = (ValueWithTranslation) in.readValue(ValueWithTranslation.class.getClassLoader());
-        phonetic = in.readString();
-        if (in.readByte() == 0x01) {
-            synonyms = new ArrayList<>();
-            in.readList(synonyms, String.class.getClassLoader());
-        } else {
-            synonyms = null;
-        }
-        saldoLinks = (SaldoLinks) in.readValue(SaldoLinks.class.getClassLoader());
-        if (in.readByte() == 0x01) {
-            compareWith = new ArrayList<>();
-            in.readList(compareWith, String.class.getClassLoader());
-        } else {
-            compareWith = null;
-        }
-        antonyms = (ValuesWithTranslations) in.readValue(ValuesWithTranslations.class.getClassLoader());
-        usage = in.readString();
-        variant = in.readString();
-        idioms = (ValuesWithTranslations) in.readValue(ValuesWithTranslations.class.getClassLoader());
-        derivations = (ValuesWithTranslations) in.readValue(ValuesWithTranslations.class.getClassLoader());
-        compounds = (ValuesWithTranslations) in.readValue(ValuesWithTranslations.class.getClassLoader());
-    }
-
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(word);
-        dest.writeString(comment);
-        if (wordTypes == null) {
-            dest.writeByte((byte) (0x00));
-        } else {
-            dest.writeByte((byte) (0x01));
-            dest.writeList(wordTypes);
-        }
-        dest.writeValue(translations);
-        if (inflections == null) {
-            dest.writeByte((byte) (0x00));
-        } else {
-            dest.writeByte((byte) (0x01));
-            dest.writeList(inflections);
-        }
-        dest.writeValue(examples);
-        dest.writeValue(definition);
-        dest.writeValue(explanation);
-        dest.writeString(phonetic);
-        if (synonyms == null) {
-            dest.writeByte((byte) (0x00));
-        } else {
-            dest.writeByte((byte) (0x01));
-            dest.writeList(synonyms);
-        }
-        dest.writeValue(saldoLinks);
-        if (compareWith == null) {
-            dest.writeByte((byte) (0x00));
-        } else {
-            dest.writeByte((byte) (0x01));
-            dest.writeList(compareWith);
-        }
-        dest.writeValue(antonyms);
-        dest.writeString(usage);
-        dest.writeString(variant);
-        dest.writeValue(idioms);
-        dest.writeValue(derivations);
-        dest.writeValue(compounds);
-    }
-
-    @SuppressWarnings("unused")
-    public static final Parcelable.Creator<Word> CREATOR = new Parcelable.Creator<Word>() {
-        @Override
-        public Word createFromParcel(Parcel in) {
-            return new Word(in);
-        }
-
-        @Override
-        public Word[] newArray(int size) {
-            return new Word[size];
-        }
-    };
 }

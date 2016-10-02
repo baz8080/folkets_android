@@ -1,15 +1,15 @@
 package com.mbcdev.folkets;
 
-import android.os.Parcel;
-import android.os.Parcelable;
 import android.support.annotation.NonNull;
+
+import java.io.Serializable;
 
 /**
  * Models a value that has a translation
  *
  * Created by barry on 21/08/2016.
  */
-class ValueWithTranslation implements Parcelable {
+class ValueWithTranslation implements Serializable {
 
     private String value = "";
     private String translation = "";
@@ -58,37 +58,4 @@ class ValueWithTranslation implements Parcelable {
                 '}';
     }
 
-
-    /////////////////////////////////////////
-    //  And now, for the parcelable crap!  //
-    /////////////////////////////////////////
-
-    ValueWithTranslation(Parcel in) {
-        value = in.readString();
-        translation = in.readString();
-    }
-
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(value);
-        dest.writeString(translation);
-    }
-
-    @SuppressWarnings("unused")
-    public static final Parcelable.Creator<ValueWithTranslation> CREATOR = new Parcelable.Creator<ValueWithTranslation>() {
-        @Override
-        public ValueWithTranslation createFromParcel(Parcel in) {
-            return new ValueWithTranslation(in);
-        }
-
-        @Override
-        public ValueWithTranslation[] newArray(int size) {
-            return new ValueWithTranslation[size];
-        }
-    };
 }

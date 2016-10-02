@@ -1,10 +1,10 @@
 package com.mbcdev.folkets;
 
 import android.content.Context;
-import android.os.Parcel;
-import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+
+import java.io.Serializable;
 
 import timber.log.Timber;
 
@@ -13,7 +13,7 @@ import timber.log.Timber;
  *
  * Created by barry on 21/08/2016.
  */
-class SaldoLink implements Parcelable {
+class SaldoLink implements Serializable {
 
     private String wordLink = "";
     private String associationsLink = "";
@@ -94,39 +94,4 @@ class SaldoLink implements Parcelable {
         return associationsLink;
     }
 
-
-    /////////////////////////////////////////
-    //  And now, for the parcelable crap!  //
-    /////////////////////////////////////////
-
-    SaldoLink(Parcel in) {
-        wordLink = in.readString();
-        associationsLink = in.readString();
-        inflectionsLink = in.readString();
-    }
-
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(wordLink);
-        dest.writeString(associationsLink);
-        dest.writeString(inflectionsLink);
-    }
-
-    @SuppressWarnings("unused")
-    public static final Parcelable.Creator<SaldoLink> CREATOR = new Parcelable.Creator<SaldoLink>() {
-        @Override
-        public SaldoLink createFromParcel(Parcel in) {
-            return new SaldoLink(in);
-        }
-
-        @Override
-        public SaldoLink[] newArray(int size) {
-            return new SaldoLink[size];
-        }
-    };
 }

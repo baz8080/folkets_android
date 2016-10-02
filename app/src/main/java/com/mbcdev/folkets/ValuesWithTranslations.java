@@ -1,9 +1,8 @@
 package com.mbcdev.folkets;
 
-import android.os.Parcel;
-import android.os.Parcelable;
 import android.support.annotation.NonNull;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,7 +11,7 @@ import java.util.List;
  *
  * Created by barry on 21/08/2016.
  */
-class ValuesWithTranslations implements Parcelable {
+class ValuesWithTranslations implements Serializable {
 
     private final List<ValueWithTranslation> valuesWithTranslations;
 
@@ -47,48 +46,4 @@ class ValuesWithTranslations implements Parcelable {
      @NonNull List<ValueWithTranslation> getValuesWithTranslations() {
         return valuesWithTranslations;
     }
-
-
-
-
-    /////////////////////////////////////////
-    //  And now, for the parcelable crap!  //
-    /////////////////////////////////////////
-
-    ValuesWithTranslations(Parcel in) {
-        if (in.readByte() == 0x01) {
-            valuesWithTranslations = new ArrayList<>();
-            in.readList(valuesWithTranslations, ValueWithTranslation.class.getClassLoader());
-        } else {
-            valuesWithTranslations = null;
-        }
-    }
-
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        if (valuesWithTranslations == null) {
-            dest.writeByte((byte) (0x00));
-        } else {
-            dest.writeByte((byte) (0x01));
-            dest.writeList(valuesWithTranslations);
-        }
-    }
-
-    @SuppressWarnings("unused")
-    public static final Parcelable.Creator<ValuesWithTranslations> CREATOR = new Parcelable.Creator<ValuesWithTranslations>() {
-        @Override
-        public ValuesWithTranslations createFromParcel(Parcel in) {
-            return new ValuesWithTranslations(in);
-        }
-
-        @Override
-        public ValuesWithTranslations[] newArray(int size) {
-            return new ValuesWithTranslations[size];
-        }
-    };
 }

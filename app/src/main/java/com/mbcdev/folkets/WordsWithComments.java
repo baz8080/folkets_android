@@ -1,9 +1,8 @@
 package com.mbcdev.folkets;
 
-import android.os.Parcel;
-import android.os.Parcelable;
 import android.support.annotation.NonNull;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -13,7 +12,7 @@ import java.util.Locale;
  *
  * Created by barry on 21/08/2016.
  */
-class WordsWithComments implements Parcelable {
+class WordsWithComments implements Serializable {
 
     private final List<String> words;
 
@@ -58,46 +57,4 @@ class WordsWithComments implements Parcelable {
                 "words=" + words +
                 '}';
     }
-
-
-    /////////////////////////////////////////
-    //  And now, for the parcelable crap!  //
-    /////////////////////////////////////////
-
-    WordsWithComments(Parcel in) {
-        if (in.readByte() == 0x01) {
-            words = new ArrayList<>();
-            in.readList(words, String.class.getClassLoader());
-        } else {
-            words = null;
-        }
-    }
-
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        if (words == null) {
-            dest.writeByte((byte) (0x00));
-        } else {
-            dest.writeByte((byte) (0x01));
-            dest.writeList(words);
-        }
-    }
-
-    @SuppressWarnings("unused")
-    public static final Parcelable.Creator<WordsWithComments> CREATOR = new Parcelable.Creator<WordsWithComments>() {
-        @Override
-        public WordsWithComments createFromParcel(Parcel in) {
-            return new WordsWithComments(in);
-        }
-
-        @Override
-        public WordsWithComments[] newArray(int size) {
-            return new WordsWithComments[size];
-        }
-    };
 }
