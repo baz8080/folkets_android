@@ -1,10 +1,12 @@
 package com.mbcdev.folkets;
 
+import android.content.Context;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 
-import java.util.Locale;
+import timber.log.Timber;
 
 /**
  * Models a link to Saldo, which contains a lot of metadata about a word
@@ -22,20 +24,31 @@ class SaldoLink implements Parcelable {
      *
      * @param rawValue the raw database value
      */
-    SaldoLink(@NonNull String rawValue) {
+    SaldoLink(@NonNull Context context, @Nullable String rawValue) {
+
+        if (rawValue == null) {
+            Timber.d("rawValue was null, cannot parse saldo links.");
+            return;
+        }
 
         String[] rawLinks = rawValue.split(Utils.PIPE_SEPARATOR);
 
-        if (rawLinks.length == 3) {
+        boolean allLinksArePresent = rawLinks.length == 3 &&
+                Utils.hasLength(rawLinks[0]) &&
+                Utils.hasLength(rawLinks[1]) &&
+                Utils.hasLength(rawLinks[2]);
 
-            String label = MainApplication.getInstance().getString(R.string.link_word);
-            wordLink = String.format(Locale.US, "<a href=\"https://spraakbanken.gu.se/ws/saldo-ws/fl/html/%s\">%s</a>", rawLinks[0], label);
+        if (allLinksArePresent) {
 
-            label = MainApplication.getInstance().getString(R.string.link_associations);
-            associationsLink = String.format(Locale.US, "<a href=\"https://spraakbanken.gu.se/ws/saldo-ws/lid/html/%s\">%s</a>", rawLinks[1], label);
+            wordLink = context.getString(R.string.link_word_format,
+                    rawLinks[0], context.getString(R.string.link_word));
 
-            label = MainApplication.getInstance().getString(R.string.link_inflections);
-            inflectionsLink = String.format(Locale.US, "<a href=\"https://spraakbanken.gu.se/ws/saldo-ws/lid/html/%s\">%s</a>", rawLinks[2], label);
+            associationsLink = context.getString(R.string.link_associations_format,
+                    rawLinks[1], context.getString(R.string.link_associations));
+
+            inflectionsLink = context.getString(R.string.link_inflections_format,
+                    rawLinks[2], context.getString(R.string.link_inflections)
+            );
         }
     }
 
