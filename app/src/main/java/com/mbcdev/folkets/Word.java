@@ -1,5 +1,6 @@
 package com.mbcdev.folkets;
 
+import android.content.Context;
 import android.database.Cursor;
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -41,7 +42,7 @@ class Word implements Parcelable {
      *
      * @param cursor the cursor containing the words.
      */
-    Word(@NonNull Cursor cursor) {
+    Word(@NonNull Context context, @NonNull Cursor cursor) {
         word = cursor.getString(cursor.getColumnIndex("word"));
         comment = cursor.getString(cursor.getColumnIndex("comment"));
         wordTypes = compileWordTypes(cursor.getString(cursor.getColumnIndex("types")));
@@ -59,7 +60,7 @@ class Word implements Parcelable {
 
         phonetic = cursor.getString(cursor.getColumnIndex("phonetic"));
         synonyms = stringToList(cursor.getString(cursor.getColumnIndex("synonyms")));
-        saldoLinks = new SaldoLinks(cursor.getString(cursor.getColumnIndex("saldos")));
+        saldoLinks = new SaldoLinks(context, cursor.getString(cursor.getColumnIndex("saldos")));
         compareWith = stringToList(cursor.getString(cursor.getColumnIndex("comparisons")));
         antonyms = new ValuesWithTranslations(cursor.getString(cursor.getColumnIndex("antonyms")));
         usage = cursor.getString(cursor.getColumnIndex("use"));

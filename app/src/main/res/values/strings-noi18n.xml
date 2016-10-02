@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation,StringFormatInvalid">
+    <string name="link_word_format"><![CDATA[
+        <a href="https://spraakbanken.gu.se/ws/saldo-ws/fl/html/%1$s">%2$s</a>
+    ]]></string>
+    <string name="link_associations_format"><![CDATA[
+        <a href="https://spraakbanken.gu.se/ws/saldo-ws/lid/html/%1$s">%2$s</a>
+    ]]></string>
+    <string name="link_inflections_format"><![CDATA[
+        <a href="https://spraakbanken.gu.se/ws/saldo-ws/lid/html/%1$s">%2$s</a>
+    ]]></string>
+</resources>

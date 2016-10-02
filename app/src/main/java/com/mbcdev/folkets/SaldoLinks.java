@@ -1,5 +1,6 @@
 package com.mbcdev.folkets;
 
+import android.content.Context;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.support.annotation.NonNull;
@@ -21,13 +22,13 @@ class SaldoLinks implements Parcelable {
      *
      * @param rawValue the raw database value
      */
-    SaldoLinks(@NonNull String rawValue) {
+    SaldoLinks(@NonNull Context context, @NonNull String rawValue) {
 
         String[] rawLinks = rawValue.split(Utils.ASTERISK_SEPARATOR);
         links = new ArrayList<>();
 
         for (String rawLink : rawLinks) {
-            links.add(new SaldoLink(rawLink));
+            links.add(new SaldoLink(context, rawLink));
         }
     }
 

@@ -24,7 +24,7 @@ enum ErrorType {
     /**
      * Gets the resource ID of the string for this ErrorType
      *
-     * @return
+     * @return the resource ID of the string for this ErrorType
      */
     int getStringResourceId() {
         return stringResourceId;
