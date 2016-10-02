@@ -3,8 +3,8 @@ package com.mbcdev.folkets
 import android.content.Context
 import com.google.common.truth.Truth.assertThat
 import org.junit.Test
-import org.mockito.*
-import org.mockito.Mockito.*
+import org.mockito.Mockito.`when`
+import org.mockito.Mockito.mock
 
 /**
  * Tests for [WordType]
@@ -361,7 +361,7 @@ class WordTypeTests {
         `when`(mockedContext.getString(R.string.word_type_pronoun)).thenReturn("Pronoun")
         `when`(mockedContext.getString(R.string.word_type_adverb)).thenReturn("Adverb")
 
-        return mockedContext;
+        return mockedContext
     }
 
 }
