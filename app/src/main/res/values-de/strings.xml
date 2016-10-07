@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Folkets Ordkompis</string>
+    <string name="antonyms_header">Gegenwörter</string>
+    <string name="comment_header">Kommentar</string>
+    <string name="comparisons_header">Siehe auch</string>
+    <string name="definition_header">Definition</string>
+    <string name="derivations_header">Ableitungen</string>
+    <string name="error_database_null">Ups, keine Datenbank gefunden.</string>
+    <string name="examples_header">Beispiele</string>
+    <string name="explanation_header">Erklärung</string>
+    <string name="idioms_header">Redewendungen</string>
+    <string name="main_search_title">Suche</string>
+    <string name="saldo_header">Saldo Links</string>
+    <string name="synonyms_header">Synonym</string>
+    <string name="translations_header">Übersetzungen</string>
+    <string name="usage_header">Sprachgebrauch</string>
+    <string name="variant_header">Variante</string>
+    <string name="word_type_abbreviation">Kürzel</string>
+    <string name="word_type_adjective">Adjektiv</string>
+    <string name="word_type_adverb">Adverb</string>
+    <string name="word_type_article">Artikel</string>
+    <string name="word_type_auxiliary_verb">Hilfsverb</string>
+    <string name="word_type_cardinal_number">Kardinalzahl</string>
+    <string name="word_type_conjunction">Bindewort</string>
+    <string name="word_type_verb">Verb</string>
+    <string name="word_type_unknown">Unbekannt</string>
+    <string name="action_switch_language">Sprache umschalten</string>
+    <string name="compounds_header">Komposita</string>
+    <string name="word_type_interjection">Interjektion</string>
+    <string name="word_type_latin">Latein</string>
+    <string name="word_type_noun">Substantiv</string>
+    <string name="word_type_participle">Partizip</string>
+    <string name="word_type_prefix">Präfix</string>
+    <string name="word_type_preposition">Präposition</string>
+    <string name="word_type_pronoun">Pronomen</string>
+    <string name="word_type_pronoun_determiner">Relativpronomen</string>
+    <string name="word_type_proper_noun">Eigenname</string>
+    <string name="word_type_subordinating_conjunction">Subjunktion</string>
+    <string name="word_type_suffix">Suffix</string>
+    <string name="word_type_pronoun_possessive">Possessivpronomen</string>
+    <string name="word_type_ordinal">Ordinal</string>
+    <string name="inflections_header">Flexion</string>
+    <string name="word_type_infinitivial">Infinitiv Anzeiger</string>
+</resources>
