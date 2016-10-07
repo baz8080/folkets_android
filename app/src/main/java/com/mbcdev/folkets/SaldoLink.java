@@ -51,15 +51,6 @@ class SaldoLink implements Serializable {
                 Utils.hasLength(inflectionsTarget);
     }
 
-    private Object[] adultValues() {
-        return new Object[]{
-                new Object[]{13, false},
-                new Object[]{17, false},
-                new Object[]{18, true},
-                new Object[]{22, true}
-        };
-    }
-
     /**
      * Gets a URL to a page which has details about the word
      *
