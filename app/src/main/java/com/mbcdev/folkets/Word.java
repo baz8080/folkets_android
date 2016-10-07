@@ -59,7 +59,7 @@ class Word implements Serializable {
 
         phonetic = cursor.getString(cursor.getColumnIndex("phonetic"));
         synonyms = stringToList(cursor.getString(cursor.getColumnIndex("synonyms")));
-        saldoLinks = new SaldoLinks(context, cursor.getString(cursor.getColumnIndex("saldos")));
+        saldoLinks = new SaldoLinks(cursor.getString(cursor.getColumnIndex("saldos")));
         compareWith = stringToList(cursor.getString(cursor.getColumnIndex("comparisons")));
         antonyms = new ValuesWithTranslations(cursor.getString(cursor.getColumnIndex("antonyms")));
         usage = cursor.getString(cursor.getColumnIndex("use"));

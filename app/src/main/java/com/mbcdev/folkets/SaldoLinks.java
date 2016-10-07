@@ -1,11 +1,13 @@
 package com.mbcdev.folkets;
 
-import android.content.Context;
 import android.support.annotation.NonNull;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+
+import timber.log.Timber;
 
 /**
  * Models a collection of {@link SaldoLink}
@@ -21,13 +23,24 @@ class SaldoLinks implements Serializable {
      *
      * @param rawValue the raw database value
      */
-    SaldoLinks(@NonNull Context context, @NonNull String rawValue) {
+    SaldoLinks(String rawValue) {
+
+        if (Utils.isEmpty(rawValue)) {
+            Timber.d("Raw value was null, cannot parse.");
+            links = Collections.emptyList();
+            return;
+        }
 
         String[] rawLinks = rawValue.split(Utils.ASTERISK_SEPARATOR);
         links = new ArrayList<>();
 
         for (String rawLink : rawLinks) {
-            links.add(new SaldoLink(context, rawLink));
+            if (Utils.hasLength(rawLink)) {
+                SaldoLink saldoLink = new SaldoLink(rawLink);
+                if (saldoLink.hasValidLinks()) {
+                    links.add(saldoLink);
+                }
+            }
         }
     }
 
@@ -38,12 +51,5 @@ class SaldoLinks implements Serializable {
      */
     @NonNull List<SaldoLink> getLinks() {
         return links;
-    }
-
-    @Override
-    public String toString() {
-        return "SaldoLinks{" +
-                "links=" + links +
-                '}';
     }
 }
