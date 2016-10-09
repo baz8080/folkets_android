@@ -1,11 +1,14 @@
 package com.mbcdev.folkets;
 
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+
+import timber.log.Timber;
 
 /**
  * Models a collection of words that have a comment
@@ -14,11 +17,21 @@ import java.util.Locale;
  */
 class WordsWithComments implements Serializable {
 
+    private static final String WORD_ONLY_FORMAT = "%s:\t%s";
+    private static final String WORD_AND_COMMENT_FORMAT = "%s:\t%s (%s)";
+
     private final List<String> words;
 
-    WordsWithComments(@NonNull String rawValues) {
+    WordsWithComments(@Nullable String rawValues) {
+
+        words = new ArrayList<>();
+
+        if (Utils.isEmpty(rawValues)) {
+            Timber.d("Raw value is empty, returning.");
+            return;
+        }
+
         String[] values = rawValues.split(Utils.ASTERISK_SEPARATOR);
-        words = new ArrayList<>(values.length);
 
         int wordNumber = 0;
 
@@ -28,15 +41,17 @@ class WordsWithComments implements Serializable {
 
             if (components.length > 0) {
 
-                wordNumber++;
+                String word = components[0].trim();
+                String comment = components.length == 2 ? components[1].trim() : null;
 
-                if (components.length == 1) {
-                    String word = components[0].trim();
-                    words.add(String.format(Locale.US, "%s:\t%s", wordNumber, word));
-                } else if (components.length == 2) {
-                    String word = components[0].trim();
-                    String comment = components[1].trim();
-                    words.add(String.format(Locale.US, "%s:\t%s (%s)", wordNumber, word, comment));
+                if (Utils.hasLength(word)) {
+                    wordNumber++;
+
+                    String wordToAdd = (Utils.isEmpty(comment)) ?
+                            String.format(Locale.US, WORD_ONLY_FORMAT, wordNumber, word) :
+                            String.format(Locale.US, WORD_AND_COMMENT_FORMAT, wordNumber, word, comment);
+
+                    words.add(wordToAdd);
                 }
             }
         }
@@ -47,14 +62,7 @@ class WordsWithComments implements Serializable {
      *
      * @return the list of words and comments
      */
-    List<String> getWords() {
+    @NonNull List<String> getWords() {
         return words;
-    }
-
-    @Override
-    public String toString() {
-        return "WordsWithComments{" +
-                "words=" + words +
-                '}';
     }
 }
