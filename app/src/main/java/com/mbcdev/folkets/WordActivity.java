@@ -27,7 +27,7 @@ import timber.log.Timber;
  */
 public class WordActivity extends AppCompatActivity {
 
-    static final String EXTRA_WORD = "extra_word";
+    private static final String EXTRA_WORD = "extra_word";
 
     private ViewGroup container;
     private LayoutInflater inflater;

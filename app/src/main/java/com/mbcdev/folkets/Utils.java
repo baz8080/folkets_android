@@ -11,7 +11,7 @@ import java.util.regex.Pattern;
  *
  * Created by barry on 22/08/2016.
  */
-public class Utils {
+class Utils {
 
     private Utils() {
         // Intentionally empty

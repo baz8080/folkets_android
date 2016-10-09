@@ -23,7 +23,7 @@ import android.view.View;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-public class DividerItemDecoration extends RecyclerView.ItemDecoration {
+class DividerItemDecoration extends RecyclerView.ItemDecoration {
 
     private static final int[] ATTRS = new int[]{
             android.R.attr.listDivider
@@ -31,7 +31,7 @@ public class DividerItemDecoration extends RecyclerView.ItemDecoration {
 
     private final Drawable mDivider;
 
-    public DividerItemDecoration(Context context) {
+    DividerItemDecoration(Context context) {
         final TypedArray a = context.obtainStyledAttributes(ATTRS);
         mDivider = a.getDrawable(0);
         a.recycle();
@@ -45,7 +45,7 @@ public class DividerItemDecoration extends RecyclerView.ItemDecoration {
         drawVertical(c, parent);
     }
 
-    public void drawVertical(Canvas c, RecyclerView parent) {
+    private void drawVertical(Canvas c, RecyclerView parent) {
         final int left = 0;
         final int right = parent.getWidth();
 
