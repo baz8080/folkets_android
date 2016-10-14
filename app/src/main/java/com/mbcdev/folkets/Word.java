@@ -243,30 +243,6 @@ class Word implements Serializable {
         return compounds;
     }
 
-    @Override
-    public String toString() {
-        return "Word{" +
-                "word='" + word + '\'' +
-                ", comment='" + comment + '\'' +
-                ", wordTypes=" + wordTypes +
-                ", translations=" + translations +
-                ", inflections=" + inflections +
-                ", examples=" + examples +
-                ", definition=" + definition +
-                ", explanation=" + explanation +
-                ", phonetic='" + phonetic + '\'' +
-                ", synonyms=" + synonyms +
-                ", saldoLinks=" + saldoLinks +
-                ", compareWith=" + compareWith +
-                ", antonyms=" + antonyms +
-                ", usage='" + usage + '\'' +
-                ", variant='" + variant + '\'' +
-                ", idioms=" + idioms +
-                ", derivations=" + derivations +
-                ", compounds=" + compounds +
-                '}';
-    }
-
     /**
      * Converts a csv string to a list
      *
