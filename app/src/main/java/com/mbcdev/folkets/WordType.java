@@ -88,7 +88,7 @@ enum WordType {
      *
      * @return the string resource id of the string describing the WordType
      */
-    @StringRes public int getTextResourceId() {
+    @StringRes int getTextResourceId() {
         return textResourceId;
     }
 

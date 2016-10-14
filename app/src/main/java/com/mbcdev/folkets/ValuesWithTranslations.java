@@ -6,6 +6,8 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import timber.log.Timber;
+
 /**
  * Models a collection of {@link ValueWithTranslation}
  *
@@ -13,29 +15,31 @@ import java.util.List;
  */
 class ValuesWithTranslations implements Serializable {
 
-    private final List<ValueWithTranslation> valuesWithTranslations;
+    private final List<ValueWithTranslation> valuesWithTranslations = new ArrayList<>();
 
     /**
      * Creates an instance from the raw database value
      *
      * @param rawValues the raw database value
      */
-    ValuesWithTranslations(@NonNull String rawValues) {
-        String[] values = rawValues.split(Utils.ASTERISK_SEPARATOR);
-        valuesWithTranslations = new ArrayList<>(values.length);
+    ValuesWithTranslations(String rawValues) {
 
-        for (String valueWithTranslation : values) {
-            if (valueWithTranslation.length() != 0) {
-                valuesWithTranslations.add(new ValueWithTranslation(valueWithTranslation));
+        if (Utils.isEmpty(rawValues)) {
+            Timber.d("RawValues is null, cannot continue.");
+            return;
+        }
+
+        String[] values = rawValues.split(Utils.ASTERISK_SEPARATOR);
+
+        for (String value : values) {
+            if (Utils.hasLength(value)) {
+                ValueWithTranslation valueWithTranslation = new ValueWithTranslation(value);
+
+                if (Utils.hasLength(valueWithTranslation.getValue())) {
+                    valuesWithTranslations.add(valueWithTranslation);
+                }
             }
         }
-    }
-
-    @Override
-    public String toString() {
-        return "ValuesWithTranslations{" +
-                "valuesWithTranslations=" + valuesWithTranslations +
-                '}';
     }
 
     /**

@@ -247,6 +247,7 @@ class SaldoLinkTests {
         assertThat(saldoLink.getInflectionsLink(context)).isEqualTo("inflections gerry INFLECTIONS")
     }
 
+    @Suppress("unused")
     private fun incompleteValues(): Array<Any> {
         return arrayOf(
                 arrayOf<Any?>(null, null, null),

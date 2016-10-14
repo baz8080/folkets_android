@@ -4,6 +4,8 @@ import android.support.annotation.NonNull;
 
 import java.io.Serializable;
 
+import timber.log.Timber;
+
 /**
  * Models a value that has a translation
  *
@@ -19,7 +21,13 @@ class ValueWithTranslation implements Serializable {
      *
      * @param rawValue The raw value from the database
      */
-    ValueWithTranslation(@NonNull String rawValue) {
+    ValueWithTranslation(String rawValue) {
+
+        if (Utils.isEmpty(rawValue)) {
+            Timber.d("Empty raw value, skipping.");
+            return;
+        }
+
         String[] values = rawValue.split(Utils.PIPE_SEPARATOR);
 
         if (values.length == 1) {
@@ -29,7 +37,6 @@ class ValueWithTranslation implements Serializable {
             value = values[0].trim();
             translation = values[1].trim();
         }
-
     }
 
     /**
@@ -49,13 +56,4 @@ class ValueWithTranslation implements Serializable {
     @NonNull String getTranslation() {
         return translation;
     }
-
-    @Override
-    public String toString() {
-        return "ValueWithTranslation{" +
-                "value='" + value + '\'' +
-                ", translation='" + translation + '\'' +
-                '}';
-    }
-
 }

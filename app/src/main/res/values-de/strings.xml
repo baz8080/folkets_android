@@ -42,4 +42,7 @@
     <string name="word_type_ordinal">Ordinal</string>
     <string name="inflections_header">Flexion</string>
     <string name="word_type_infinitivial">Infinitiv Anzeiger</string>
+    <string name="link_word">WORT</string>
+    <string name="link_associations">VERBÄNDE</string>
+    <string name="link_inflections">FLEXIONEN</string>
 </resources>
