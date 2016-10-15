@@ -2,6 +2,8 @@ package com.mbcdev.folkets;
 
 import android.support.annotation.NonNull;
 
+import com.zendesk.util.StringUtils;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -24,7 +26,7 @@ class ValuesWithTranslations implements Serializable {
      */
     ValuesWithTranslations(String rawValues) {
 
-        if (Utils.isEmpty(rawValues)) {
+        if (StringUtils.isEmpty(rawValues)) {
             Timber.d("RawValues is null, cannot continue.");
             return;
         }
@@ -32,10 +34,10 @@ class ValuesWithTranslations implements Serializable {
         String[] values = rawValues.split(Utils.ASTERISK_SEPARATOR);
 
         for (String value : values) {
-            if (Utils.hasLength(value)) {
+            if (StringUtils.hasLength(value)) {
                 ValueWithTranslation valueWithTranslation = new ValueWithTranslation(value);
 
-                if (Utils.hasLength(valueWithTranslation.getValue())) {
+                if (StringUtils.hasLength(valueWithTranslation.getValue())) {
                     valuesWithTranslations.add(valueWithTranslation);
                 }
             }

@@ -5,6 +5,8 @@ import android.database.Cursor;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
+import com.zendesk.util.StringUtils;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -254,7 +256,7 @@ class Word implements Serializable {
 
         List<String> strings = new ArrayList<>();
 
-        if (Utils.hasLength(csvString)) {
+        if (StringUtils.hasLength(csvString)) {
             strings = Arrays.asList(csvString.split(Utils.ASTERISK_SEPARATOR));
         }
 
