@@ -18,6 +18,7 @@ buildscript {
 allprojects {
     repositories {
         jcenter()
+        maven { url 'https://zendesk.artifactoryonline.com/zendesk/repo' }
     }
 
     tasks.matching {it instanceof Test}.all {
@@ -27,4 +28,23 @@ allprojects {
 
 task clean(type: Delete) {
     delete rootProject.buildDir
+}
+
+/**
+ * Looks for the specified configuration key in this order:
+ *
+ * <ol>
+ *     <li>system environment</li>
+ *     <li>project properties</li>
+ * </ol>
+ *
+ * If it isn't found, then the empty string is returned. This stops the gradlew from failing until
+ * it actually needs those values.
+ *
+ * @param keyName The key to look for
+ * @return The value or the empty string if not found
+ */
+def getConfigurationParameter(String keyName) {
+    return System.getenv(keyName) ?:
+            rootProject.hasProperty(keyName) ? rootProject.properties[keyName] : ''
 }
