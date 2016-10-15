@@ -15,6 +15,9 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.zendesk.util.CollectionUtils;
+import com.zendesk.util.StringUtils;
+
 import java.util.List;
 import java.util.Locale;
 
@@ -64,7 +67,7 @@ public class WordActivity extends AppCompatActivity {
 
         TextView wordIpaTextView = (TextView) findViewById(R.id.activity_word_ipa);
 
-        if (Utils.hasLength(word.getPhonetic())) {
+        if (StringUtils.hasLength(word.getPhonetic())) {
             wordIpaTextView.setText(String.format(Locale.US, "/%s/", word.getPhonetic()));
         } else {
             wordIpaTextView.setVisibility(View.GONE);
@@ -166,19 +169,19 @@ public class WordActivity extends AppCompatActivity {
             return;
         }
 
-        String context = buildValueWithTranslation(valueWithTranslation);
+        String content = buildValueWithTranslation(valueWithTranslation);
 
-        if (Utils.isEmpty(context)) {
+        if (StringUtils.isEmpty(content)) {
             return;
         }
 
-        SectionLinearLayout section = new SectionLinearLayout(title, context);
+        SectionLinearLayout section = new SectionLinearLayout(title, content);
         container.addView(section.layout);
     }
 
     private void addSection(String title, String content) {
 
-        if (Utils.isEmpty(title) || Utils.isEmpty(content)) {
+        if (StringUtils.isEmpty(title) || StringUtils.isEmpty(content)) {
             return;
         }
 
@@ -188,7 +191,7 @@ public class WordActivity extends AppCompatActivity {
 
     private void addSection(String title, SaldoLinks links) {
 
-        if (Utils.isEmpty(title) || links == null || Utils.isEmpty(links.getLinks())) {
+        if (StringUtils.isEmpty(title) || links == null || CollectionUtils.isEmpty(links.getLinks())) {
             return;
         }
 
@@ -225,11 +228,11 @@ public class WordActivity extends AppCompatActivity {
     private String buildValueWithTranslation (ValueWithTranslation valueWithTranslation) {
         StringBuilder builder = new StringBuilder();
 
-        if (Utils.hasLength(valueWithTranslation.getValue())) {
+        if (StringUtils.hasLength(valueWithTranslation.getValue())) {
             builder.append(valueWithTranslation.getValue());
         }
 
-        if (Utils.hasLength(valueWithTranslation.getTranslation())) {
+        if (StringUtils.hasLength(valueWithTranslation.getTranslation())) {
             builder.append(" - ");
             builder.append(valueWithTranslation.getTranslation());
         }

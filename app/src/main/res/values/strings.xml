@@ -49,4 +49,5 @@
     <string name="link_inflections">INFLECTIONS</string>
 
     <string name="error_database_null">Oops!, seems like the database is missing.</string>
+    <string name="action_help">Help</string>
 </resources>

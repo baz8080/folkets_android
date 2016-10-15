@@ -2,6 +2,8 @@ package com.mbcdev.folkets;
 
 import android.support.annotation.NonNull;
 
+import com.zendesk.util.StringUtils;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -25,7 +27,7 @@ class SaldoLinks implements Serializable {
      */
     SaldoLinks(String rawValue) {
 
-        if (Utils.isEmpty(rawValue)) {
+        if (StringUtils.isEmpty(rawValue)) {
             Timber.d("Raw value was null, cannot parse.");
             links = Collections.emptyList();
             return;
@@ -35,7 +37,7 @@ class SaldoLinks implements Serializable {
         links = new ArrayList<>();
 
         for (String rawLink : rawLinks) {
-            if (Utils.hasLength(rawLink)) {
+            if (StringUtils.hasLength(rawLink)) {
                 SaldoLink saldoLink = new SaldoLink(rawLink);
                 if (saldoLink.hasValidLinks()) {
                     links.add(saldoLink);

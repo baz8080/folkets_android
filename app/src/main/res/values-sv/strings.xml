@@ -50,5 +50,6 @@
     <string name="link_inflections">BÖJNINGAR</string>
 
     <string name="error_database_null">Hoppsan! Det verkar som att något är fel i databasen.</string>
+    <string name="action_help">Hjälp</string>
 
 </resources>

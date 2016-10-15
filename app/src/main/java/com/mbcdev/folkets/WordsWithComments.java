@@ -3,6 +3,8 @@ package com.mbcdev.folkets;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
+import com.zendesk.util.StringUtils;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -26,7 +28,7 @@ class WordsWithComments implements Serializable {
 
         words = new ArrayList<>();
 
-        if (Utils.isEmpty(rawValues)) {
+        if (StringUtils.isEmpty(rawValues)) {
             Timber.d("Raw value is empty, returning.");
             return;
         }
@@ -44,10 +46,10 @@ class WordsWithComments implements Serializable {
                 String word = components[0].trim();
                 String comment = components.length == 2 ? components[1].trim() : null;
 
-                if (Utils.hasLength(word)) {
+                if (StringUtils.hasLength(word)) {
                     wordNumber++;
 
-                    String wordToAdd = (Utils.isEmpty(comment)) ?
+                    String wordToAdd = (StringUtils.isEmpty(comment)) ?
                             String.format(Locale.US, WORD_ONLY_FORMAT, wordNumber, word) :
                             String.format(Locale.US, WORD_AND_COMMENT_FORMAT, wordNumber, word, comment);
 

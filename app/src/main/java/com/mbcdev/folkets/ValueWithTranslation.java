@@ -2,6 +2,8 @@ package com.mbcdev.folkets;
 
 import android.support.annotation.NonNull;
 
+import com.zendesk.util.StringUtils;
+
 import java.io.Serializable;
 
 import timber.log.Timber;
@@ -23,7 +25,7 @@ class ValueWithTranslation implements Serializable {
      */
     ValueWithTranslation(String rawValue) {
 
-        if (Utils.isEmpty(rawValue)) {
+        if (StringUtils.isEmpty(rawValue)) {
             Timber.d("Empty raw value, skipping.");
             return;
         }

@@ -4,6 +4,8 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
+import com.zendesk.util.StringUtils;
+
 import java.io.Serializable;
 
 import timber.log.Timber;
@@ -34,9 +36,7 @@ class SaldoLink implements Serializable {
         String[] rawLinks = rawValue.split(Utils.PIPE_SEPARATOR);
 
         boolean allLinksArePresent = rawLinks.length == 3 &&
-                Utils.hasLength(rawLinks[0]) &&
-                Utils.hasLength(rawLinks[1]) &&
-                Utils.hasLength(rawLinks[2]);
+                StringUtils.hasLengthMany(rawLinks[0], rawLinks[1], rawLinks[2]);
 
         if (allLinksArePresent) {
             wordTarget = rawLinks[0];
@@ -46,9 +46,7 @@ class SaldoLink implements Serializable {
     }
 
     boolean hasValidLinks() {
-        return Utils.hasLength(wordTarget) &&
-                Utils.hasLength(associationsTarget) &&
-                Utils.hasLength(inflectionsTarget);
+        return StringUtils.hasLengthMany(wordTarget, associationsTarget, inflectionsTarget);
     }
 
     /**
@@ -59,7 +57,7 @@ class SaldoLink implements Serializable {
     @NonNull String getWordLink(Context context) {
 
         if (context == null || wordTarget == null) {
-            return Utils.EMPTY_STRING;
+            return StringUtils.EMPTY_STRING;
         }
 
         String label = context.getString(R.string.link_word);
@@ -74,7 +72,7 @@ class SaldoLink implements Serializable {
     @NonNull String getInflectionsLink(Context context) {
 
         if (context == null || inflectionsTarget == null) {
-            return Utils.EMPTY_STRING;
+            return StringUtils.EMPTY_STRING;
         }
 
         String label = context.getString(R.string.link_inflections);
@@ -89,7 +87,7 @@ class SaldoLink implements Serializable {
     @NonNull String getAssociationsLink(Context context) {
 
         if (context == null || associationsTarget == null) {
-            return Utils.EMPTY_STRING;
+            return StringUtils.EMPTY_STRING;
         }
 
         String label = context.getString(R.string.link_associations);

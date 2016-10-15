@@ -5,6 +5,8 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.StringRes;
 
+import com.zendesk.util.StringUtils;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -103,7 +105,7 @@ enum WordType {
             @Nullable Context context, @Nullable List<WordType> wordTypes) {
 
         if (context == null || wordTypes == null) {
-            return Utils.EMPTY_STRING;
+            return StringUtils.EMPTY_STRING;
         }
 
         StringBuilder wordTypeBuilder = new StringBuilder();
