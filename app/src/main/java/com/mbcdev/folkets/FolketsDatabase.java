@@ -31,7 +31,6 @@ import static timber.log.Timber.e;
 class FolketsDatabase {
 
     private static final String FOLKETS_DB = "folkets.db";
-    private final Context context;
 
     private SQLiteDatabase database;
     private final SharedPreferences preferences;
@@ -42,11 +41,11 @@ class FolketsDatabase {
      * @param context A valid context
      */
     FolketsDatabase(@NonNull Context context) {
-        this.context = context.getApplicationContext();
-        preferences = PreferenceManager.getDefaultSharedPreferences(context);
+        Context applicationContext = context.getApplicationContext();
+        preferences = PreferenceManager.getDefaultSharedPreferences(applicationContext);
 
         synchronized (this) {
-            initialiseDatabase(context);
+            initialiseDatabase(applicationContext);
         }
     }
 
@@ -79,7 +78,7 @@ class FolketsDatabase {
 
                 cursor.moveToFirst();
                 while (!cursor.isAfterLast()) {
-                    words.add(new Word(context, cursor));
+                    words.add(new Word(cursor));
                     cursor.moveToNext();
                 }
 
