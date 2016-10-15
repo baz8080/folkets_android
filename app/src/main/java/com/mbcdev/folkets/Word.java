@@ -1,6 +1,5 @@
 package com.mbcdev.folkets;
 
-import android.content.Context;
 import android.database.Cursor;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -12,6 +11,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import timber.log.Timber;
+
 /**
  * Model to convert a word from a database cursor
  *
@@ -19,31 +20,37 @@ import java.util.List;
  */
 class Word implements Serializable {
 
-    private final String word;
-    private final String comment;
-    private final List<WordType> wordTypes;
-    private final WordsWithComments translations;
-    private final List<String> inflections;
-    private final ValuesWithTranslations examples;
-    private final ValueWithTranslation definition;
-    private final ValueWithTranslation explanation;
-    private final String phonetic;
-    private final List<String> synonyms;
-    private final SaldoLinks saldoLinks;
-    private final List<String> compareWith;
-    private final ValuesWithTranslations antonyms;
-    private final String usage;
-    private final String variant;
-    private final ValuesWithTranslations idioms;
-    private final ValuesWithTranslations derivations;
-    private final ValuesWithTranslations compounds;
+    private String word;
+    private String comment;
+    private List<WordType> wordTypes;
+    private WordsWithComments translations;
+    private List<String> inflections;
+    private ValuesWithTranslations examples;
+    private ValueWithTranslation definition;
+    private ValueWithTranslation explanation;
+    private String phonetic;
+    private List<String> synonyms;
+    private SaldoLinks saldoLinks;
+    private List<String> compareWith;
+    private ValuesWithTranslations antonyms;
+    private String usage;
+    private String variant;
+    private ValuesWithTranslations idioms;
+    private ValuesWithTranslations derivations;
+    private ValuesWithTranslations compounds;
 
     /**
      * Creates an instance from the given cursor
      *
      * @param cursor the cursor containing the words.
      */
-    Word(@NonNull Context context, @NonNull Cursor cursor) {
+    Word(Cursor cursor) {
+        
+        if (cursor == null) {
+            Timber.d("Cursor was null, cannot continue.");
+            return;
+        }
+        
         word = cursor.getString(cursor.getColumnIndex("word"));
         comment = cursor.getString(cursor.getColumnIndex("comment"));
         wordTypes = compileWordTypes(cursor.getString(cursor.getColumnIndex("types")));
@@ -53,7 +60,7 @@ class Word implements Serializable {
         definition = new ValueWithTranslation(cursor.getString(cursor.getColumnIndex("definition")));
 
         String rawExplanation = cursor.getString(cursor.getColumnIndex("explanation"));
-        if (rawExplanation.length() != 0) {
+        if (StringUtils.hasLength(rawExplanation)) {
             this.explanation = new ValueWithTranslation(rawExplanation);
         } else {
             this.explanation = null;
@@ -69,18 +76,6 @@ class Word implements Serializable {
         idioms = new ValuesWithTranslations(cursor.getString(cursor.getColumnIndex("idioms")));
         derivations = new ValuesWithTranslations(cursor.getString(cursor.getColumnIndex("derivations")));
         compounds = new ValuesWithTranslations(cursor.getString(cursor.getColumnIndex("compounds")));
-    }
-
-    @NonNull
-    private List<WordType> compileWordTypes(@NonNull String types) {
-
-        List<WordType> wordTypes = new ArrayList<>();
-
-        for (String type : types.split(",")) {
-            wordTypes.add(WordType.lookup(type));
-        }
-
-        return wordTypes;
     }
 
     /**
@@ -257,10 +252,32 @@ class Word implements Serializable {
         List<String> strings = new ArrayList<>();
 
         if (StringUtils.hasLength(csvString)) {
-            strings = Arrays.asList(csvString.split(Utils.ASTERISK_SEPARATOR));
+            String[] split = csvString.split(Utils.ASTERISK_SEPARATOR);
+
+            for (String string : split) {
+                if (StringUtils.hasLength(string)) {
+                    strings.add(string.trim());
+                }
+            }
         }
 
         return strings;
+    }
+
+    @NonNull
+    private List<WordType> compileWordTypes(@Nullable String types) {
+
+        List<WordType> wordTypes = new ArrayList<>();
+
+        if (types == null) {
+            wordTypes.add(WordType.UNKNOWN);
+        } else {
+            for (String type : types.split(",")) {
+                wordTypes.add(WordType.lookup(type));
+            }
+        }
+
+        return wordTypes;
     }
 
 }
