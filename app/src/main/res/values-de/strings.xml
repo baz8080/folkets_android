@@ -45,4 +45,5 @@
     <string name="link_word">WORT</string>
     <string name="link_associations">VERBÄNDE</string>
     <string name="link_inflections">FLEXIONEN</string>
+    <string name="action_help">Hilfe</string>
 </resources>

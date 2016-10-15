@@ -59,6 +59,11 @@ interface MainMvp {
          * @return the Context
          */
         @NonNull Context getContext();
+
+        /**
+         * Called when help (Zendesk) should be shown
+         */
+        void showHelp();
     }
 
     /**
@@ -89,5 +94,10 @@ interface MainMvp {
          * switch the app to search the english database.
          */
         void switchBaseLanguage();
+
+        /**
+         * Called when the user has requested help
+         */
+        void helpRequested();
     }
 }

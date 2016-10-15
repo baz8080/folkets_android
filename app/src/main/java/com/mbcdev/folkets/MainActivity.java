@@ -14,6 +14,8 @@ import android.view.MenuItem;
 import android.view.inputmethod.EditorInfo;
 import android.widget.SearchView;
 
+import com.zendesk.sdk.support.SupportActivity;
+
 import java.util.List;
 import java.util.Locale;
 
@@ -85,6 +87,9 @@ public class MainActivity extends AppCompatActivity implements MainMvp.View {
         if (id == R.id.action_switch_language) {
             presenter.switchBaseLanguage();
             return true;
+        } else if (id == R.id.action_help) {
+            presenter.helpRequested();
+            return true;
         }
 
         return super.onOptionsItemSelected(item);
@@ -116,5 +121,12 @@ public class MainActivity extends AppCompatActivity implements MainMvp.View {
     @Override
     public Context getContext() {
         return this;
+    }
+
+    @Override
+    public void showHelp() {
+        new SupportActivity.Builder()
+                .showContactUsButton(false)
+                .show(this);
     }
 }

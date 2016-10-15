@@ -56,4 +56,9 @@ class MainPresenter implements MainMvp.Presenter {
         view.setToolbarText(model.getLanguageCode());
         search("");
     }
+
+    @Override
+    public void helpRequested() {
+        view.showHelp();
+    }
 }
