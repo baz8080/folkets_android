@@ -6,6 +6,7 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -38,7 +39,7 @@ public class MainActivity extends AppCompatActivity implements MainMvp.View {
 
         recyclerView = (RecyclerView) findViewById(R.id.main_recycler_view);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        recyclerView.addItemDecoration(new DividerItemDecoration(this));
+        recyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
 
         presenter = new MainPresenter();
         presenter.attachView(this);
@@ -126,7 +127,6 @@ public class MainActivity extends AppCompatActivity implements MainMvp.View {
     @Override
     public void showHelp() {
         new SupportActivity.Builder()
-                .showContactUsButton(false)
                 .show(this);
     }
 }
