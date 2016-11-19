@@ -13,4 +13,3 @@ An Android app to use the Folkets Swedish to English lexicon.
 ## Building
 
 * Import project from root build.gradle and run. No special setup required.
-
