@@ -61,4 +61,14 @@ class MainPresenter implements MainMvp.Presenter {
     public void helpRequested() {
         view.showHelp();
     }
+
+    @Override
+    public void showIpmRequested() {
+        model.showIpm();
+    }
+
+    @Override
+    public void cancelIpmRequested() {
+        model.cancelIpm();
+    }
 }

@@ -8,6 +8,8 @@ import android.support.annotation.NonNull;
 import java.util.List;
 import java.util.Locale;
 
+import zendesk.connect.ConnectSDK;
+
 /**
  * Default implementation of the {@link MainMvp.Model}
  *
@@ -55,5 +57,15 @@ class MainModel implements MainMvp.Model {
         } else {
             return switchBaseLanguage ? SWEDISH_LANGUAGE_CODE : ENGLISH_LANGUAGE_CODE;
         }
+    }
+
+    @Override
+    public void showIpm() {
+        ConnectSDK.INSTANCE.show();
+    }
+
+    @Override
+    public void cancelIpm() {
+        ConnectSDK.INSTANCE.abort();
     }
 }

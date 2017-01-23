@@ -7,7 +7,7 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:2.2.2'
+        classpath 'com.android.tools.build:gradle:2.2.3'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
 
         // NOTE: Do not place your application dependencies here; they belong
@@ -19,6 +19,14 @@ allprojects {
     repositories {
         jcenter()
         maven { url 'https://zendesk.artifactoryonline.com/zendesk/repo' }
+        maven {
+            credentials {
+                username getConfigurationParameter("zdRepoUsername")
+                password getConfigurationParameter("zdRepoPassword")
+            }
+
+            url 'https://zdrepo.artifactoryonline.com/zdrepo/repo'
+        }
     }
 
     tasks.matching {it instanceof Test}.all {

@@ -24,9 +24,28 @@ interface MainMvp {
          */
         void search(@NonNull String query, @NonNull Callback<List<Word>> callback);
 
+        /**
+         * Switches the current language from "en" to "sv", or from "sv" to "en".
+         */
         void switchBaseLanguage();
 
+        /**
+         * Gets the preferred language of the user, will either be "en", or "sv"
+         *
+         * @return "en" if the user prefers the English to Swedish dictionary, or "sv" if the
+         *         user prefers the Swedish to English dictionary
+         */
         @NonNull String getLanguageCode();
+
+        /**
+         * Shows an in-product message, if available.
+         */
+        void showIpm();
+
+        /**
+         * Cancels an in-product message, making it ineligible for display.
+         */
+        void cancelIpm();
     }
 
     /**
@@ -99,5 +118,16 @@ interface MainMvp {
          * Called when the user has requested help
          */
         void helpRequested();
+
+        /**
+         * Called when an in-product message has been requested. If an IPM is available, it will
+         * be shown at the bottom of the screen.
+         */
+        void showIpmRequested();
+
+        /**
+         * Called when we don't want to show an in-product message any more.
+         */
+        void cancelIpmRequested();
     }
 }

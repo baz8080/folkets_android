@@ -22,6 +22,15 @@
         <activity android:name=".WordActivity"
                   android:theme="@style/AppTheme.NoActionBar">
         </activity>
+        <activity android:name=".DeeplinkRouter"
+            android:theme="@style/AppTheme.NoActionBar">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="folkets" />
+            </intent-filter>
+        </activity>
     </application>
 
 </manifest>
