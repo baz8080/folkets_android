@@ -20,6 +20,8 @@ import com.zendesk.sdk.support.SupportActivity;
 import java.util.List;
 import java.util.Locale;
 
+import timber.log.Timber;
+
 /**
  * This activity will show a list of words and translations, and allow users to tap on a result
  * to see the full definition of the word
@@ -43,12 +45,17 @@ public class MainActivity extends AppCompatActivity implements MainMvp.View {
 
         presenter = new MainPresenter();
         presenter.attachView(this);
+        presenter.showIpmRequested();
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        presenter.detachView();
+
+        if (presenter != null) {
+            presenter.detachView();
+            presenter.cancelIpmRequested();
+        }
     }
 
     @Override

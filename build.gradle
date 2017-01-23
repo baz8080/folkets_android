@@ -19,6 +19,14 @@ allprojects {
     repositories {
         jcenter()
         maven { url 'https://zendesk.artifactoryonline.com/zendesk/repo' }
+        maven {
+            credentials {
+                username getConfigurationParameter("zdRepoUsername")
+                password getConfigurationParameter("zdRepoPassword")
+            }
+
+            url 'https://zdrepo.artifactoryonline.com/zdrepo/repo'
+        }
     }
 
     tasks.matching {it instanceof Test}.all {
