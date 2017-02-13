@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Folkets Ordkompis</string>
-    <string name="action_switch_language">Byt språk</string>
     <string name="main_search_title">Sök</string>
 
     <string name="word_type_noun">Substantiv</string>

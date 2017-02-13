@@ -8,8 +8,6 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-import timber.log.Timber;
-
 /**
  * Models a collection of {@link ValueWithTranslation}
  *
@@ -27,7 +25,6 @@ class ValuesWithTranslations implements Serializable {
     ValuesWithTranslations(String rawValues) {
 
         if (StringUtils.isEmpty(rawValues)) {
-            Timber.d("RawValues is null, cannot continue.");
             return;
         }
 

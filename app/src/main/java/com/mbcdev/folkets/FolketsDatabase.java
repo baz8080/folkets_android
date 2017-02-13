@@ -12,6 +12,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import okio.BufferedSink;
@@ -34,6 +35,7 @@ class FolketsDatabase {
 
     private SQLiteDatabase database;
     private final SharedPreferences preferences;
+    private final LruCache<String, List<Word>> cache;
 
     /**
      * Creates an instance of the SQLiteOpenHelper. Intentionally private
@@ -43,6 +45,7 @@ class FolketsDatabase {
     FolketsDatabase(@NonNull Context context) {
         Context applicationContext = context.getApplicationContext();
         preferences = PreferenceManager.getDefaultSharedPreferences(applicationContext);
+        cache = new LruCache<>(20);
 
         synchronized (this) {
             initialiseDatabase(applicationContext);
@@ -52,12 +55,11 @@ class FolketsDatabase {
     /**
      * Searches the database for
      *
-     * @param tableName The table name to run the query in.
      * @param query The query. This will be appended with % to get inexact matches
      * @param callback The callback used to deliver the results.
      */
     void search(
-            @NonNull final String tableName, @NonNull final String query,
+            @NonNull final String query,
             @NonNull final Callback<List<Word>> callback) {
 
         if (this.database == null) {
@@ -69,20 +71,46 @@ class FolketsDatabase {
         execute(new Runnable() {
             @Override
             public void run() {
-                Cursor cursor = database.query(
-                        tableName, null, "word like ?",
-                        new String[] { query + "%" }, null, null, "word asc limit 0,100");
 
-                d("Number of results %s", cursor.getCount());
+                final List<Word> cachedWords = cache.get(query);
+
+                if (cachedWords != null) {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            callback.onSuccess(cachedWords);
+                        }
+                    });
+
+                    return;
+                }
+
+                Long time = System.currentTimeMillis();
+
+
+                Cursor cursor = database.rawQuery(
+                        "select * from folkets_en_sv where word like ? union select * from folkets_sv_en where word like ? limit 0,75",
+                        new String[] { query + "%" , query + "%"}
+                );
+
+                d("Fetched %s results in %d ms", cursor.getCount(), (System.currentTimeMillis() - time));
                 final List<Word> words = new ArrayList<>();
 
+                time = System.currentTimeMillis();
                 cursor.moveToFirst();
                 while (!cursor.isAfterLast()) {
                     words.add(new Word(cursor));
                     cursor.moveToNext();
                 }
+                d("Created result set in %d ms", (System.currentTimeMillis() - time));
 
                 cursor.close();
+
+                time = System.currentTimeMillis();
+                Collections.sort(words);
+                cache.put(query, words);
+
+                d("Sorted result set in %d ms", (System.currentTimeMillis() - time));
 
                 runOnUiThread(new Runnable() {
                     @Override

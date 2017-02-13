@@ -9,8 +9,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import timber.log.Timber;
-
 /**
  * Models a collection of {@link SaldoLink}
  *
@@ -28,7 +26,6 @@ class SaldoLinks implements Serializable {
     SaldoLinks(String rawValue) {
 
         if (StringUtils.isEmpty(rawValue)) {
-            Timber.d("Raw value was null, cannot parse.");
             links = Collections.emptyList();
             return;
         }

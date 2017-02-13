@@ -23,10 +23,6 @@ interface MainMvp {
          * @param callback The callback used to deliver results
          */
         void search(@NonNull String query, @NonNull Callback<List<Word>> callback);
-
-        void switchBaseLanguage();
-
-        @NonNull String getLanguageCode();
     }
 
     /**
@@ -88,12 +84,6 @@ interface MainMvp {
          * @param query the query to search for
          */
         void search(@NonNull String query);
-
-        /**
-         * Switches the base language. If the device has an swedish locale, then this will
-         * switch the app to search the english database.
-         */
-        void switchBaseLanguage();
 
         /**
          * Called when the user has requested help

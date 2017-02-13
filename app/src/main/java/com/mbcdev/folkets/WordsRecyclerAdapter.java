@@ -1,5 +1,6 @@
 package com.mbcdev.folkets;
 
+import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -39,15 +40,20 @@ class WordsRecyclerAdapter extends RecyclerView.Adapter<WordsRecyclerAdapter.Vie
     public void onBindViewHolder(final ViewHolder holder, final int position) {
 
         final Word word = wordList.get(position);
+        final Context context = holder.holderView.getContext();
 
         holder.holderView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                WordActivity.startWithWord(holder.holderView.getContext(), word);
+                WordActivity.startWithWord(context, word);
             }
         });
 
         holder.wordTextView.setText(word.getWord());
+        holder.wordTextView.setCompoundDrawablesWithIntrinsicBounds(
+                word.getSourceLanguage().equals("en") ? R.drawable.flag_uk : R.drawable.flag_sv,
+                0, 0, 0
+        );
 
         String wordTypes = WordType.formatWordTypesForDisplay(
                 holder.holderView.getContext(), word.getWordTypes());
