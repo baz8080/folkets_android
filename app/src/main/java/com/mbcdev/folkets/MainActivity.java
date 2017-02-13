@@ -1,5 +1,6 @@
 package com.mbcdev.folkets;
 
+import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -13,6 +14,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.SearchView;
 
 import com.zendesk.sdk.support.SupportActivity;
@@ -40,6 +42,7 @@ public class MainActivity extends AppCompatActivity implements MainMvp.View {
         recyclerView = (RecyclerView) findViewById(R.id.main_recycler_view);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
+        recyclerView.addOnScrollListener(new KeyboardHidingScrollListener());
 
         presenter = new MainPresenter();
         presenter.attachView(this);
@@ -85,10 +88,7 @@ public class MainActivity extends AppCompatActivity implements MainMvp.View {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_switch_language) {
-            presenter.switchBaseLanguage();
-            return true;
-        } else if (id == R.id.action_help) {
+        if (id == R.id.action_help) {
             presenter.helpRequested();
             return true;
         }
@@ -128,5 +128,21 @@ public class MainActivity extends AppCompatActivity implements MainMvp.View {
     public void showHelp() {
         new SupportActivity.Builder()
                 .show(this);
+    }
+
+    /**
+     * Attempts to hide the keyboard when the RecyclerView scroll state changes
+     */
+    class KeyboardHidingScrollListener extends RecyclerView.OnScrollListener {
+        @Override
+        public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+
+            if (getCurrentFocus() == null) {
+                return;
+            }
+
+            InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);
+            inputMethodManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+        }
     }
 }

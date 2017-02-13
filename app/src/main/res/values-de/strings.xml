@@ -25,7 +25,6 @@
     <string name="word_type_conjunction">Bindewort</string>
     <string name="word_type_verb">Verb</string>
     <string name="word_type_unknown">Unbekannt</string>
-    <string name="action_switch_language">Sprache umschalten</string>
     <string name="compounds_header">Komposita</string>
     <string name="word_type_interjection">Interjektion</string>
     <string name="word_type_latin">Latein</string>

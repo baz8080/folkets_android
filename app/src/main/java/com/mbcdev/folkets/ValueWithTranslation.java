@@ -6,8 +6,6 @@ import com.zendesk.util.StringUtils;
 
 import java.io.Serializable;
 
-import timber.log.Timber;
-
 /**
  * Models a value that has a translation
  *
@@ -26,7 +24,6 @@ class ValueWithTranslation implements Serializable {
     ValueWithTranslation(String rawValue) {
 
         if (StringUtils.isEmpty(rawValue)) {
-            Timber.d("Empty raw value, skipping.");
             return;
         }
 

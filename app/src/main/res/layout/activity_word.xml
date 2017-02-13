@@ -27,7 +27,10 @@
                 style="@style/TextAppearance.AppCompat.Title.Inverse"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                tools:text="Inexorable" />
+                android:drawableEnd="@drawable/ic_play"
+                android:drawablePadding="4dp"
+                tools:text="Inexorable"
+                android:gravity="center"/>
 
             <TextView
                 android:id="@+id/activity_word_ipa"

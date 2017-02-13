@@ -1,6 +1,10 @@
 package com.mbcdev.folkets;
 
+import android.content.Context;
+import android.os.CountDownTimer;
 import android.support.annotation.NonNull;
+
+import com.zendesk.util.StringUtils;
 
 import java.util.List;
 
@@ -16,11 +20,14 @@ class MainPresenter implements MainMvp.Presenter {
     private MainMvp.Model model;
     private MainMvp.View view;
 
+    private CountDownTimer countDownTimer;
+
     @Override
     public void attachView(@NonNull MainMvp.View view) {
         this.view = view;
-        model = new MainModel(view.getContext());
-        view.setToolbarText(model.getLanguageCode());
+        Context context = view.getContext();
+        model = new MainModel(context);
+        view.setToolbarText(context.getString(R.string.main_search_title));
         search("");
     }
 
@@ -30,31 +37,42 @@ class MainPresenter implements MainMvp.Presenter {
     }
 
     @Override
-    public void search(@NonNull String query) {
+    public void search(@NonNull final String query) {
 
         if (view == null) {
             Timber.d("View is null. Will not search.");
             return;
         }
 
-        model.search(query, new Callback<List<Word>>() {
+        if (countDownTimer != null) {
+            countDownTimer.cancel();
+        }
+
+        long delay = StringUtils.hasLength(query)
+                ? 150
+                : 0;
+
+        countDownTimer = new CountDownTimer(delay, delay) {
             @Override
-            public void onSuccess(List<Word> result) {
-                view.showResults(result);
+            public void onTick(long millisUntilFinished) {
+                // Intentionally empty
             }
 
             @Override
-            public void onError(ErrorType errorType) {
-                view.onError(errorType);
-            }
-        });
-    }
+            public void onFinish() {
+                model.search(query, new com.mbcdev.folkets.Callback<List<Word>>() {
+                    @Override
+                    public void onSuccess(List<Word> result) {
+                        view.showResults(result);
+                    }
 
-    @Override
-    public void switchBaseLanguage() {
-        model.switchBaseLanguage();
-        view.setToolbarText(model.getLanguageCode());
-        search("");
+                    @Override
+                    public void onError(ErrorType errorType) {
+                        view.onError(errorType);
+                    }
+                });
+            }
+        }.start();
     }
 
     @Override

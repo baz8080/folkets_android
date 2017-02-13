@@ -8,8 +8,8 @@ import com.zendesk.util.StringUtils;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
+import java.util.Locale;
 
 import timber.log.Timber;
 
@@ -18,8 +18,9 @@ import timber.log.Timber;
  *
  * Created by barry on 21/08/2016.
  */
-class Word implements Serializable {
+class Word implements Serializable, Comparable<Word> {
 
+    private String sourceLanguage;
     private String word;
     private String comment;
     private List<WordType> wordTypes;
@@ -50,7 +51,8 @@ class Word implements Serializable {
             Timber.d("Cursor was null, cannot continue.");
             return;
         }
-        
+
+        sourceLanguage = cursor.getString(cursor.getColumnIndex("language"));
         word = cursor.getString(cursor.getColumnIndex("word"));
         comment = cursor.getString(cursor.getColumnIndex("comment"));
         wordTypes = compileWordTypes(cursor.getString(cursor.getColumnIndex("types")));
@@ -76,6 +78,15 @@ class Word implements Serializable {
         idioms = new ValuesWithTranslations(cursor.getString(cursor.getColumnIndex("idioms")));
         derivations = new ValuesWithTranslations(cursor.getString(cursor.getColumnIndex("derivations")));
         compounds = new ValuesWithTranslations(cursor.getString(cursor.getColumnIndex("compounds")));
+    }
+
+    /**
+     * Gets the source language of this word
+     *
+     * @return "en" if this is an Englsh word, or "sv" if it is a Swedish word.
+     */
+    String getSourceLanguage() {
+        return sourceLanguage;
     }
 
     /**
@@ -280,4 +291,8 @@ class Word implements Serializable {
         return wordTypes;
     }
 
+    @Override
+    public int compareTo(@NonNull Word o) {
+        return this.word.toLowerCase(Locale.US).compareTo(o.getWord().toLowerCase(Locale.US));
+    }
 }
