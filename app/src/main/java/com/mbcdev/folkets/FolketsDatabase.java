@@ -202,6 +202,7 @@ class FolketsDatabase {
                 BufferedSink bufferedSink = Okio.buffer(Okio.sink(file))) {
 
             bufferedSink.writeAll(hashingSource);
+            bufferedSink.close();
 
             String hash = hashingSource.hash().hex();
             d("copyDbToStorage: Saving hash of db as %s", hash);
