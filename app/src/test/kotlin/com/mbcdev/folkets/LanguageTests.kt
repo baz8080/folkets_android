@@ -1,7 +1,7 @@
 package com.mbcdev.folkets
 
-import org.junit.Test
 import com.google.common.truth.Truth.assertThat
+import org.junit.Test
 
 /**
  * Tests for [Language]
@@ -11,18 +11,8 @@ import com.google.common.truth.Truth.assertThat
 class LanguageTests {
 
     @Test
-    fun englishShouldHaveCorrectDatabaseTable() {
-        assertThat(Language.ENGLISH.tableName).isEqualTo("folkets_en_sv")
-    }
-
-    @Test
     fun englishShouldHaveCorrectLanguageCode() {
         assertThat(Language.ENGLISH.code).isEqualTo("en")
-    }
-
-    @Test
-    fun swedishShouldHaveCorrectDatabaseTable() {
-        assertThat(Language.SWEDISH.tableName).isEqualTo("folkets_sv_en")
     }
 
     @Test
