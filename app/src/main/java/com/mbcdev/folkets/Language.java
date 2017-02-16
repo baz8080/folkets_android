@@ -13,21 +13,20 @@ import timber.log.Timber;
  * Created by barry on 24/09/2016.
  */
 enum Language {
-    ENGLISH("folkets_en_sv", "en"),
-    SWEDISH("folkets_sv_en", "sv");
+    ENGLISH("en"),
+    SWEDISH("sv");
 
-    private final String tableName;
     private final String code;
+    private final Locale locale;
 
     /**
      * Initialises the enum constant with the specified values
      *
-     * @param tableName The table name that this language's data is in
      * @param code The two letter code of the language
      */
-    Language(String tableName, String code) {
-        this.tableName = tableName;
+    Language(String code) {
         this.code = code;
+        this.locale = new Locale(code);
     }
 
     /**
@@ -40,12 +39,12 @@ enum Language {
     }
 
     /**
-     * Gets the table name
+     * Gets the language as a locale
      *
-     * @return the table name
+     * @return the language as a locale
      */
-    String getTableName() {
-        return tableName;
+    Locale getLocale() {
+        return locale;
     }
 
     /**

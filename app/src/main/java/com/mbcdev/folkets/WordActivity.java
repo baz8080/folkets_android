@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
-import android.speech.tts.TextToSpeech;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Html;
@@ -32,12 +31,9 @@ import timber.log.Timber;
 public class WordActivity extends AppCompatActivity {
 
     private static final String EXTRA_WORD = "extra_word";
-    private static final Locale LOCALE_SV = new Locale("sv");
 
     private ViewGroup container;
     private LayoutInflater inflater;
-    private TextToSpeech textToSpeech;
-    private boolean textToSpeechAvailable = false;
 
     /**
      * Starts this activity to show the given word
@@ -66,25 +62,16 @@ public class WordActivity extends AppCompatActivity {
         final Word word = (Word) getIntent().getSerializableExtra(EXTRA_WORD);
         Timber.d(word.toString());
 
-        textToSpeech = new TextToSpeech(this, new TextToSpeech.OnInitListener() {
-            @Override
-            public void onInit(int status) {
-                textToSpeechAvailable = (status == TextToSpeech.SUCCESS);
-                textToSpeech.setLanguage(word.getSourceLanguage().equals("en") ? Locale.ENGLISH : LOCALE_SV);
-            }
-        });
-
         TextView wordTextView = (TextView) findViewById(R.id.activity_word_word);
         wordTextView.setText(word.getWord());
 
         wordTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (!textToSpeechAvailable) {
-                    return;
-                }
-
-                textToSpeech.speak(word.getWord(), TextToSpeech.QUEUE_FLUSH, null);
+                MainApplication.instance().speak(
+                        Language.fromLanguageCode(word.getSourceLanguage()),
+                        word.getWord()
+                );
             }
         });
 
@@ -118,15 +105,6 @@ public class WordActivity extends AppCompatActivity {
         addSection(getString(R.string.synonyms_header), word.getSynonyms());
         addSection(getString(R.string.comparisons_header), word.getCompareWith());
         addSection(getString(R.string.saldo_header), word.getSaldoLinks());
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-
-        if (textToSpeech != null) {
-            textToSpeech.shutdown();
-        }
     }
 
     private void addSection(String title, List<String> list) {
