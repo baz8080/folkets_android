@@ -3,10 +3,12 @@ package com.mbcdev.folkets;
 import android.app.Application;
 import android.speech.tts.TextToSpeech;
 
+import com.crashlytics.android.Crashlytics;
 import com.zendesk.logger.Logger;
 import com.zendesk.sdk.model.access.AnonymousIdentity;
 import com.zendesk.sdk.network.impl.ZendeskConfig;
 
+import io.fabric.sdk.android.Fabric;
 import timber.log.Timber;
 
 /**
@@ -33,6 +35,7 @@ public class MainApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+        Fabric.with(this, new Crashlytics());
 
         instance = this;
 
@@ -58,9 +61,9 @@ public class MainApplication extends Application {
 
         ZendeskConfig.INSTANCE.init(
                 this,
-                "https://z3nfolkets.zendesk.com",
-                getString(R.string.FOLKETS_ZEN_APP_ID),
-                getString(R.string.FOLKETS_ZEN_OAUTH_CLIENT_ID));
+                getString(R.string.com_zendesk_sdk_url),
+                getString(R.string.com_zendesk_sdk_identifier),
+                getString(R.string.com_zendesk_sdk_clientIdentifier));
 
         ZendeskConfig.INSTANCE.setIdentity(new AnonymousIdentity.Builder().build());
     }
