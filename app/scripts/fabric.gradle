@@ -1,0 +1,28 @@
+/**
+ * Creates a properties file that Fabric uses to initialise..
+ */
+task (createFabricProperties) << {
+
+    Properties fabricProperties = new Properties()
+    File fabricPropertiesFile = new File("${project.projectDir}/fabric.properties")
+
+    fabricPropertiesFile.mkdirs();
+    fabricPropertiesFile.delete()
+
+    boolean created = fabricPropertiesFile.createNewFile()
+
+    if (!created) {
+        throw new GradleScriptException("Could not create the Fabric properties file", null)
+    }
+
+    fabricProperties.put("apiSecret", getConfigurationParameter("FABRIC_API_SECRET"))
+    fabricProperties.put("apiKey", getConfigurationParameter("FABRIC_API_KEY"))
+
+    fabricProperties.store(fabricPropertiesFile.newWriter(), null)
+}
+
+tasks.whenTaskAdded { task ->
+    if (task.name.startsWith("fabricGenerateResources")) {
+        task.dependsOn createFabricProperties
+    }
+}

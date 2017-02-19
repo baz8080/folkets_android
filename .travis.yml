@@ -1,6 +1,6 @@
 sudo: false
 jdk:
-  - oraclejdk8
+- oraclejdk8
 language: android
 android:
   components:
@@ -10,14 +10,17 @@ android:
   - android-25
   - extra-google-m2repository
   - extra-android-m2repository
-script:
-  ./gradlew build
+script: ./gradlew build
 after_failure:
-  - cat app/build/outputs/lint-results-*.xml
+- cat app/build/outputs/lint-results-*.xml
 before_cache:
-  - rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
-  - rm -fr $HOME/.gradle/caches/*/plugin-resolution/
+- rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
+- rm -fr $HOME/.gradle/caches/*/plugin-resolution/
 cache:
   directories:
-    - $HOME/.gradle/caches/
-    - $HOME/.gradle/wrapper/
+  - $HOME/.gradle/caches/
+  - $HOME/.gradle/wrapper/
+env:
+  global:
+  - secure: Zkt6VKEzl1Shb4Fpg1t21bzGP/7z27ZiV0CMFs1FuxTcXFzPASv3ngDx6VHFj+Ep7gvEwAq75+sgkgewThVTDMhae6JLgr33E2ecKRWcn0dwybNvoVmyxGP0jFn3X6Nj+ZA90/GfmwuPgM4cgJJeu8gM092PR4Mq+B3Xd+Z3gOWA2N93uwiWuutsF1UeYBB5/1fqsF+sOS9xjTW6db66vKQQulkKEP8+iv6D46p1zFoxaG5hh2YYUxXw6GnAxXT+tYuW3M7PD6E6cTNKqioVwsohYmD3JaKmnkklOi2YItp/67TouDjz8Jvroc5qCB/kzrNHJFntBPCR6aYetM+7fZT3IUySqgnJYjHVJprOynhhVjplt9nHDbouXzcVT6giEdlJ59kLlH9XcY6lGLU9KHHwka4bSoctcCPu7bLGt/6hymdnXhFWg2s+JQKFpySk1YiVOInUpxIFASPuVVzM+W/rhc+HSoXwMWsQTGXCDDOMvC27arE1bW18Y9RvOcaNzst5BAgMsPxXGBbZsbB32zO7QLcEac7bf8s0LGcHq0xKkC78FnZYjYITWW/3WvkgdRG7r+nhIfobY7+vl5UZUSvwMJpPwlGvEGfptyH3Bx1+t1NPM9F1SSXjCnEqdNzIpdAiOo+zoYKkolOJb4+V8ByLJnUN5a7ni7tB/yoVp2A=
+  - secure: Az10xqEBWD+FqJvSpLkf8nAj0YqX8XttYGbprCm+uZWszsbFm/Trrvg3eUcRy8tK6TMQXxyr83esNS+p5LINeB8uyiVgiKQNdRQfStRYoCRIuDP2ZPHPf4WN/gSY/C8SSiimniq9P0eTC/CVUAjH/Eqv9whqjqVOt9Qb45E81rDuP+Q4Lr6CjQGfKIlxF24UhYLATkQ0tTnKCCxKGs43v/iuVbw/HhGAtDZVKxubRqhKfu/h8cS7onnYnnQTmH8IHgSWzlIEPOfE8HKv72fSa1vK0g1UTqVXwVJsPdHz+JxGGyhUMx/HrG8z2nSaZxX6zpOTO+KteldMXtBmyy4uNUqXgYsAjad/hKzFw9VXhnqgEa4exIDB6yRnY3+G4sWeXjYR01UTX46sBFyfi/w7uswE3+eSe/7v/R9w/jvWzRHP6co45RlvXI82VIuE9UJZfvfpZ/P9WmoFoQjiFu/mq6GpEMQw5tstoDVvJwO0ODEcQoOqc9Vxfqj1N5Wss2389aAKLDucffSBIh8x4Mf0Rs3gOElU58XWdSpz07uQ62NxIdcId4wUcvwKWaDx9teFzlYZg586Qqq4yWqD8GpYmRGHxhyHygJ20ddPcFV4ZYS+HJ9AuVRfYe+MUabhkYJJXWWuun2XFpRokODtfcO1hEw6ZPkBj1WUS7uEaD9uAB8=

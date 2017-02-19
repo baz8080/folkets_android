@@ -7,8 +7,10 @@ buildscript {
         classpath 'io.fabric.tools:gradle:1.+'
     }
 }
+
 apply plugin: 'com.android.application'
 apply plugin: 'io.fabric'
+apply from: 'scripts/fabric.gradle'
 
 repositories {
     maven { url 'https://maven.fabric.io/public' }
