@@ -44,12 +44,6 @@ interface MainMvp {
         void onError(@NonNull ErrorType error);
 
         /**
-         * Sets the toolbar text
-         * @param text The text to set
-         */
-        void setToolbarText(@NonNull String text);
-
-        /**
          * Gets the Context
          *
          * @return the Context
@@ -67,16 +61,17 @@ interface MainMvp {
      */
     interface Presenter {
         /**
-         * Attaches the view to the presenter
+         * Initialises the presenter
          *
-         * @param view the view to attach
+         * @param view the view to attach to the presenter
+         * @param model the model to attach to the presenter
          */
-        void attachView(@NonNull View view);
+        void init(@NonNull View view, @NonNull Model model);
 
         /**
          * Detaches the view from the presenter
          */
-        void detachView();
+        void detach();
 
         /**
          * Searches the database
