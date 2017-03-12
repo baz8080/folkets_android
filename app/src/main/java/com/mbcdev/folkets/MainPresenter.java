@@ -1,6 +1,5 @@
 package com.mbcdev.folkets;
 
-import android.content.Context;
 import android.os.CountDownTimer;
 import android.support.annotation.NonNull;
 
@@ -23,23 +22,27 @@ class MainPresenter implements MainMvp.Presenter {
     private CountDownTimer countDownTimer;
 
     @Override
-    public void attachView(@NonNull MainMvp.View view) {
+    public void init(@NonNull MainMvp.View view, @NonNull MainMvp.Model model) {
         this.view = view;
-        Context context = view.getContext();
-        model = new MainModel(context);
-        view.setToolbarText(context.getString(R.string.main_search_title));
+        this.model = model;
+
         search("");
     }
 
     @Override
-    public void detachView() {
+    public void detach() {
         this.view = null;
+        this.model = null;
+
+        if (countDownTimer != null) {
+            countDownTimer.cancel();
+        }
     }
 
     @Override
     public void search(@NonNull final String query) {
 
-        if (view == null) {
+        if (view == null || model == null) {
             Timber.d("View is null. Will not search.");
             return;
         }
@@ -77,6 +80,8 @@ class MainPresenter implements MainMvp.Presenter {
 
     @Override
     public void helpRequested() {
-        view.showHelp();
+        if (view != null) {
+            view.showHelp();
+        }
     }
 }

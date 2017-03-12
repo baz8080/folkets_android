@@ -7,6 +7,7 @@ import com.crashlytics.android.Crashlytics;
 import com.zendesk.logger.Logger;
 import com.zendesk.sdk.model.access.AnonymousIdentity;
 import com.zendesk.sdk.network.impl.ZendeskConfig;
+import com.zendesk.util.StringUtils;
 
 import io.fabric.sdk.android.Fabric;
 import timber.log.Timber;
@@ -35,7 +36,10 @@ public class MainApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        Fabric.with(this, new Crashlytics());
+
+        if (!BuildConfig.DEBUG) {
+            Fabric.with(this, new Crashlytics());
+        }
 
         instance = this;
 
@@ -59,13 +63,19 @@ public class MainApplication extends Application {
 
         Logger.setLoggable(BuildConfig.DEBUG);
 
-        ZendeskConfig.INSTANCE.init(
-                this,
+        if (StringUtils.hasLengthMany(
                 getString(R.string.com_zendesk_sdk_url),
                 getString(R.string.com_zendesk_sdk_identifier),
-                getString(R.string.com_zendesk_sdk_clientIdentifier));
+                getString(R.string.com_zendesk_sdk_clientIdentifier)
+        )) {
+            ZendeskConfig.INSTANCE.init(
+                    this,
+                    getString(R.string.com_zendesk_sdk_url),
+                    getString(R.string.com_zendesk_sdk_identifier),
+                    getString(R.string.com_zendesk_sdk_clientIdentifier));
 
-        ZendeskConfig.INSTANCE.setIdentity(new AnonymousIdentity.Builder().build());
+            ZendeskConfig.INSTANCE.setIdentity(new AnonymousIdentity.Builder().build());
+        }
     }
 
     /**

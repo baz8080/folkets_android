@@ -9,8 +9,4 @@
     <string name="link_inflections_format" translatable="false"><![CDATA[
         <a href="https://spraakbanken.gu.se/ws/saldo-ws/lid/html/%1$s">%2$s</a>
     ]]></string>
-
-    <string name="com.zendesk.sdk.url" translatable="false"></string>
-    <string name="com.zendesk.sdk.identifier" translatable="false"></string>
-    <string name="com.zendesk.sdk.clientIdentifier" translatable="false"></string>
 </resources>

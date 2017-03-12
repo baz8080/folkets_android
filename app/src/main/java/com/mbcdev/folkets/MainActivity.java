@@ -20,7 +20,6 @@ import android.widget.SearchView;
 import com.zendesk.sdk.support.SupportActivity;
 
 import java.util.List;
-import java.util.Locale;
 
 /**
  * This activity will show a list of words and translations, and allow users to tap on a result
@@ -39,19 +38,28 @@ public class MainActivity extends AppCompatActivity implements MainMvp.View {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        ActionBar actionBar = getSupportActionBar();
+
+        if (actionBar != null) {
+            actionBar.setTitle(R.string.main_search_title);
+        }
+
         recyclerView = (RecyclerView) findViewById(R.id.main_recycler_view);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
         recyclerView.addOnScrollListener(new KeyboardHidingScrollListener());
 
+
         presenter = new MainPresenter();
-        presenter.attachView(this);
+        MainMvp.Model model = new MainModel(this);
+
+        presenter.init(this, model);
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        presenter.detachView();
+        presenter.detach();
     }
 
     @Override
@@ -106,16 +114,6 @@ public class MainActivity extends AppCompatActivity implements MainMvp.View {
     public void onError(@NonNull ErrorType errorType) {
         String error = getString(errorType.getStringResourceId());
         Snackbar.make(recyclerView, error, Snackbar.LENGTH_SHORT).show();
-    }
-
-    @Override
-    public void setToolbarText(@NonNull String text) {
-
-        ActionBar actionBar = getSupportActionBar();
-
-        if (actionBar != null) {
-            actionBar.setTitle(text.toUpperCase(Locale.US));
-        }
     }
 
     @NonNull
