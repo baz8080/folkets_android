@@ -282,8 +282,11 @@ public class WordActivity extends AppCompatActivity {
             return;
         }
 
-        Answers.getInstance().logContentView(new ContentViewEvent()
+        ContentViewEvent event = new ContentViewEvent()
                 .putContentName(word.getWord())
-                .putContentType(String.format(Locale.US, "%s word", word.getSourceLanguage())));
+                .putContentType(String.format(Locale.US, "%s word", word.getSourceLanguage()))
+                .putCustomAttribute("Types", WordType.formatWordTypesForDisplay(this, word.getWordTypes()));
+
+        Answers.getInstance().logContentView(event);
     }
 }
