@@ -15,6 +15,8 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.crashlytics.android.answers.Answers;
+import com.crashlytics.android.answers.ContentViewEvent;
 import com.zendesk.util.CollectionUtils;
 import com.zendesk.util.StringUtils;
 
@@ -60,7 +62,7 @@ public class WordActivity extends AppCompatActivity {
         }
 
         final Word word = (Word) getIntent().getSerializableExtra(EXTRA_WORD);
-        Timber.d(word.toString());
+        logWordViewedEvent(word);
 
         TextView wordTextView = (TextView) findViewById(R.id.activity_word_word);
         wordTextView.setText(word.getWord());
@@ -252,7 +254,7 @@ public class WordActivity extends AppCompatActivity {
         return builder.toString().trim();
     }
 
-    class SectionLinearLayout {
+    private class SectionLinearLayout {
 
         private final LinearLayout layout;
         private final TextView contentTextView;
@@ -272,5 +274,16 @@ public class WordActivity extends AppCompatActivity {
                 contentTextView.setText(content);
             }
         }
+    }
+
+    private void logWordViewedEvent(Word word) {
+
+        if (word == null) {
+            return;
+        }
+
+        Answers.getInstance().logContentView(new ContentViewEvent()
+                .putContentName(word.getWord())
+                .putContentType(String.format(Locale.US, "%s word", word.getSourceLanguage())));
     }
 }
