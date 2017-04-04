@@ -3,6 +3,9 @@ package com.mbcdev.folkets;
 import android.content.Context;
 import android.support.annotation.NonNull;
 
+import com.crashlytics.android.answers.Answers;
+import com.crashlytics.android.answers.SearchEvent;
+
 import java.util.List;
 
 /**
@@ -26,5 +29,6 @@ class MainModel implements MainMvp.Model {
     @Override
     public void search(@NonNull final String query, @NonNull final Callback<List<Word>> callback) {
         database.search(query, callback);
+        Answers.getInstance().logSearch(new SearchEvent().putQuery(query));
     }
 }

@@ -4,6 +4,8 @@ import android.app.Application;
 import android.speech.tts.TextToSpeech;
 
 import com.crashlytics.android.Crashlytics;
+import com.crashlytics.android.answers.Answers;
+import com.crashlytics.android.answers.CustomEvent;
 import com.zendesk.logger.Logger;
 import com.zendesk.sdk.model.access.AnonymousIdentity;
 import com.zendesk.sdk.network.impl.ZendeskConfig;
@@ -91,9 +93,20 @@ public class MainApplication extends Application {
             return;
         }
 
-        if (language != null && !instance.textToSpeech.getLanguage().equals(language.getLocale())) {
+        if (language == null || phrase == null) {
+            Timber.d("Text to speech requires a valid language and phrase");
+            return;
+        }
+
+        if (!instance.textToSpeech.getLanguage().equals(language.getLocale())) {
             instance.textToSpeech.setLanguage(language.getLocale());
         }
+
+        CustomEvent event = new CustomEvent("TTS")
+                .putCustomAttribute("Language", language.getCode())
+                .putCustomAttribute("Phrase", phrase);
+
+        Answers.getInstance().logCustom(event);
 
         instance.textToSpeech.speak(phrase, TextToSpeech.QUEUE_FLUSH, null);
     }
