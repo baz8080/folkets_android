@@ -2,9 +2,11 @@ package com.mbcdev.folkets;
 
 import android.os.CountDownTimer;
 import android.support.annotation.NonNull;
+import android.support.annotation.VisibleForTesting;
 
 import com.zendesk.util.StringUtils;
 
+import java.lang.ref.WeakReference;
 import java.util.List;
 
 import timber.log.Timber;
@@ -63,17 +65,7 @@ class MainPresenter implements MainMvp.Presenter {
 
             @Override
             public void onFinish() {
-                model.search(query, new com.mbcdev.folkets.Callback<List<Word>>() {
-                    @Override
-                    public void onSuccess(List<Word> result) {
-                        view.showResults(result);
-                    }
-
-                    @Override
-                    public void onError(ErrorType errorType) {
-                        view.onError(errorType);
-                    }
-                });
+                model.search(query, new SearchCallback(view));
             }
         }.start();
     }
@@ -82,6 +74,34 @@ class MainPresenter implements MainMvp.Presenter {
     public void helpRequested() {
         if (view != null) {
             view.showHelp();
+        }
+    }
+
+    @VisibleForTesting
+    static class SearchCallback implements Callback<List<Word>> {
+
+        private final WeakReference<MainMvp.View> viewReference;
+
+        SearchCallback(MainMvp.View view) {
+            this.viewReference = new WeakReference<>(view);
+        }
+
+        @Override
+        public void onSuccess(List<Word> result) {
+            MainMvp.View view = viewReference.get();
+
+            if (view != null) {
+                view.showResults(result);
+            }
+        }
+
+        @Override
+        public void onError(ErrorType errorType) {
+            MainMvp.View view = viewReference.get();
+
+            if (view != null) {
+                view.onError(errorType);
+            }
         }
     }
 }
