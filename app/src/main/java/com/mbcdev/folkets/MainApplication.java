@@ -38,21 +38,15 @@ public class MainApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-
-        if (!BuildConfig.DEBUG) {
-            Fabric.with(this, new Crashlytics());
-        }
-
+        Fabric.with(this, new Crashlytics());
         instance = this;
 
         /*
-
             I'd rather not handle voice here, but it is being initialised early on for performance.
             If I defer it to WordActivity, the delay can be up to 5 seconds before tts is fully
             ready to speak. onInit itself is called rather quickly, but there is some background
             processing then which is the real issue. This issue does not manifest on high-end
             devices but can be clearly see on the likes of the Moto G (3rd generation)
-
          */
         textToSpeech = new TextToSpeech(this, new TextToSpeech.OnInitListener() {
             @Override
