@@ -83,7 +83,7 @@ class Word implements Serializable, Comparable<Word> {
     /**
      * Gets the source language of this word
      *
-     * @return "en" if this is an Englsh word, or "sv" if it is a Swedish word.
+     * @return "en" if this is an English word, or "sv" if it is a Swedish word.
      */
     String getSourceLanguage() {
         return sourceLanguage;
