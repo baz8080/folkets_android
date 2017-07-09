@@ -4,8 +4,6 @@ import android.app.Application;
 import android.speech.tts.TextToSpeech;
 
 import com.crashlytics.android.Crashlytics;
-import com.crashlytics.android.answers.Answers;
-import com.crashlytics.android.answers.CustomEvent;
 import com.zendesk.logger.Logger;
 import com.zendesk.sdk.model.access.AnonymousIdentity;
 import com.zendesk.sdk.network.impl.ZendeskConfig;
@@ -23,8 +21,7 @@ public class MainApplication extends Application {
 
     private static MainApplication instance;
 
-    private TextToSpeech textToSpeech;
-    private boolean textToSpeechAvailable;
+    private FolketsTextToSpeech textToSpeech;
 
     /**
      * Gets the instance of MainApplication
@@ -41,6 +38,9 @@ public class MainApplication extends Application {
         Fabric.with(this, new Crashlytics());
         instance = this;
 
+        Timber.plant(new Timber.DebugTree());
+        Logger.setLoggable(BuildConfig.DEBUG);
+
         /*
             I'd rather not handle voice here, but it is being initialised early on for performance.
             If I defer it to WordActivity, the delay can be up to 5 seconds before tts is fully
@@ -48,16 +48,9 @@ public class MainApplication extends Application {
             processing then which is the real issue. This issue does not manifest on high-end
             devices but can be clearly see on the likes of the Moto G (3rd generation)
          */
-        textToSpeech = new TextToSpeech(this, new TextToSpeech.OnInitListener() {
-            @Override
-            public void onInit(int status) {
-                textToSpeechAvailable = (status == TextToSpeech.SUCCESS);
-            }
-        });
-
-        Timber.plant(new Timber.DebugTree());
-
-        Logger.setLoggable(BuildConfig.DEBUG);
+        FolketsTextToSpeechInitListener listener = new FolketsTextToSpeechInitListener();
+        TextToSpeech tts = new TextToSpeech(this, listener);
+        textToSpeech = new FolketsTextToSpeech(tts, listener);
 
         if (StringUtils.hasLengthMany(
                 getString(R.string.com_zendesk_sdk_url),
@@ -75,33 +68,15 @@ public class MainApplication extends Application {
     }
 
     /**
-     * Speaks a phrase in the given language
+     * Calls {@link FolketsTextToSpeech#speak(Language, String)} to invoke TTS
      *
-     * @param language The language to speak in
-     * @param phrase The phrase to speak
+     * @param language The language to use in TTS
+     * @param phrase The phrase to utter in TTS
      */
     public void speak(Language language, String phrase) {
 
-        if (instance == null || instance.textToSpeech == null || !instance.textToSpeechAvailable) {
-            Timber.d("Text to speech is not available");
-            return;
+        if (textToSpeech != null) {
+            textToSpeech.speak(language, phrase);
         }
-
-        if (language == null || phrase == null) {
-            Timber.d("Text to speech requires a valid language and phrase");
-            return;
-        }
-
-        if (!instance.textToSpeech.getLanguage().equals(language.getLocale())) {
-            instance.textToSpeech.setLanguage(language.getLocale());
-        }
-
-        CustomEvent event = new CustomEvent("TTS")
-                .putCustomAttribute("Language", language.getCode())
-                .putCustomAttribute("Phrase", phrase);
-
-        Answers.getInstance().logCustom(event);
-
-        instance.textToSpeech.speak(phrase, TextToSpeech.QUEUE_FLUSH, null);
     }
 }

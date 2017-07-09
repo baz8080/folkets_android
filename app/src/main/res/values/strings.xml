@@ -49,4 +49,6 @@
 
     <string name="error_database_null">Oops!, seems like the database is missing.</string>
     <string name="action_help">Help</string>
+
+    <string name="tts_volume_too_low">The volume is too low to hear the word!</string>
 </resources>
