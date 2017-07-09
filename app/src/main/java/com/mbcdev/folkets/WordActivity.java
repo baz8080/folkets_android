@@ -3,6 +3,7 @@ package com.mbcdev.folkets;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Typeface;
+import android.media.AudioManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
@@ -14,6 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.crashlytics.android.answers.Answers;
 import com.crashlytics.android.answers.ContentViewEvent;
@@ -28,7 +30,6 @@ import timber.log.Timber;
 /**
  * An activity to dump the full contents of a Word. At the moment no great amount of attention has
  * gone into this apart from dumping all of the data.
- *
  */
 public class WordActivity extends AppCompatActivity {
 
@@ -36,6 +37,7 @@ public class WordActivity extends AppCompatActivity {
 
     private ViewGroup container;
     private LayoutInflater inflater;
+    private AudioManager audioManager;
 
     /**
      * Starts this activity to show the given word
@@ -61,6 +63,8 @@ public class WordActivity extends AppCompatActivity {
             return;
         }
 
+        audioManager = (AudioManager) getSystemService(AUDIO_SERVICE);
+
         final Word word = (Word) getIntent().getSerializableExtra(EXTRA_WORD);
         logWordViewedEvent(word);
 
@@ -70,10 +74,7 @@ public class WordActivity extends AppCompatActivity {
         wordTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                MainApplication.instance().speak(
-                        Language.fromLanguageCode(word.getSourceLanguage()),
-                        word.getWord()
-                );
+                onTtsRequested(word);
             }
         });
 
@@ -288,5 +289,22 @@ public class WordActivity extends AppCompatActivity {
                 .putCustomAttribute("Types", WordType.formatWordTypesForDisplay(this, word.getWordTypes()));
 
         Answers.getInstance().logContentView(event);
+    }
+
+    private void onTtsRequested(Word word) {
+
+        if (word == null) {
+            Timber.d("TTS was requested for a null Word");
+            return;
+        }
+
+        if (audioManager != null && audioManager.getStreamVolume(AudioManager.STREAM_MUSIC) == 0) {
+            Toast.makeText(this, R.string.tts_volume_too_low, Toast.LENGTH_SHORT).show();
+        }
+
+        MainApplication.instance().speak(
+                Language.fromLanguageCode(word.getSourceLanguage()),
+                word.getWord()
+        );
     }
 }
