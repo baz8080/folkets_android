@@ -54,6 +54,20 @@ interface MainMvp {
          * Called when help (Zendesk) should be shown
          */
         void showHelp();
+
+        /**
+         * Shows a word in a detailed view
+         *
+         * @param word The word to show in a detailed view
+         */
+        void showWordDetail(Word word);
+
+        /**
+         * Speaks the word
+         *
+         * @param word the word to speak
+         */
+        void speak(Word word);
     }
 
     /**
@@ -84,5 +98,19 @@ interface MainMvp {
          * Called when the user has requested help
          */
         void helpRequested();
+
+        /**
+         * Called when a word has been selected in the list.
+         *
+         * @param word The word that was selected
+         */
+        void onWordSelected(Word word);
+
+        /**
+         * Called when text to speech has been requested for a word in the list.
+         *
+         * @param word The word that was selected
+         */
+        void onTtsRequested(Word word);
     }
 }

@@ -77,6 +77,20 @@ class MainPresenter implements MainMvp.Presenter {
         }
     }
 
+    @Override
+    public void onWordSelected(Word word) {
+        if (view != null) {
+            view.showWordDetail(word);
+        }
+    }
+
+    @Override
+    public void onTtsRequested(Word word) {
+        if (view != null) {
+            view.speak(word);
+        }
+    }
+
     @VisibleForTesting
     static class SearchCallback implements Callback<List<Word>> {
 

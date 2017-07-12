@@ -5,6 +5,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.List;
@@ -17,14 +18,16 @@ import java.util.List;
 class WordsRecyclerAdapter extends RecyclerView.Adapter<WordsRecyclerAdapter.ViewHolder> {
 
     private final List<Word> wordList;
+    private final MainMvp.Presenter presenter;
 
     /**
      * Creates an instance with the given list of words
      *
      * @param wordList the list of words to display
      */
-    WordsRecyclerAdapter(List<Word> wordList) {
+    WordsRecyclerAdapter(List<Word> wordList, MainMvp.Presenter presenter) {
         this.wordList = wordList;
+        this.presenter = presenter;
     }
 
     @Override
@@ -45,7 +48,14 @@ class WordsRecyclerAdapter extends RecyclerView.Adapter<WordsRecyclerAdapter.Vie
         holder.holderView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                WordActivity.startWithWord(context, word);
+                presenter.onWordSelected(word);
+            }
+        });
+
+        holder.ttsImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                presenter.onTtsRequested(word);
             }
         });
 
@@ -55,8 +65,7 @@ class WordsRecyclerAdapter extends RecyclerView.Adapter<WordsRecyclerAdapter.Vie
                 0, 0, 0
         );
 
-        String wordTypes = WordType.formatWordTypesForDisplay(
-                holder.holderView.getContext(), word.getWordTypes());
+        String wordTypes = WordType.formatWordTypesForDisplay(context, word.getWordTypes());
         holder.wordTypeTextView.setText(wordTypes);
 
         StringBuilder stringBuilder = new StringBuilder();
@@ -89,6 +98,7 @@ class WordsRecyclerAdapter extends RecyclerView.Adapter<WordsRecyclerAdapter.Vie
         final TextView wordTextView;
         final TextView wordTypeTextView;
         final TextView translationTextView;
+        final ImageView ttsImageView;
 
         ViewHolder(View v) {
             super(v);
@@ -97,6 +107,7 @@ class WordsRecyclerAdapter extends RecyclerView.Adapter<WordsRecyclerAdapter.Vie
             wordTextView = (TextView) v.findViewById(R.id.recycler_view_word);
             wordTypeTextView = (TextView) v.findViewById(R.id.recycler_view_type);
             translationTextView = (TextView) v.findViewById(R.id.recycler_view_translation);
+            ttsImageView = (ImageView) v.findViewById(R.id.recycler_view_tts);
         }
     }
 }

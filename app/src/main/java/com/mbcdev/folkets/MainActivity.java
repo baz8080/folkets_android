@@ -107,7 +107,7 @@ public class MainActivity extends AppCompatActivity implements MainMvp.View {
 
     @Override
     public void showResults(@NonNull List<Word> words) {
-        recyclerView.setAdapter(new WordsRecyclerAdapter(words));
+        recyclerView.setAdapter(new WordsRecyclerAdapter(words, presenter));
     }
 
     @Override
@@ -128,10 +128,20 @@ public class MainActivity extends AppCompatActivity implements MainMvp.View {
                 .show(this);
     }
 
+    @Override
+    public void showWordDetail(Word word) {
+        WordActivity.startWithWord(this, word);
+    }
+
+    @Override
+    public void speak(Word word) {
+        MainApplication.instance().speak(word);
+    }
+
     /**
      * Attempts to hide the keyboard when the RecyclerView scroll state changes
      */
-    class KeyboardHidingScrollListener extends RecyclerView.OnScrollListener {
+    private class KeyboardHidingScrollListener extends RecyclerView.OnScrollListener {
         @Override
         public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
 
