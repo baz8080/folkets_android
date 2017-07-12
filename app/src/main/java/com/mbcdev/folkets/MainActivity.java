@@ -35,7 +35,7 @@ public class MainActivity extends AppCompatActivity implements MainMvp.View {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
         ActionBar actionBar = getSupportActionBar();
@@ -44,7 +44,7 @@ public class MainActivity extends AppCompatActivity implements MainMvp.View {
             actionBar.setTitle(R.string.main_search_title);
         }
 
-        recyclerView = (RecyclerView) findViewById(R.id.main_recycler_view);
+        recyclerView = findViewById(R.id.main_recycler_view);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
         recyclerView.addOnScrollListener(new KeyboardHidingScrollListener());

@@ -63,7 +63,7 @@ public class WordActivity extends AppCompatActivity {
         final Word word = (Word) getIntent().getSerializableExtra(EXTRA_WORD);
         logWordViewedEvent(word);
 
-        TextView wordTextView = (TextView) findViewById(R.id.activity_word_word);
+        TextView wordTextView = findViewById(R.id.activity_word_word);
         wordTextView.setText(word.getWord());
 
         wordTextView.setOnClickListener(new View.OnClickListener() {
@@ -73,7 +73,7 @@ public class WordActivity extends AppCompatActivity {
             }
         });
 
-        TextView wordIpaTextView = (TextView) findViewById(R.id.activity_word_ipa);
+        TextView wordIpaTextView = findViewById(R.id.activity_word_ipa);
 
         if (StringUtils.hasLength(word.getPhonetic())) {
             wordIpaTextView.setText(String.format(Locale.US, "/%s/", word.getPhonetic()));
@@ -81,11 +81,11 @@ public class WordActivity extends AppCompatActivity {
             wordIpaTextView.setVisibility(View.GONE);
         }
 
-        TextView wordTypesTextView = (TextView) findViewById(R.id.activity_word_types);
+        TextView wordTypesTextView = findViewById(R.id.activity_word_types);
         String wordTypes = WordType.formatWordTypesForDisplay(this, word.getWordTypes());
         wordTypesTextView.setText(wordTypes);
 
-        container = (ViewGroup) findViewById(R.id.activity_word_container);
+        container = findViewById(R.id.activity_word_container);
         inflater = LayoutInflater.from(this);
 
         addSection(getString(R.string.translations_header), word.getTranslations());
@@ -258,13 +258,13 @@ public class WordActivity extends AppCompatActivity {
         SectionLinearLayout(String title, String content) {
             this.layout = (LinearLayout) inflater.inflate(R.layout.include_word_section, container, false);
 
-            TextView titleTextView = (TextView) layout.findViewById(R.id.include_word_section_title);
+            TextView titleTextView = layout.findViewById(R.id.include_word_section_title);
 
             if (titleTextView != null) {
                 titleTextView.setText(title);
             }
 
-            contentTextView = (TextView) layout.findViewById(R.id.include_word_section_content);
+            contentTextView = layout.findViewById(R.id.include_word_section_content);
 
             if (contentTextView != null) {
                 contentTextView.setText(content);

@@ -104,10 +104,10 @@ class WordsRecyclerAdapter extends RecyclerView.Adapter<WordsRecyclerAdapter.Vie
             super(v);
 
             holderView = v;
-            wordTextView = (TextView) v.findViewById(R.id.recycler_view_word);
-            wordTypeTextView = (TextView) v.findViewById(R.id.recycler_view_type);
-            translationTextView = (TextView) v.findViewById(R.id.recycler_view_translation);
-            ttsImageView = (ImageView) v.findViewById(R.id.recycler_view_tts);
+            wordTextView = v.findViewById(R.id.recycler_view_word);
+            wordTypeTextView = v.findViewById(R.id.recycler_view_type);
+            translationTextView = v.findViewById(R.id.recycler_view_translation);
+            ttsImageView = v.findViewById(R.id.recycler_view_tts);
         }
     }
 }
