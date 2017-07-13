@@ -3,7 +3,6 @@ package com.mbcdev.folkets;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Typeface;
-import android.media.AudioManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
@@ -15,7 +14,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.crashlytics.android.answers.Answers;
 import com.crashlytics.android.answers.ContentViewEvent;
@@ -37,7 +35,6 @@ public class WordActivity extends AppCompatActivity {
 
     private ViewGroup container;
     private LayoutInflater inflater;
-    private AudioManager audioManager;
 
     /**
      * Starts this activity to show the given word
@@ -63,12 +60,10 @@ public class WordActivity extends AppCompatActivity {
             return;
         }
 
-        audioManager = (AudioManager) getSystemService(AUDIO_SERVICE);
-
         final Word word = (Word) getIntent().getSerializableExtra(EXTRA_WORD);
         logWordViewedEvent(word);
 
-        TextView wordTextView = (TextView) findViewById(R.id.activity_word_word);
+        TextView wordTextView = findViewById(R.id.activity_word_word);
         wordTextView.setText(word.getWord());
 
         wordTextView.setOnClickListener(new View.OnClickListener() {
@@ -78,7 +73,7 @@ public class WordActivity extends AppCompatActivity {
             }
         });
 
-        TextView wordIpaTextView = (TextView) findViewById(R.id.activity_word_ipa);
+        TextView wordIpaTextView = findViewById(R.id.activity_word_ipa);
 
         if (StringUtils.hasLength(word.getPhonetic())) {
             wordIpaTextView.setText(String.format(Locale.US, "/%s/", word.getPhonetic()));
@@ -86,11 +81,11 @@ public class WordActivity extends AppCompatActivity {
             wordIpaTextView.setVisibility(View.GONE);
         }
 
-        TextView wordTypesTextView = (TextView) findViewById(R.id.activity_word_types);
+        TextView wordTypesTextView = findViewById(R.id.activity_word_types);
         String wordTypes = WordType.formatWordTypesForDisplay(this, word.getWordTypes());
         wordTypesTextView.setText(wordTypes);
 
-        container = (ViewGroup) findViewById(R.id.activity_word_container);
+        container = findViewById(R.id.activity_word_container);
         inflater = LayoutInflater.from(this);
 
         addSection(getString(R.string.translations_header), word.getTranslations());
@@ -263,13 +258,13 @@ public class WordActivity extends AppCompatActivity {
         SectionLinearLayout(String title, String content) {
             this.layout = (LinearLayout) inflater.inflate(R.layout.include_word_section, container, false);
 
-            TextView titleTextView = (TextView) layout.findViewById(R.id.include_word_section_title);
+            TextView titleTextView = layout.findViewById(R.id.include_word_section_title);
 
             if (titleTextView != null) {
                 titleTextView.setText(title);
             }
 
-            contentTextView = (TextView) layout.findViewById(R.id.include_word_section_content);
+            contentTextView = layout.findViewById(R.id.include_word_section_content);
 
             if (contentTextView != null) {
                 contentTextView.setText(content);
@@ -298,13 +293,6 @@ public class WordActivity extends AppCompatActivity {
             return;
         }
 
-        if (audioManager != null && audioManager.getStreamVolume(AudioManager.STREAM_MUSIC) == 0) {
-            Toast.makeText(this, R.string.tts_volume_too_low, Toast.LENGTH_SHORT).show();
-        }
-
-        MainApplication.instance().speak(
-                Language.fromLanguageCode(word.getSourceLanguage()),
-                word.getWord()
-        );
+        MainApplication.instance().speak(word);
     }
 }

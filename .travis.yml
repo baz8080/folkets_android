@@ -7,8 +7,8 @@ android:
   components:
   - tools
   - platform-tools
-  - android-25
-  - build-tools-25.0.2
+  - android-26
+  - build-tools-26.0.0
   - extra-android-m2repository
 before_script: ./app/scripts/travis_before_script.sh
 script: ./app/scripts/travis_script.sh

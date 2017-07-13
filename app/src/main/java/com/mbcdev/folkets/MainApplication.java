@@ -1,7 +1,9 @@
 package com.mbcdev.folkets;
 
 import android.app.Application;
+import android.media.AudioManager;
 import android.speech.tts.TextToSpeech;
+import android.widget.Toast;
 
 import com.crashlytics.android.Crashlytics;
 import com.zendesk.logger.Logger;
@@ -23,6 +25,8 @@ public class MainApplication extends Application {
 
     private FolketsTextToSpeech textToSpeech;
 
+    private AudioManager audioManager;
+
     /**
      * Gets the instance of MainApplication
      *
@@ -40,6 +44,8 @@ public class MainApplication extends Application {
 
         Timber.plant(new Timber.DebugTree());
         Logger.setLoggable(BuildConfig.DEBUG);
+
+        audioManager = (AudioManager) getSystemService(AUDIO_SERVICE);
 
         /*
             I'd rather not handle voice here, but it is being initialised early on for performance.
@@ -70,13 +76,19 @@ public class MainApplication extends Application {
     /**
      * Calls {@link FolketsTextToSpeech#speak(Language, String)} to invoke TTS
      *
-     * @param language The language to use in TTS
-     * @param phrase The phrase to utter in TTS
+     * @param word The word to speak with TTS
      */
-    public void speak(Language language, String phrase) {
+    public void speak(Word word) {
+
+        if (audioManager != null && audioManager.getStreamVolume(AudioManager.STREAM_MUSIC) == 0) {
+            Toast.makeText(this, R.string.tts_volume_too_low, Toast.LENGTH_SHORT).show();
+        }
 
         if (textToSpeech != null) {
-            textToSpeech.speak(language, phrase);
+            textToSpeech.speak(
+                    Language.fromLanguageCode(word.getSourceLanguage()),
+                    word.getWord()
+            );
         }
     }
 }
