@@ -45,5 +45,5 @@
     <string name="link_associations">VERBÄNDE</string>
     <string name="link_inflections">FLEXIONEN</string>
     <string name="action_help">Hilfe</string>
-    <string name="tts_volume_too_low">Die Lautstärke ist zu niedrig, um das Wort zu hören!</string>
+    <string name="tts_volume_too_low">Die Lautstärke ist zu leise, um das Wort verstehen zu können!</string>
 </resources>
