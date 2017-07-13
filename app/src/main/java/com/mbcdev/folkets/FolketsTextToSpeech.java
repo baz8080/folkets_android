@@ -10,6 +10,7 @@ import com.zendesk.util.StringUtils;
 
 import java.util.Locale;
 
+import io.fabric.sdk.android.Fabric;
 import timber.log.Timber;
 
 /**
@@ -73,11 +74,14 @@ class FolketsTextToSpeech {
 
         textToSpeech.speak(phrase, TextToSpeech.QUEUE_FLUSH, null);
 
-        CustomEvent event = new CustomEvent("TTS")
-                .putCustomAttribute("Language", language.getCode())
-                .putCustomAttribute("Phrase", phrase);
+        if (Fabric.isInitialized()) {
+            CustomEvent event = new CustomEvent("TTS")
+                    .putCustomAttribute("Language", language.getCode())
+                    .putCustomAttribute("Phrase", phrase);
 
-        Answers.getInstance().logCustom(event);
+            Answers.getInstance().logCustom(event);
+        }
+
         return FolketsSpeechStatus.SUCCESS;
     }
 }
