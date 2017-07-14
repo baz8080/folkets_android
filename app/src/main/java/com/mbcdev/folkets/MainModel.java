@@ -1,6 +1,5 @@
 package com.mbcdev.folkets;
 
-import android.content.Context;
 import android.support.annotation.NonNull;
 
 import com.crashlytics.android.answers.Answers;
@@ -15,20 +14,26 @@ import java.util.List;
  */
 class MainModel implements MainMvp.Model {
 
-    private FolketsDatabase database = null;
+    private final FabricProvider fabricProvider;
+    private final FolketsDatabase database;
 
     /**
      * Creates an instance of the model
      *
-     * @param context A valid context
+     * @param database An instance of FolketsDatabase
      */
-    MainModel(@NonNull Context context) {
-        this.database = new FolketsDatabase(context);
+    MainModel(@NonNull FolketsDatabase database, @NonNull FabricProvider fabricProvider) {
+        this.database = database;
+        this.fabricProvider = fabricProvider;
     }
 
     @Override
     public void search(@NonNull final String query, @NonNull final Callback<List<Word>> callback) {
         database.search(query, callback);
-        Answers.getInstance().logSearch(new SearchEvent().putQuery(query));
+
+        if (fabricProvider.isInitialised()) {
+            fabricProvider.getAnswers().logSearch(new SearchEvent().putQuery(query));
+        }
     }
 }
+

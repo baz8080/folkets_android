@@ -3,6 +3,7 @@ package com.mbcdev.folkets;
 import android.database.Cursor;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.annotation.VisibleForTesting;
 
 import com.zendesk.util.StringUtils;
 
@@ -78,6 +79,10 @@ class Word implements Serializable, Comparable<Word> {
         idioms = new ValuesWithTranslations(cursor.getString(cursor.getColumnIndex("idioms")));
         derivations = new ValuesWithTranslations(cursor.getString(cursor.getColumnIndex("derivations")));
         compounds = new ValuesWithTranslations(cursor.getString(cursor.getColumnIndex("compounds")));
+    }
+
+    private Word() {
+        // Intentionally empty for testing
     }
 
     /**
@@ -294,5 +299,18 @@ class Word implements Serializable, Comparable<Word> {
     @Override
     public int compareTo(@NonNull Word o) {
         return this.word.toLowerCase(Locale.US).compareTo(o.getWord().toLowerCase(Locale.US));
+    }
+
+    /**
+     * Gets a word for use in testing when you don't want to go through
+     * the whole cursor thing.
+     *
+     * @param word The word to set
+     * @return A newly created word object with the specified word value
+     */
+    static Word getTestingWord(String word) {
+        Word testingWord = new Word();
+        testingWord.word = word;
+        return testingWord;
     }
 }
