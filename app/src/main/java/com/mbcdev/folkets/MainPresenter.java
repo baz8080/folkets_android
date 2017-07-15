@@ -27,8 +27,6 @@ class MainPresenter implements MainMvp.Presenter {
     public void init(@NonNull MainMvp.View view, @NonNull MainMvp.Model model) {
         this.view = view;
         this.model = model;
-
-        search("");
     }
 
     @Override
@@ -44,6 +42,20 @@ class MainPresenter implements MainMvp.Presenter {
     @Override
     public void search(@NonNull final String query) {
 
+        /*
+            TODO
+
+            This search mechanism isn't good.
+
+            1) I'm not sure if the delay mechanism should live here, or in the
+               owning activity.
+            2) Hiding the asynchronous nature of this call doesn't make testing it
+               easy
+            3) I should probably wrap the countdowntimer, or use a different mechanism
+               that is easier to unit test.
+
+         */
+
         if (view == null || model == null) {
             Timber.d("View is null. Will not search.");
             return;
@@ -57,17 +69,21 @@ class MainPresenter implements MainMvp.Presenter {
                 ? 150
                 : 0;
 
-        countDownTimer = new CountDownTimer(delay, delay) {
-            @Override
-            public void onTick(long millisUntilFinished) {
-                // Intentionally empty
-            }
+        if (delay == 0) {
+            model.search(query, new SearchCallback(view));
+        } else {
+            countDownTimer = new CountDownTimer(delay, delay) {
+                @Override
+                public void onTick(long millisUntilFinished) {
+                    // Intentionally empty
+                }
 
-            @Override
-            public void onFinish() {
-                model.search(query, new SearchCallback(view));
-            }
-        }.start();
+                @Override
+                public void onFinish() {
+                    model.search(query, new SearchCallback(view));
+                }
+            }.start();
+        }
     }
 
     @Override
@@ -117,5 +133,15 @@ class MainPresenter implements MainMvp.Presenter {
                 view.onError(errorType);
             }
         }
+    }
+
+    @VisibleForTesting
+    MainMvp.View getView() {
+        return view;
+    }
+
+    @VisibleForTesting
+    MainMvp.Model getModel() {
+        return model;
     }
 }

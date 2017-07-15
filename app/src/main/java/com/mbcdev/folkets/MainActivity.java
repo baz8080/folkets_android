@@ -17,6 +17,7 @@ import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.SearchView;
 
+import com.crashlytics.android.answers.Answers;
 import com.zendesk.sdk.support.SupportActivity;
 
 import java.util.List;
@@ -49,11 +50,14 @@ public class MainActivity extends AppCompatActivity implements MainMvp.View {
         recyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
         recyclerView.addOnScrollListener(new KeyboardHidingScrollListener());
 
-
         presenter = new MainPresenter();
-        MainMvp.Model model = new MainModel(this);
+
+        FolketsDatabase database = new FolketsDatabase(this);
+        FabricProvider fabricProvider = new DefaultFabricProvider(Answers.getInstance());
+        MainMvp.Model model = new MainModel(database, fabricProvider);
 
         presenter.init(this, model);
+        presenter.search("");
     }
 
     @Override
