@@ -128,23 +128,14 @@ public class WordActivity extends AppCompatActivity {
 
     private void addSection(String title, WordsWithComments valuesWithTranslation) {
 
-        if (valuesWithTranslation == null || valuesWithTranslation.getWords() == null || valuesWithTranslation.getWords().size() == 0) {
+        if (valuesWithTranslation == null || valuesWithTranslation.getWords().size() == 0) {
             return;
         }
 
-        StringBuilder stringBuilder = new StringBuilder();
+        String translations = valuesWithTranslation.getWordsFormattedForDisplay();
 
-        for (String wordWithComment : valuesWithTranslation.getWords()) {
-            stringBuilder.append(wordWithComment);
-
-            if (stringBuilder.length() > 0) {
-                stringBuilder.append("\n");
-            }
-        }
-
-        if (stringBuilder.length() > 0) {
-            String content = stringBuilder.toString().trim();
-            SectionLinearLayout section = new SectionLinearLayout(title, content);
+        if (StringUtils.hasLength(translations)) {
+            SectionLinearLayout section = new SectionLinearLayout(title, translations);
             container.addView(section.layout);
         }
     }

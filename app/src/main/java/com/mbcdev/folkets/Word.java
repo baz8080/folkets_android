@@ -1,6 +1,7 @@
 package com.mbcdev.folkets;
 
 import android.database.Cursor;
+import android.support.annotation.DrawableRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.VisibleForTesting;
@@ -257,6 +258,26 @@ class Word implements Serializable, Comparable<Word> {
     }
 
     /**
+     * Gets a drawable resource indicating the language of the source language
+     *
+     * @return a drawable resource indicating the language of the source language
+     */
+    @DrawableRes int getFlag() {
+
+        if (sourceLanguage == null) {
+            return R.drawable.flag_uk;
+        }
+
+        switch (sourceLanguage) {
+            case "sv":
+                return R.drawable.flag_sv;
+            case "en":
+            default:
+                return R.drawable.flag_uk;
+        }
+    }
+
+    /**
      * Converts a csv string to a list
      *
      * @param csvString a csv string
@@ -308,9 +329,10 @@ class Word implements Serializable, Comparable<Word> {
      * @param word The word to set
      * @return A newly created word object with the specified word value
      */
-    static Word getTestingWord(String word) {
+    static Word getTestingWord(String word, String sourceLanguage) {
         Word testingWord = new Word();
         testingWord.word = word;
+        testingWord.sourceLanguage = sourceLanguage;
         return testingWord;
     }
 }
