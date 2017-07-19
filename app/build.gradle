@@ -65,7 +65,7 @@ dependencies {
     compile 'com.jakewharton.timber:timber:4.5.1'
 
     testCompile 'junit:junit:4.12'
-    testCompile 'com.google.truth:truth:0.34'
+    testCompile "com.google.truth:truth:$truth_version"
     testCompile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
     testCompile "org.mockito:mockito-core:$mockito_version"
     testCompile 'pl.pragmatists:JUnitParams:1.1.0'
@@ -75,6 +75,7 @@ dependencies {
     })
     androidTestCompile "org.mockito:mockito-android:$mockito_version"
     androidTestCompile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+    androidTestCompile "com.google.truth:truth:$truth_version"
 
     compile('com.crashlytics.sdk.android:crashlytics:2.6.8@aar') {
         transitive = true;
