@@ -278,4 +278,27 @@ class WordTests {
         assertThat(word.compounds.valuesWithTranslations[0].translation).isEqualTo("com2")
     }
 
+    @Test
+    fun `flag should be uk when word sourceLanguage is null`() {
+        val word = Word.getTestingWord("Eon", null)
+        assertThat(word.flag).isEqualTo(R.drawable.flag_uk)
+    }
+
+    @Test
+    fun `flag should be uk when word sourceLanguage is english`() {
+        val word = Word.getTestingWord("Extinguisher", "en")
+        assertThat(word.flag).isEqualTo(R.drawable.flag_uk)
+    }
+
+    @Test
+    fun `flag should be swedish when word sourceLanguage is swedish`() {
+        val word = Word.getTestingWord("Tambur", "sv")
+        assertThat(word.flag).isEqualTo(R.drawable.flag_sv)
+    }
+
+    @Test
+    fun `flag should be uk when word sourceLanguage is not english or swedish`() {
+        val word = Word.getTestingWord("petaQ", "tlh")
+        assertThat(word.flag).isEqualTo(R.drawable.flag_uk)
+    }
 }

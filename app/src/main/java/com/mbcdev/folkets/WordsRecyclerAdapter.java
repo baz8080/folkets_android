@@ -8,6 +8,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.zendesk.util.StringUtils;
+
 import java.util.List;
 
 /**
@@ -60,25 +62,16 @@ class WordsRecyclerAdapter extends RecyclerView.Adapter<WordsRecyclerAdapter.Vie
         });
 
         holder.wordTextView.setText(word.getWord());
-        holder.wordTextView.setCompoundDrawablesWithIntrinsicBounds(
-                word.getSourceLanguage().equals("en") ? R.drawable.flag_uk : R.drawable.flag_sv,
-                0, 0, 0
-        );
+        holder.wordTextView.setCompoundDrawablesWithIntrinsicBounds(word.getFlag(), 0, 0, 0);
 
         String wordTypes = WordType.formatWordTypesForDisplay(context, word.getWordTypes());
         holder.wordTypeTextView.setText(wordTypes);
 
-        StringBuilder stringBuilder = new StringBuilder();
+        String translations = word.getTranslations().getWordsFormattedForDisplay();
 
-        for (String wordWithComment : word.getTranslations().getWords()) {
-            stringBuilder.append(wordWithComment).append("\n");
-        }
-
-        if (stringBuilder.length() > 0) {
+        if (StringUtils.hasLength(translations)) {
             holder.translationTextView.setVisibility(View.VISIBLE);
-            holder.translationTextView.setText(
-                    stringBuilder.subSequence(0, stringBuilder.length() - 1)
-            );
+            holder.translationTextView.setText(translations);
         } else {
             holder.translationTextView.setVisibility(View.GONE);
         }

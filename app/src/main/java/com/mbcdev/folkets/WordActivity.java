@@ -23,6 +23,7 @@ import com.zendesk.util.StringUtils;
 import java.util.List;
 import java.util.Locale;
 
+import io.fabric.sdk.android.Fabric;
 import timber.log.Timber;
 
 /**
@@ -111,40 +112,23 @@ public class WordActivity extends AppCompatActivity {
             return;
         }
 
-        StringBuilder builder = new StringBuilder();
+        String stringOfList = Utils.listToString(list);
 
-        for (int i = 0, listSize = list.size(); i < listSize; i++) {
-            builder.append(list.get(i));
-
-            if (i < listSize -1) {
-                builder.append("\n");
-            }
-        }
-
-        if (builder.length() > 0) {
-            addSection(title, builder.toString());
+        if (StringUtils.hasLength(stringOfList)) {
+            addSection(title, stringOfList);
         }
     }
 
     private void addSection(String title, WordsWithComments valuesWithTranslation) {
 
-        if (valuesWithTranslation == null || valuesWithTranslation.getWords() == null || valuesWithTranslation.getWords().size() == 0) {
+        if (valuesWithTranslation == null || valuesWithTranslation.getWords().size() == 0) {
             return;
         }
 
-        StringBuilder stringBuilder = new StringBuilder();
+        String translations = valuesWithTranslation.getWordsFormattedForDisplay();
 
-        for (String wordWithComment : valuesWithTranslation.getWords()) {
-            stringBuilder.append(wordWithComment);
-
-            if (stringBuilder.length() > 0) {
-                stringBuilder.append("\n");
-            }
-        }
-
-        if (stringBuilder.length() > 0) {
-            String content = stringBuilder.toString().trim();
-            SectionLinearLayout section = new SectionLinearLayout(title, content);
+        if (StringUtils.hasLength(translations)) {
+            SectionLinearLayout section = new SectionLinearLayout(getWordSectionLayout(), title, translations);
             container.addView(section.layout);
         }
     }
@@ -166,7 +150,7 @@ public class WordActivity extends AppCompatActivity {
         }
 
         if (builder.length() > 0) {
-            SectionLinearLayout section = new SectionLinearLayout(title, builder.toString().trim());
+            SectionLinearLayout section = new SectionLinearLayout(getWordSectionLayout(), title, builder.toString().trim());
             container.addView(section.layout);
         }
     }
@@ -183,7 +167,7 @@ public class WordActivity extends AppCompatActivity {
             return;
         }
 
-        SectionLinearLayout section = new SectionLinearLayout(title, content);
+        SectionLinearLayout section = new SectionLinearLayout(getWordSectionLayout(), title, content);
         container.addView(section.layout);
     }
 
@@ -193,7 +177,7 @@ public class WordActivity extends AppCompatActivity {
             return;
         }
 
-        SectionLinearLayout section = new SectionLinearLayout(title, content);
+        SectionLinearLayout section = new SectionLinearLayout(getWordSectionLayout(), title, content);
         container.addView(section.layout);
     }
 
@@ -223,7 +207,7 @@ public class WordActivity extends AppCompatActivity {
             return;
         }
 
-        SectionLinearLayout section = new SectionLinearLayout(title, stringBuilder.toString());
+        SectionLinearLayout section = new SectionLinearLayout(getWordSectionLayout(), title, stringBuilder.toString());
         section.contentTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 14);
         section.contentTextView.setTypeface(Typeface.DEFAULT_BOLD);
         section.contentTextView.setLinkTextColor(getResources().getColor(R.color.colorPrimary));
@@ -250,13 +234,14 @@ public class WordActivity extends AppCompatActivity {
         return builder.toString().trim();
     }
 
-    private class SectionLinearLayout {
+    static class SectionLinearLayout {
 
-        private final LinearLayout layout;
         private final TextView contentTextView;
+        private final LinearLayout layout;
 
-        SectionLinearLayout(String title, String content) {
-            this.layout = (LinearLayout) inflater.inflate(R.layout.include_word_section, container, false);
+        SectionLinearLayout(LinearLayout layout, String title, String content) {
+
+            this.layout = layout;
 
             TextView titleTextView = layout.findViewById(R.id.include_word_section_title);
 
@@ -274,7 +259,7 @@ public class WordActivity extends AppCompatActivity {
 
     private void logWordViewedEvent(Word word) {
 
-        if (word == null) {
+        if (word == null || !Fabric.isInitialized()) {
             return;
         }
 
@@ -294,5 +279,9 @@ public class WordActivity extends AppCompatActivity {
         }
 
         MainApplication.instance().speak(word);
+    }
+
+    private LinearLayout getWordSectionLayout() {
+        return (LinearLayout) inflater.inflate(R.layout.include_word_section, container, false);
     }
 }

@@ -4,6 +4,7 @@ buildscript {
     ext.kotlin_version = '1.1.3-2'
     ext.support_library_version = '26.0.0-beta2'
     ext.mockito_version = '2.8.47'
+    ext.truth_version = '0.34'
 
     repositories {
         jcenter()

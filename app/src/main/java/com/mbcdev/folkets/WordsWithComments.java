@@ -67,4 +67,13 @@ class WordsWithComments implements Serializable {
     @NonNull List<String> getWords() {
         return words;
     }
+
+    /**
+     * Gets the words as a string separated by newlines
+     *
+     * @return the words as a string separated by newlines, or the empty string if there are none.
+     */
+    @NonNull String getWordsFormattedForDisplay() {
+        return Utils.listToString(words);
+    }
 }

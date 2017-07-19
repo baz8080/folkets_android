@@ -117,4 +117,11 @@ class WordsWithCommentsTests {
         assertThat(emptyWordAndComment.words).isNotNull()
         assertThat(emptyWordAndComment.words).hasSize(0)
     }
+
+    @Test
+    fun `formattedForDisplay should create string from list`() {
+        val multipleWords = WordsWithComments("one**two")
+        val formatted = multipleWords.wordsFormattedForDisplay
+        assertThat(formatted).isEqualTo("1:\tone\n2:\ttwo")
+    }
 }

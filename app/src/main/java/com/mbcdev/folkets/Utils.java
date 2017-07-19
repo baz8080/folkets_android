@@ -2,7 +2,12 @@ package com.mbcdev.folkets;
 
 import android.os.Handler;
 import android.os.Looper;
+import android.support.annotation.NonNull;
 
+import com.zendesk.util.CollectionUtils;
+import com.zendesk.util.StringUtils;
+
+import java.util.List;
 import java.util.regex.Pattern;
 
 /**
@@ -27,5 +32,21 @@ class Utils {
     static void runOnUiThread(Runnable runnable) {
         Handler handler = new Handler(Looper.getMainLooper());
         handler.post(runnable);
+    }
+
+    @NonNull
+    static String listToString(List list) {
+
+        if (CollectionUtils.isEmpty(list)) {
+            return StringUtils.EMPTY_STRING;
+        }
+
+        StringBuilder sb = new StringBuilder();
+
+        for (Object object : list) {
+            sb.append(object.toString()).append("\n");
+        }
+
+        return sb.subSequence(0, sb.length() - 1).toString();
     }
 }

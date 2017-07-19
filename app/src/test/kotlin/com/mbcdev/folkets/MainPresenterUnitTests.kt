@@ -67,7 +67,7 @@ class MainPresenterUnitTests {
 
     @Test
     fun `onWordSelected calls showWordDetail`() {
-        val word = Word.getTestingWord("Skärp")
+        val word = Word.getTestingWord("Skärp", "sv")
         presenter.onWordSelected(word)
 
         val wordCaptor = ArgumentCaptor.forClass(Word::class.java)
@@ -78,7 +78,7 @@ class MainPresenterUnitTests {
 
     @Test
     fun `onTtsRequested calls speak`() {
-        val word = Word.getTestingWord("Hjo")
+        val word = Word.getTestingWord("Hjo", "sv")
         presenter.onTtsRequested(word)
 
         val wordCaptor = ArgumentCaptor.forClass(Word::class.java)
