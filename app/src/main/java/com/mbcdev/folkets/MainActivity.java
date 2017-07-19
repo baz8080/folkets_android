@@ -2,7 +2,9 @@ package com.mbcdev.folkets;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.ActionBar;
@@ -13,14 +15,19 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.SearchView;
 
 import com.crashlytics.android.answers.Answers;
+import com.zendesk.sdk.model.helpcenter.SimpleArticle;
 import com.zendesk.sdk.support.SupportActivity;
+import com.zendesk.sdk.support.ViewArticleActivity;
 
 import java.util.List;
+
+import timber.log.Timber;
 
 /**
  * This activity will show a list of words and translations, and allow users to tap on a result
@@ -34,6 +41,7 @@ public class MainActivity extends AppCompatActivity implements MainMvp.View {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_main);
 
         Toolbar toolbar = findViewById(R.id.toolbar);
@@ -64,6 +72,7 @@ public class MainActivity extends AppCompatActivity implements MainMvp.View {
     protected void onDestroy() {
         super.onDestroy();
         presenter.detach();
+        Timber.d("onDestroy");
     }
 
     @Override
@@ -139,7 +148,49 @@ public class MainActivity extends AppCompatActivity implements MainMvp.View {
 
     @Override
     public void speak(Word word) {
-        MainApplication.instance().speak(word);
+        FolketsTextToSpeech.SpeechStatus status = MainApplication.instance().speak(word);
+        presenter.onTtsResult(status);
+    }
+
+    @Override
+    public void showLowVolumeError() {
+
+        Snackbar.make(recyclerView, R.string.tts_volume_too_low, Snackbar.LENGTH_LONG)
+                .setAction(R.string.error_audio_settings, new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Intent intent = new Intent(Settings.ACTION_SOUND_SETTINGS);
+                        startActivity(intent);
+                    }
+                })
+                .show();
+    }
+
+    @Override
+    public void showLanguageNotSupportedError() {
+        Snackbar.make(recyclerView, R.string.error_tts_didnt_work, Snackbar.LENGTH_INDEFINITE)
+                .setAction(R.string.error_fix_it, new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Intent viewArticleIntent = new Intent(MainActivity.this, ViewArticleActivity.class);
+                        viewArticleIntent.putExtra("article_simple", new SimpleArticle(115004243105L, ""));
+                        viewArticleIntent.putExtra("extra_contact_us_button_visibility", false);
+
+                        Intent ttsSettingsIntent = new Intent();
+                        ttsSettingsIntent.setAction("com.android.settings.TTS_SETTINGS");
+
+                        startActivities(new Intent[] {
+                                ttsSettingsIntent,
+                                viewArticleIntent
+                        });
+                    }
+                })
+                .show();
+    }
+
+    @Override
+    public void showGenericTTsError(FolketsTextToSpeech.SpeechStatus status) {
+        Snackbar.make(recyclerView, R.string.error_tts_didnt_work, Snackbar.LENGTH_LONG).show();
     }
 
     /**

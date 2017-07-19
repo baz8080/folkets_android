@@ -50,6 +50,9 @@
 
     <string name="error_database_null">Hoppsan! Det verkar som att något är fel i databasen.</string>
     <string name="action_help">Hjälp</string>
-    <string name="tts_volume_too_low">Volymen är för låg för att höras ordet!</string>
+    <string name="tts_volume_too_low">Hoppsan! Volymen är för låg!</string>
+    <string name="error_audio_settings">Ljudinställningar</string>
+    <string name="error_fix_it">Fixa det</string>
+    <string name="error_tts_didnt_work">Hoppsan! Talet fungerade inte!</string>
 
 </resources>
