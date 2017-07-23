@@ -6,7 +6,7 @@
     <string name="comparisons_header">Siehe auch</string>
     <string name="definition_header">Definition</string>
     <string name="derivations_header">Ableitungen</string>
-    <string name="error_database_null">Ups, keine Datenbank gefunden.</string>
+    <string name="error_database_null">Ups, keine Datenbank gefunden!</string>
     <string name="examples_header">Beispiele</string>
     <string name="explanation_header">Erklärung</string>
     <string name="idioms_header">Redewendungen</string>
@@ -48,5 +48,5 @@
     <string name="tts_volume_too_low">Ups, die Lautstärke ist zu leise!</string>
     <string name="error_audio_settings">Audio Einstellungen</string>
     <string name="error_fix_it">Repariere es</string>
-    <string name="error_tts_didnt_work">Ups!, die Sprache hat nicht funktioniert!</string>
+    <string name="error_tts_didnt_work">Ups, die Sprache hat nicht funktioniert!</string>
 </resources>

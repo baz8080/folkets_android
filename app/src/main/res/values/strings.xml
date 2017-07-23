@@ -47,11 +47,11 @@
     <string name="link_associations">ASSOCIATIONS</string>
     <string name="link_inflections">INFLECTIONS</string>
 
-    <string name="error_database_null">Oops!, seems like the database is missing.</string>
+    <string name="error_database_null">Oops, seems like the database is missing!</string>
     <string name="action_help">Help</string>
 
-    <string name="tts_volume_too_low">Oops!, The  volume is too low!</string>
+    <string name="tts_volume_too_low">Oops, The  volume is too low!</string>
     <string name="error_fix_it">Fix it</string>
-    <string name="error_tts_didnt_work">Oops!, the speech didn\'t work!</string>
+    <string name="error_tts_didnt_work">Oops, the speech didn\'t work!</string>
     <string name="error_audio_settings">Audio Settings</string>
 </resources>
