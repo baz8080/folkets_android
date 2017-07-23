@@ -20,11 +20,13 @@ import timber.log.Timber;
  */
 class FolketsTextToSpeech {
 
-    enum FolketsSpeechStatus {
+    enum SpeechStatus {
         ERROR_TTS_NULL,
         ERROR_LISTENER_NULL,
         ERROR_TTS_NOT_READY,
         ERROR_LANGUAGE_OR_PHRASE_MISSING,
+        ERROR_LANGUAGE_NOT_SUPPORTED,
+        ERROR_VOLUME_TOO_LOW,
         SUCCESS
     }
 
@@ -47,23 +49,33 @@ class FolketsTextToSpeech {
      *
      * @param language The language to speak in
      * @param phrase The phrase to speak
-     * @return The status of the speaking, will be {@link FolketsSpeechStatus#SUCCESS} if successful,
+     * @return The status of the speaking, will be {@link SpeechStatus#SUCCESS} if successful,
      *         otherwise an error has occured.
      */
-    @NonNull FolketsSpeechStatus speak(@Nullable Language language, @Nullable String phrase) {
+    @NonNull
+    SpeechStatus speak(@Nullable Language language, @Nullable String phrase) {
 
         if (textToSpeech == null) {
             Timber.d("Text to speech is null");
-            return FolketsSpeechStatus.ERROR_TTS_NULL;
+            return SpeechStatus.ERROR_TTS_NULL;
         } else if (listener == null) {
             Timber.d("Text to speech initialisation listener is null");
-            return FolketsSpeechStatus.ERROR_LISTENER_NULL;
+            return SpeechStatus.ERROR_LISTENER_NULL;
         } else if (!listener.isInitialised()) {
             Timber.d("Text to speech initialisation is not ready yet");
-            return FolketsSpeechStatus.ERROR_TTS_NOT_READY;
+            return SpeechStatus.ERROR_TTS_NOT_READY;
         } else if (language == null || StringUtils.isEmpty(phrase)) {
             Timber.d("Text to speech requires a valid language and phrase");
-            return FolketsSpeechStatus.ERROR_LANGUAGE_OR_PHRASE_MISSING;
+            return SpeechStatus.ERROR_LANGUAGE_OR_PHRASE_MISSING;
+        }
+
+        Locale wordLocale = language.getLocale();
+        int languageAvailability = textToSpeech.isLanguageAvailable(wordLocale);
+
+        if (languageAvailability == TextToSpeech.LANG_MISSING_DATA
+                        || languageAvailability == TextToSpeech.LANG_NOT_SUPPORTED) {
+            Timber.d("Language code %s is not supported on this device", language.getCode());
+            return SpeechStatus.ERROR_LANGUAGE_NOT_SUPPORTED;
         }
 
         Locale currentTtsLanguage = textToSpeech.getLanguage();
@@ -82,6 +94,6 @@ class FolketsTextToSpeech {
             Answers.getInstance().logCustom(event);
         }
 
-        return FolketsSpeechStatus.SUCCESS;
+        return SpeechStatus.SUCCESS;
     }
 }

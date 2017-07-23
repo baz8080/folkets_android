@@ -6,10 +6,9 @@ import org.junit.Test
 import org.mockito.ArgumentCaptor
 import org.mockito.ArgumentMatchers
 import org.mockito.Mock
-import org.mockito.Mockito
-import org.mockito.Mockito.*
+import org.mockito.Mockito.verify
+import org.mockito.Mockito.verifyZeroInteractions
 import org.mockito.MockitoAnnotations.initMocks
-import java.util.ArrayList
 
 
 /**
@@ -86,4 +85,54 @@ class MainPresenterUnitTests {
 
         assertThat(word.word).isEqualTo("Hjo")
     }
+
+    @Test
+    fun `onTtsResult calls view is null safe`() {
+        presenter.onTtsResult(null)
+    }
+
+    @Test
+    fun `onTtsResult calls view on low volume error`() {
+        presenter.onTtsResult(FolketsTextToSpeech.SpeechStatus.ERROR_VOLUME_TOO_LOW)
+        verify(view).showLowVolumeError()
+    }
+
+    @Test
+    fun `onTtsResult calls view language not supported error`() {
+        presenter.onTtsResult(FolketsTextToSpeech.SpeechStatus.ERROR_LANGUAGE_NOT_SUPPORTED)
+        verify(view).showLanguageNotSupportedError()
+    }
+
+    @Test
+    fun `onTtsResult calls generic tts error when status is ERROR_TTS_NULL`() {
+        presenter.onTtsResult(FolketsTextToSpeech.SpeechStatus.ERROR_TTS_NULL)
+        val statusCaptor = ArgumentCaptor.forClass(FolketsTextToSpeech.SpeechStatus::class.java)
+        verify(view).showGenericTTsError(statusCaptor.capture())
+        assertThat(statusCaptor.value).isEqualTo(FolketsTextToSpeech.SpeechStatus.ERROR_TTS_NULL)
+    }
+
+    @Test
+    fun `onTtsResult calls generic tts error when status is ERROR_LISTENER_NULL`() {
+        presenter.onTtsResult(FolketsTextToSpeech.SpeechStatus.ERROR_LISTENER_NULL)
+        val statusCaptor = ArgumentCaptor.forClass(FolketsTextToSpeech.SpeechStatus::class.java)
+        verify(view).showGenericTTsError(statusCaptor.capture())
+        assertThat(statusCaptor.value).isEqualTo(FolketsTextToSpeech.SpeechStatus.ERROR_LISTENER_NULL)
+    }
+
+    @Test
+    fun `onTtsResult calls generic tts error when status is ERROR_TTS_NOT_READY`() {
+        presenter.onTtsResult(FolketsTextToSpeech.SpeechStatus.ERROR_TTS_NOT_READY)
+        val statusCaptor = ArgumentCaptor.forClass(FolketsTextToSpeech.SpeechStatus::class.java)
+        verify(view).showGenericTTsError(statusCaptor.capture())
+        assertThat(statusCaptor.value).isEqualTo(FolketsTextToSpeech.SpeechStatus.ERROR_TTS_NOT_READY)
+    }
+
+    @Test
+    fun `onTtsResult calls generic tts error when status is ERROR_LANGUAGE_OR_PHRASE_MISSING`() {
+        presenter.onTtsResult(FolketsTextToSpeech.SpeechStatus.ERROR_LANGUAGE_OR_PHRASE_MISSING)
+        val statusCaptor = ArgumentCaptor.forClass(FolketsTextToSpeech.SpeechStatus::class.java)
+        verify(view).showGenericTTsError(statusCaptor.capture())
+        assertThat(statusCaptor.value).isEqualTo(FolketsTextToSpeech.SpeechStatus.ERROR_LANGUAGE_OR_PHRASE_MISSING)
+    }
+
 }

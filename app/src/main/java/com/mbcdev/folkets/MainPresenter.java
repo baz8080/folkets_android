@@ -107,6 +107,31 @@ class MainPresenter implements MainMvp.Presenter {
         }
     }
 
+    @Override
+    public void onTtsResult(FolketsTextToSpeech.SpeechStatus status) {
+        if (view != null && status != null) {
+
+            switch (status) {
+
+                case ERROR_TTS_NULL:
+                case ERROR_LISTENER_NULL:
+                case ERROR_TTS_NOT_READY:
+                case ERROR_LANGUAGE_OR_PHRASE_MISSING:
+                    view.showGenericTTsError(status);
+                    break;
+                case ERROR_LANGUAGE_NOT_SUPPORTED:
+                    view.showLanguageNotSupportedError();
+                    break;
+                case ERROR_VOLUME_TOO_LOW:
+                    view.showLowVolumeError();
+                    break;
+                case SUCCESS:
+                    break;
+            }
+
+        }
+    }
+
     @VisibleForTesting
     static class SearchCallback implements Callback<List<Word>> {
 

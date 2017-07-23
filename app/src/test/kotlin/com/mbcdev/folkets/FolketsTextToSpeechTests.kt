@@ -7,7 +7,6 @@ import org.junit.Test
 import org.mockito.*
 import org.mockito.Mockito.*
 import java.util.*
-import kotlin.collections.HashMap
 
 /**
  * Tests for [FolketsTextToSpeech]
@@ -34,7 +33,7 @@ class FolketsTextToSpeechTests {
         val ttsStatus = folketsTts.speak(null, null)
 
         assertThat(ttsStatus).isNotNull()
-        assertThat(ttsStatus).isEqualTo(FolketsTextToSpeech.FolketsSpeechStatus.ERROR_TTS_NULL)
+        assertThat(ttsStatus).isEqualTo(FolketsTextToSpeech.SpeechStatus.ERROR_TTS_NULL)
     }
 
     @Test
@@ -44,7 +43,7 @@ class FolketsTextToSpeechTests {
         val ttsStatus = folketsTts.speak(null, null)
 
         assertThat(ttsStatus).isNotNull()
-        assertThat(ttsStatus).isEqualTo(FolketsTextToSpeech.FolketsSpeechStatus.ERROR_LISTENER_NULL)
+        assertThat(ttsStatus).isEqualTo(FolketsTextToSpeech.SpeechStatus.ERROR_LISTENER_NULL)
         verifyZeroInteractions(mockedTts)
     }
 
@@ -56,7 +55,7 @@ class FolketsTextToSpeechTests {
         val ttsStatus = folketsTts.speak(null, null)
 
         assertThat(ttsStatus).isNotNull()
-        assertThat(ttsStatus).isEqualTo(FolketsTextToSpeech.FolketsSpeechStatus.ERROR_TTS_NOT_READY)
+        assertThat(ttsStatus).isEqualTo(FolketsTextToSpeech.SpeechStatus.ERROR_TTS_NOT_READY)
         verifyZeroInteractions(mockedTts)
     }
 
@@ -69,7 +68,7 @@ class FolketsTextToSpeechTests {
         val ttsStatus = folketsTts.speak(null, null)
 
         assertThat(ttsStatus).isNotNull()
-        assertThat(ttsStatus).isEqualTo(FolketsTextToSpeech.FolketsSpeechStatus.ERROR_LANGUAGE_OR_PHRASE_MISSING)
+        assertThat(ttsStatus).isEqualTo(FolketsTextToSpeech.SpeechStatus.ERROR_LANGUAGE_OR_PHRASE_MISSING)
         verifyZeroInteractions(mockedTts)
     }
 
@@ -82,7 +81,7 @@ class FolketsTextToSpeechTests {
         val ttsStatus = folketsTts.speak(null, "foto")
 
         assertThat(ttsStatus).isNotNull()
-        assertThat(ttsStatus).isEqualTo(FolketsTextToSpeech.FolketsSpeechStatus.ERROR_LANGUAGE_OR_PHRASE_MISSING)
+        assertThat(ttsStatus).isEqualTo(FolketsTextToSpeech.SpeechStatus.ERROR_LANGUAGE_OR_PHRASE_MISSING)
         verifyZeroInteractions(mockedTts)
     }
 
@@ -95,8 +94,36 @@ class FolketsTextToSpeechTests {
         val ttsStatus = folketsTts.speak(Language.ENGLISH, "")
 
         assertThat(ttsStatus).isNotNull()
-        assertThat(ttsStatus).isEqualTo(FolketsTextToSpeech.FolketsSpeechStatus.ERROR_LANGUAGE_OR_PHRASE_MISSING)
+        assertThat(ttsStatus).isEqualTo(FolketsTextToSpeech.SpeechStatus.ERROR_LANGUAGE_OR_PHRASE_MISSING)
         verifyZeroInteractions(mockedTts)
+    }
+
+    @Test
+    fun `speech does not work if the language is missing data`() {
+        val realListener = FolketsTextToSpeechInitListener()
+        realListener.onInit(TextToSpeech.SUCCESS)
+
+        `when`(mockedTts.isLanguageAvailable(ArgumentMatchers.any())).thenReturn(TextToSpeech.LANG_MISSING_DATA)
+
+        val folketsTts = FolketsTextToSpeech(mockedTts, realListener)
+        val ttsStatus = folketsTts.speak(Language.ENGLISH, "train")
+
+        assertThat(ttsStatus).isNotNull()
+        assertThat(ttsStatus).isEqualTo(FolketsTextToSpeech.SpeechStatus.ERROR_LANGUAGE_NOT_SUPPORTED)
+    }
+
+    @Test
+    fun `speech does not work if the language is not supported`() {
+        val realListener = FolketsTextToSpeechInitListener()
+        realListener.onInit(TextToSpeech.SUCCESS)
+
+        `when`(mockedTts.isLanguageAvailable(ArgumentMatchers.any())).thenReturn(TextToSpeech.LANG_NOT_SUPPORTED)
+
+        val folketsTts = FolketsTextToSpeech(mockedTts, realListener)
+        val ttsStatus = folketsTts.speak(Language.SWEDISH, "tåg")
+
+        assertThat(ttsStatus).isNotNull()
+        assertThat(ttsStatus).isEqualTo(FolketsTextToSpeech.SpeechStatus.ERROR_LANGUAGE_NOT_SUPPORTED)
     }
 
     @Test
@@ -110,7 +137,7 @@ class FolketsTextToSpeechTests {
         val ttsStatus = folketsTts.speak(Language.ENGLISH, "Ireland")
 
         assertThat(ttsStatus).isNotNull()
-        assertThat(ttsStatus).isEqualTo(FolketsTextToSpeech.FolketsSpeechStatus.SUCCESS)
+        assertThat(ttsStatus).isEqualTo(FolketsTextToSpeech.SpeechStatus.SUCCESS)
 
         val localeCaptor = ArgumentCaptor.forClass(Locale::class.java)
         verify(mockedTts, atMost(1)).language = localeCaptor.capture()
@@ -130,7 +157,7 @@ class FolketsTextToSpeechTests {
         val ttsStatus = folketsTts.speak(Language.SWEDISH, "Sverige")
 
         assertThat(ttsStatus).isNotNull()
-        assertThat(ttsStatus).isEqualTo(FolketsTextToSpeech.FolketsSpeechStatus.SUCCESS)
+        assertThat(ttsStatus).isEqualTo(FolketsTextToSpeech.SpeechStatus.SUCCESS)
 
         verify(mockedTts, atMost(0)).language = ArgumentMatchers.any()
     }
@@ -146,7 +173,7 @@ class FolketsTextToSpeechTests {
         val ttsStatus = folketsTts.speak(Language.ENGLISH, "Dublin")
 
         assertThat(ttsStatus).isNotNull()
-        assertThat(ttsStatus).isEqualTo(FolketsTextToSpeech.FolketsSpeechStatus.SUCCESS)
+        assertThat(ttsStatus).isEqualTo(FolketsTextToSpeech.SpeechStatus.SUCCESS)
 
         val localeCaptor = ArgumentCaptor.forClass(Locale::class.java)
         verify(mockedTts, atMost(1)).language = localeCaptor.capture()
@@ -166,7 +193,7 @@ class FolketsTextToSpeechTests {
         val ttsStatus = folketsTts.speak(Language.SWEDISH, "Göteborg")
 
         assertThat(ttsStatus).isNotNull()
-        assertThat(ttsStatus).isEqualTo(FolketsTextToSpeech.FolketsSpeechStatus.SUCCESS)
+        assertThat(ttsStatus).isEqualTo(FolketsTextToSpeech.SpeechStatus.SUCCESS)
 
         val phraseCaptor = ArgumentCaptor.forClass(String::class.java)
         val queueModeCaptor = ArgumentCaptor.forClass(Int::class.java)

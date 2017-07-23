@@ -68,6 +68,35 @@ interface MainMvp {
          * @param word the word to speak
          */
         void speak(Word word);
+
+        /**
+         * Shows a snackbar when the current language is not supported. This could be because
+         * the language is not supported by the TTS engine, or it is supported, but some required
+         * TTS data is missing.
+         */
+        void showLanguageNotSupportedError();
+
+        /**
+         * Shows a snackbar when the volume is too low to hear the tts
+         */
+        void showLowVolumeError();
+
+        /**
+         * Shows a generic error for tts.
+         * <p>
+         *     The error will be one of these types:
+         *
+         *     <ul>
+         *         <li>{@link FolketsTextToSpeech.SpeechStatus#ERROR_TTS_NULL}</li>
+         *         <li>{@link FolketsTextToSpeech.SpeechStatus#ERROR_LISTENER_NULL}</li>
+         *         <li>{@link FolketsTextToSpeech.SpeechStatus#ERROR_TTS_NOT_READY}</li>
+         *         <li>{@link FolketsTextToSpeech.SpeechStatus#ERROR_LANGUAGE_OR_PHRASE_MISSING}</li>
+         *     </ul>
+         * </p>
+         *
+         * @param status The status of the error
+         */
+        void showGenericTTsError(FolketsTextToSpeech.SpeechStatus status);
     }
 
     /**
@@ -112,5 +141,12 @@ interface MainMvp {
          * @param word The word that was selected
          */
         void onTtsRequested(Word word);
+
+        /**
+         * Called when text to speech has completed
+         *
+         * @param status the status of the text to speech
+         */
+        void onTtsResult(FolketsTextToSpeech.SpeechStatus status);
     }
 }

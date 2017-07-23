@@ -3,7 +3,6 @@ package com.mbcdev.folkets;
 import android.app.Application;
 import android.media.AudioManager;
 import android.speech.tts.TextToSpeech;
-import android.widget.Toast;
 
 import com.crashlytics.android.Crashlytics;
 import com.zendesk.logger.Logger;
@@ -39,6 +38,7 @@ public class MainApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+
         Fabric.with(this, new Crashlytics());
         instance = this;
 
@@ -78,17 +78,22 @@ public class MainApplication extends Application {
      *
      * @param word The word to speak with TTS
      */
-    public void speak(Word word) {
+    public FolketsTextToSpeech.SpeechStatus speak(Word word) {
 
         if (audioManager != null && audioManager.getStreamVolume(AudioManager.STREAM_MUSIC) == 0) {
-            Toast.makeText(this, R.string.tts_volume_too_low, Toast.LENGTH_SHORT).show();
+            return FolketsTextToSpeech.SpeechStatus.ERROR_VOLUME_TOO_LOW;
         }
 
+        FolketsTextToSpeech.SpeechStatus status =
+                FolketsTextToSpeech.SpeechStatus.ERROR_TTS_NULL;
+
         if (textToSpeech != null) {
-            textToSpeech.speak(
+            status = textToSpeech.speak(
                     Language.fromLanguageCode(word.getSourceLanguage()),
                     word.getWord()
             );
         }
+
+        return status;
     }
 }
