@@ -272,13 +272,29 @@ public class WordActivity extends AppCompatActivity {
     }
 
     private void onTtsRequested(Word word) {
+        FolketsTextToSpeech.SpeechStatus status = MainApplication.instance().speak(word);
 
-        if (word == null) {
-            Timber.d("TTS was requested for a null Word");
-            return;
+        if (status != null) {
+
+            switch (status) {
+
+                case ERROR_TTS_NULL:
+                case ERROR_LISTENER_NULL:
+                case ERROR_TTS_NOT_READY:
+                case ERROR_LANGUAGE_OR_PHRASE_MISSING:
+                    TextToSpeechSnackbarFactory.genericErrorSnackbar(container).show();
+                    break;
+                case ERROR_LANGUAGE_NOT_SUPPORTED:
+                    TextToSpeechSnackbarFactory.languageNotSupportedSnackbar(container, this).show();
+                    break;
+                case ERROR_VOLUME_TOO_LOW:
+                    TextToSpeechSnackbarFactory.lowVolumeSnackbar(container, this).show();
+                    break;
+                case SUCCESS:
+                    break;
+            }
+
         }
-
-        MainApplication.instance().speak(word);
     }
 
     private LinearLayout getWordSectionLayout() {

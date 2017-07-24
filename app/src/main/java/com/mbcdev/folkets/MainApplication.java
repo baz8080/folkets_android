@@ -84,6 +84,10 @@ public class MainApplication extends Application {
             return FolketsTextToSpeech.SpeechStatus.ERROR_VOLUME_TOO_LOW;
         }
 
+        if (word == null) {
+            return FolketsTextToSpeech.SpeechStatus.ERROR_LANGUAGE_OR_PHRASE_MISSING;
+        }
+
         FolketsTextToSpeech.SpeechStatus status =
                 FolketsTextToSpeech.SpeechStatus.ERROR_TTS_NULL;
 
