@@ -42,6 +42,7 @@ android {
     buildTypes {
         debug {
             applicationIdSuffix ".debug"
+            ext.enableCrashlytics = false
         }
 
         release {
@@ -58,6 +59,16 @@ android {
     sourceSets {
         test.java.srcDirs += 'src/test/kotlin'
         androidTest.java.srcDirs += 'src/androidTest/kotlin'
+    }
+
+    dexOptions {
+        if ('true' == System.getenv('CI')) {
+            println "Disabling preDexLibraries on CI environment"
+            preDexLibraries = false
+        } else {
+            println "Enabling preDexLibraries on non CI environment"
+            preDexLibraries = true
+        }
     }
 }
 

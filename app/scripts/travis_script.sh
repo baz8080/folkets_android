@@ -6,7 +6,7 @@ elif [ "$BUILD_GROUP" == "instrument" ]; then
 
     export ADB_INSTALL_TIMEOUT=30
 
-    ./gradlew :app:assembleDebug :app:assembleDebugAndroidTest
+    ./gradlew :app:assembleDebugAndroidTest
 
     which android-wait-for-emulator > /dev/null
 
