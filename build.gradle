@@ -5,6 +5,7 @@ buildscript {
     ext.support_library_version = '26.0.0-beta2'
     ext.mockito_version = '2.8.47'
     ext.truth_version = '0.34'
+    ext.junit_params_version = '1.1.0'
 
     repositories {
         jcenter()
