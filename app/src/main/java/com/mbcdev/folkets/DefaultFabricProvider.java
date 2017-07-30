@@ -3,6 +3,7 @@ package com.mbcdev.folkets;
 import android.support.annotation.NonNull;
 
 import com.crashlytics.android.answers.Answers;
+import com.crashlytics.android.answers.CustomEvent;
 
 import io.fabric.sdk.android.Fabric;
 
@@ -28,5 +29,18 @@ class DefaultFabricProvider implements FabricProvider {
     @Override
     public Answers getAnswers() {
         return answers;
+    }
+
+    @Override
+    public void logTextToSpeechEvent(@NonNull String languageCode, @NonNull String phrase) {
+        if (!isInitialised()) {
+            return;
+        }
+
+        CustomEvent textToSpeechEvent = new CustomEvent("TTS")
+                .putCustomAttribute("Language", languageCode)
+                .putCustomAttribute("Phrase", phrase);
+
+        answers.logCustom(textToSpeechEvent);
     }
 }
