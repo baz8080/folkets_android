@@ -23,4 +23,6 @@ interface FabricProvider {
      * @return an instance of Answers
      */
     @NonNull Answers getAnswers();
+
+    void logTextToSpeechEvent(@NonNull String languageCode, @NonNull String word);
 }

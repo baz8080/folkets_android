@@ -5,6 +5,7 @@ import android.media.AudioManager;
 import android.speech.tts.TextToSpeech;
 
 import com.crashlytics.android.Crashlytics;
+import com.crashlytics.android.answers.Answers;
 import com.zendesk.logger.Logger;
 import com.zendesk.sdk.model.access.AnonymousIdentity;
 import com.zendesk.sdk.network.impl.ZendeskConfig;
@@ -56,7 +57,9 @@ public class MainApplication extends Application {
          */
         FolketsTextToSpeechInitListener listener = new FolketsTextToSpeechInitListener();
         TextToSpeech tts = new TextToSpeech(this, listener);
-        textToSpeech = new FolketsTextToSpeech(tts, listener);
+        FabricProvider fabricProvider = new DefaultFabricProvider(Answers.getInstance());
+
+        textToSpeech = new FolketsTextToSpeech(tts, listener, fabricProvider);
 
         if (StringUtils.hasLengthMany(
                 getString(R.string.com_zendesk_sdk_url),
