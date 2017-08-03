@@ -17,7 +17,6 @@ import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.SearchView;
 
-import com.crashlytics.android.answers.Answers;
 import com.zendesk.sdk.support.SupportActivity;
 
 import java.util.List;
@@ -56,7 +55,7 @@ public class MainActivity extends AppCompatActivity implements MainMvp.View {
         presenter = new MainPresenter();
 
         FolketsDatabase database = new FolketsDatabase(this);
-        FabricProvider fabricProvider = new DefaultFabricProvider(Answers.getInstance());
+        FabricProvider fabricProvider = DefaultFabricProvider.instance();
         MainMvp.Model model = new MainModel(database, fabricProvider);
 
         presenter.init(this, model);

@@ -2,7 +2,6 @@ package com.mbcdev.folkets
 
 import android.speech.tts.TextToSpeech
 import com.crashlytics.android.answers.Answers
-import com.crashlytics.android.answers.CustomEvent
 import com.google.common.truth.Truth.assertThat
 import org.junit.Before
 import org.junit.Test
@@ -230,48 +229,12 @@ class FolketsTextToSpeechTests {
     }
 
     @Test
-    fun `answers event is not generated when Fabric is not initialised`() {
+    fun `fabric provider is called when speech is a success`() {
         val answers = mock(Answers::class.java)
-        val fabricProvider = spy(DefaultFabricProvider(answers))
-
-        `when`(fabricProvider.isInitialised).thenReturn(false)
-        `when`(fabricProvider.answers).thenReturn(answers)
-        `when`(mockedTts.language).thenReturn(Language.SWEDISH.locale)
-
-        val realListener = FolketsTextToSpeechInitListener()
-        realListener.onInit(TextToSpeech.SUCCESS)
-
-        val folketsTts = FolketsTextToSpeech(mockedTts, realListener, fabricProvider)
-        val ttsStatus = folketsTts.speak(Language.ENGLISH, "Dublin")
-
-        assertThat(ttsStatus).isNotNull()
-        assertThat(ttsStatus).isEqualTo(FolketsTextToSpeech.SpeechStatus.SUCCESS)
-
-        val languageCodeCaptor = ArgumentCaptor.forClass(String::class.java)
-        val phraseCaptor = ArgumentCaptor.forClass(String::class.java)
-
-        verify(fabricProvider).logTextToSpeechEvent(
-                languageCodeCaptor.capture(), phraseCaptor.capture())
-        verify(answers, never()).logCustom(any())
-
-        val languageCode = languageCodeCaptor.value
-        val phrase = phraseCaptor.value
-
-        assertThat(languageCode).isNotNull()
-        assertThat(languageCode).isEqualTo("en")
-
-        assertThat(phrase).isNotNull()
-        assertThat(phrase).isEqualTo("Dublin")
-
-    }
-
-    @Test
-    fun `answers event is generated when Fabric is initialised`() {
-        val answers = mock(Answers::class.java)
-        val fabricProvider = spy(DefaultFabricProvider(answers))
+        val populator = mock(EventPopulator::class.java)
+        val fabricProvider = spy(DefaultFabricProvider(answers, populator))
 
         `when`(fabricProvider.isInitialised).thenReturn(true)
-        `when`(fabricProvider.answers).thenReturn(answers)
         `when`(mockedTts.language).thenReturn(Language.SWEDISH.locale)
 
         val realListener = FolketsTextToSpeechInitListener()
@@ -283,24 +246,19 @@ class FolketsTextToSpeechTests {
         assertThat(ttsStatus).isNotNull()
         assertThat(ttsStatus).isEqualTo(FolketsTextToSpeech.SpeechStatus.SUCCESS)
 
-        val eventCaptor = ArgumentCaptor.forClass(CustomEvent::class.java)
         val languageCodeCaptor = ArgumentCaptor.forClass(String::class.java)
         val phraseCaptor = ArgumentCaptor.forClass(String::class.java)
 
         verify(fabricProvider).logTextToSpeechEvent(
                 languageCodeCaptor.capture(), phraseCaptor.capture())
-        verify(answers).logCustom(eventCaptor.capture())
 
         val languageCode = languageCodeCaptor.value
         val phrase = phraseCaptor.value
-        val event = eventCaptor.value
 
         assertThat(languageCode).isNotNull()
         assertThat(languageCode).isEqualTo("sv")
 
         assertThat(phrase).isNotNull()
         assertThat(phrase).isEqualTo("Göteborg")
-
-        assertThat(event).isNotNull()
     }
 }
