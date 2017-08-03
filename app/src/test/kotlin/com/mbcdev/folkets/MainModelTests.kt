@@ -1,7 +1,6 @@
 package com.mbcdev.folkets
 
 import com.crashlytics.android.answers.Answers
-import com.crashlytics.android.answers.SearchEvent
 import com.google.common.truth.Truth.assertThat
 import org.junit.Before
 import org.junit.Test
@@ -19,22 +18,24 @@ class MainModelTests {
 
     private var callback = object : Callback<List<Word>> {
         override fun onSuccess(result: List<Word>?) {
-            TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+            // Intentionally empty
         }
 
         override fun onError(errorType: ErrorType?) {
-            TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+            // Intentionally empty
         }
     }
 
     @Mock private lateinit var database: FolketsDatabase
-    @Mock private lateinit var fabricProvider: FabricProvider
     @Mock private lateinit var answers: Answers
+    @Mock private lateinit var populator: EventPopulator
+
+    private lateinit var fabricProvider: FabricProvider
 
     @Before
     fun setup() {
         MockitoAnnotations.initMocks(this)
-        `when`(fabricProvider.answers).thenReturn(answers)
+        fabricProvider = spy(DefaultFabricProvider(answers, populator))
     }
 
     @Test
@@ -47,30 +48,15 @@ class MainModelTests {
     }
 
     @Test
-    fun `answers is not called when Fabric is not initialised`() {
-        `when`(fabricProvider.isInitialised).thenReturn(false)
-        val model = MainModel(database, fabricProvider)
-
-        model.search("Barn", callback)
-
-        verifyZeroInteractions(answers)
-
-    }
-
-    @Test
-    fun `answers is called when Fabric is initialised`() {
+    fun `logSearchEvent is called when a search is made`() {
         `when`(fabricProvider.isInitialised).thenReturn(true)
         val model = MainModel(database, fabricProvider)
 
         model.search("Barn", callback)
 
-        verify(fabricProvider).answers
-
-        val searchEventCaptor = ArgumentCaptor.forClass(SearchEvent::class.java)
-        verify(answers).logSearch(searchEventCaptor.capture())
-
-        // Can't test for much more than this
-        assertThat(searchEventCaptor).isNotNull()
+        val queryCaptor = ArgumentCaptor.forClass(String::class.java)
+        verify(fabricProvider).logSearchEvent(queryCaptor.capture())
+        assertThat(queryCaptor.value).isEqualTo("Barn")
     }
 
 }
