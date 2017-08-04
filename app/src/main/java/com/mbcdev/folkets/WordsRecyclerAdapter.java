@@ -1,6 +1,7 @@
 package com.mbcdev.folkets;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.zendesk.logger.Logger;
 import com.zendesk.util.StringUtils;
 
 import java.util.List;
@@ -19,6 +21,8 @@ import java.util.List;
  */
 class WordsRecyclerAdapter extends RecyclerView.Adapter<WordsRecyclerAdapter.ViewHolder> {
 
+    private final static String LOG_TAG = "WordsRecyclerAdapter";
+
     private final List<Word> wordList;
     private final MainMvp.Presenter presenter;
 
@@ -26,8 +30,9 @@ class WordsRecyclerAdapter extends RecyclerView.Adapter<WordsRecyclerAdapter.Vie
      * Creates an instance with the given list of words
      *
      * @param wordList the list of words to display
+     * @param presenter the presenter to notify when actions happen
      */
-    WordsRecyclerAdapter(List<Word> wordList, MainMvp.Presenter presenter) {
+    WordsRecyclerAdapter(@NonNull List<Word> wordList, @NonNull MainMvp.Presenter presenter) {
         this.wordList = wordList;
         this.presenter = presenter;
     }
@@ -44,7 +49,18 @@ class WordsRecyclerAdapter extends RecyclerView.Adapter<WordsRecyclerAdapter.Vie
     @Override
     public void onBindViewHolder(final ViewHolder holder, final int position) {
 
+        if (holder == null) {
+            Logger.e(LOG_TAG, "The ViewHolder was null. Doing nothing.");
+            return;
+        }
+
         final Word word = wordList.get(position);
+
+        if (word == null) {
+            Logger.e(LOG_TAG, "The Word at position %d was null. Doing nothing.", position);
+            return;
+        }
+
         final Context context = holder.holderView.getContext();
 
         holder.holderView.setOnClickListener(new View.OnClickListener() {
