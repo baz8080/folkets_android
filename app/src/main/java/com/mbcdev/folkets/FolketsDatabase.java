@@ -1,7 +1,6 @@
 package com.mbcdev.folkets;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
@@ -34,8 +33,9 @@ class FolketsDatabase {
     private static final String FOLKETS_DB = "folkets.db";
 
     private SQLiteDatabase database;
-    private final SharedPreferences preferences;
+
     private final LruCache<String, List<Word>> cache;
+    private final FolketsPreferencesStorage preferencesStorage;
 
     /**
      * Creates an instance of the SQLiteOpenHelper. Intentionally private
@@ -44,8 +44,9 @@ class FolketsDatabase {
      */
     FolketsDatabase(@NonNull Context context) {
         Context applicationContext = context.getApplicationContext();
-        preferences = PreferenceManager.getDefaultSharedPreferences(applicationContext);
         cache = new LruCache<>(20);
+        preferencesStorage = new FolketsPreferencesStorage(
+                PreferenceManager.getDefaultSharedPreferences(applicationContext));
 
         synchronized (this) {
             initialiseDatabase(applicationContext);
@@ -53,7 +54,7 @@ class FolketsDatabase {
     }
 
     /**
-     * Searches the database for
+     * Searches the database. If a cached value is present then it will be returned.
      *
      * @param query The query. This will be appended with % to get inexact matches
      * @param callback The callback used to deliver the results.
@@ -68,25 +69,39 @@ class FolketsDatabase {
             return;
         }
 
+        final List<Word> cachedWords = cache.get(query);
+
+        if (cachedWords != null) {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    callback.onSuccess(cachedWords);
+                }
+            });
+
+            return;
+        }
+
+        // TODO move the search optimisation here, or decide that things are fast enough without
+
+        searchInternal(query, callback);
+    }
+
+    /**
+     * Searches the database
+     *
+     * @param query The query. This will be appended with % to get inexact matches
+     * @param callback The callback used to deliver the results.
+     */
+    private void searchInternal(
+            @NonNull final String query,
+            @NonNull final Callback<List<Word>> callback) {
+
         execute(new Runnable() {
             @Override
             public void run() {
 
-                final List<Word> cachedWords = cache.get(query);
-
-                if (cachedWords != null) {
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            callback.onSuccess(cachedWords);
-                        }
-                    });
-
-                    return;
-                }
-
                 Long time = System.currentTimeMillis();
-
 
                 Cursor cursor = database.rawQuery(
                         "select * from folkets_en_sv where word like ? union select * from folkets_sv_en where word like ? limit 0,75",
@@ -122,6 +137,7 @@ class FolketsDatabase {
         });
     }
 
+
     /**
      * Initialises the database.
      * <p>
@@ -146,7 +162,7 @@ class FolketsDatabase {
 
         if (file.exists()) {
             d("initialiseDatabase: DB already exists.");
-            String storedHash = preferences.getString("db_hash", "");
+            String storedHash = preferencesStorage.getDatabaseHash();
 
             try (InputStream inputStream = context.getResources().openRawResource(R.raw.folkets);
                  HashingSource hashingSource = HashingSource.md5(Okio.source(inputStream))) {
@@ -206,7 +222,7 @@ class FolketsDatabase {
 
             String hash = hashingSource.hash().hex();
             d("copyDbToStorage: Saving hash of db as %s", hash);
-            preferences.edit().putString("db_hash", hash).apply();
+            preferencesStorage.setDatabaseHash(hash);
             database = getDatabase(file);
 
         } catch (final IOException e) {

@@ -57,6 +57,7 @@ android {
     }
 
     sourceSets {
+        main.java.srcDirs += 'src/main/kotlin'
         test.java.srcDirs += 'src/test/kotlin'
         androidTest.java.srcDirs += 'src/androidTest/kotlin'
     }
@@ -78,6 +79,7 @@ dependencies {
     compile "com.android.support:design:$support_library_version"
     compile 'com.squareup.okio:okio:1.13.0'
     compile 'com.jakewharton.timber:timber:4.5.1'
+    compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
 
     testCompile 'junit:junit:4.12'
     testCompile "com.google.truth:truth:$truth_version"
