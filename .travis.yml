@@ -9,7 +9,7 @@ android:
   - tools
   - platform-tools
   - android-26
-  - build-tools-26.0.0
+  - build-tools-26.0.1
 before_script: ./app/scripts/travis_before_script.sh
 script: ./app/scripts/travis_script.sh
 after_failure:
