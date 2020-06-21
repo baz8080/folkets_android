@@ -15,15 +15,12 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.crashlytics.android.answers.Answers;
-import com.crashlytics.android.answers.ContentViewEvent;
 import com.zendesk.util.CollectionUtils;
 import com.zendesk.util.StringUtils;
 
 import java.util.List;
 import java.util.Locale;
 
-import io.fabric.sdk.android.Fabric;
 import timber.log.Timber;
 
 /**
@@ -257,18 +254,9 @@ public class WordActivity extends AppCompatActivity {
         }
     }
 
-    private void logWordViewedEvent(Word word) {
-
-        if (word == null || !Fabric.isInitialized()) {
-            return;
-        }
-
-        ContentViewEvent event = new ContentViewEvent()
-                .putContentName(word.getWord())
-                .putContentType(String.format(Locale.US, "%s word", word.getSourceLanguage()))
-                .putCustomAttribute("Types", WordType.formatWordTypesForDisplay(this, word.getWordTypes()));
-
-        Answers.getInstance().logContentView(event);
+    private void logWordViewedEvent(@NonNull Word word) {
+        FabricProvider fabricProvider = DefaultFabricProvider.instance();
+        fabricProvider.logWordViewedEvent(this, word);
     }
 
     private void onTtsRequested(Word word) {

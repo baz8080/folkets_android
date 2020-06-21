@@ -3,9 +3,15 @@
 set -e
 
 if [ "$BUILD_GROUP" == "instrument" ]; then
-    android-update-sdk --components=sys-img-armeabi-v7a-android-19 --accept-licenses='android-sdk-license-[0-9a-f]{8}'
-    echo no | android create avd --force -n test -t android-19 --abi armeabi-v7a --skin QVGA
-    emulator -avd test -no-audio -no-skin -netfast -no-window &
+
+    mkdir -p ${ANDROID_HOME}licenses
+    echo -e "\n8933bad161af4178b1185d1a37fbf41ea5269c55" > ${ANDROID_HOME}licenses/android-sdk-license
+
+    ${ANDROID_HOME}tools/bin/sdkmanager --channel=0 "system-images;android-19;default;armeabi-v7a" "emulator"
+
+    echo no | ${ANDROID_HOME}tools/bin/avdmanager create avd --force -n test --abi "armeabi-v7a" -k "system-images;android-19;default;armeabi-v7a" --device "3.2in QVGA (ADP2)"
+    ${ANDROID_HOME}emulator/emulator -avd test -no-audio -netfast -no-window &
+
 else
     echo "$BUILD_GROUP is unknown"
 fi

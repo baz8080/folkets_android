@@ -4,13 +4,10 @@ import android.speech.tts.TextToSpeech;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
-import com.crashlytics.android.answers.Answers;
-import com.crashlytics.android.answers.CustomEvent;
 import com.zendesk.util.StringUtils;
 
 import java.util.Locale;
 
-import io.fabric.sdk.android.Fabric;
 import timber.log.Timber;
 
 /**
@@ -30,18 +27,23 @@ class FolketsTextToSpeech {
         SUCCESS
     }
 
-    private FolketsTextToSpeechInitListener listener;
-    private TextToSpeech textToSpeech;
+    private final FolketsTextToSpeechInitListener listener;
+    private final TextToSpeech textToSpeech;
+    private final FabricProvider fabricProvider;
 
     /**
      * Creates an instance, wrapping the supplied TextToSpeech instance.
      *
      * @param textToSpeech The TextToSpeech object to wrap
      * @param listener The listener used to determine whether the TextToSpeech object is initialised
+     * @param fabricProvider The provider of crashlytics and answers implementations
      */
-    FolketsTextToSpeech(TextToSpeech textToSpeech, FolketsTextToSpeechInitListener listener) {
+    FolketsTextToSpeech(
+            TextToSpeech textToSpeech, FolketsTextToSpeechInitListener listener,
+            FabricProvider fabricProvider) {
         this.textToSpeech = textToSpeech;
         this.listener = listener;
+        this.fabricProvider = fabricProvider;
     }
 
     /**
@@ -86,12 +88,8 @@ class FolketsTextToSpeech {
 
         textToSpeech.speak(phrase, TextToSpeech.QUEUE_FLUSH, null);
 
-        if (Fabric.isInitialized()) {
-            CustomEvent event = new CustomEvent("TTS")
-                    .putCustomAttribute("Language", language.getCode())
-                    .putCustomAttribute("Phrase", phrase);
-
-            Answers.getInstance().logCustom(event);
+        if (fabricProvider != null) {
+            fabricProvider.logTextToSpeechEvent(language.getCode(), phrase);
         }
 
         return SpeechStatus.SUCCESS;

@@ -56,7 +56,9 @@ public class MainApplication extends Application {
          */
         FolketsTextToSpeechInitListener listener = new FolketsTextToSpeechInitListener();
         TextToSpeech tts = new TextToSpeech(this, listener);
-        textToSpeech = new FolketsTextToSpeech(tts, listener);
+        FabricProvider fabricProvider = DefaultFabricProvider.instance();
+
+        textToSpeech = new FolketsTextToSpeech(tts, listener, fabricProvider);
 
         if (StringUtils.hasLengthMany(
                 getString(R.string.com_zendesk_sdk_url),

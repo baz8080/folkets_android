@@ -1,6 +1,7 @@
 package com.mbcdev.folkets
 
 import android.speech.tts.TextToSpeech
+import com.crashlytics.android.answers.Answers
 import com.google.common.truth.Truth.assertThat
 import org.junit.Before
 import org.junit.Test
@@ -28,7 +29,7 @@ class FolketsTextToSpeechTests {
 
     @Test
     fun `speech does not work if the underlying TTS is null`() {
-        val folketsTts = FolketsTextToSpeech(null, null)
+        val folketsTts = FolketsTextToSpeech(null, null, null)
 
         val ttsStatus = folketsTts.speak(null, null)
 
@@ -38,7 +39,7 @@ class FolketsTextToSpeechTests {
 
     @Test
     fun `speech does not work if the underying TTS has no onInit listener`() {
-        val folketsTts = FolketsTextToSpeech(mockedTts, null)
+        val folketsTts = FolketsTextToSpeech(mockedTts, null, null)
 
         val ttsStatus = folketsTts.speak(null, null)
 
@@ -50,7 +51,7 @@ class FolketsTextToSpeechTests {
     @Test
     fun `speech does not work if the onInit listener is not ready`() {
         val realListener = FolketsTextToSpeechInitListener()
-        val folketsTts = FolketsTextToSpeech(mockedTts, realListener)
+        val folketsTts = FolketsTextToSpeech(mockedTts, realListener, null)
 
         val ttsStatus = folketsTts.speak(null, null)
 
@@ -63,7 +64,7 @@ class FolketsTextToSpeechTests {
     fun `speech does not work if the language and phrase are missing`() {
         val realListener = FolketsTextToSpeechInitListener()
         realListener.onInit(TextToSpeech.SUCCESS)
-        val folketsTts = FolketsTextToSpeech(mockedTts, realListener)
+        val folketsTts = FolketsTextToSpeech(mockedTts, realListener, null)
 
         val ttsStatus = folketsTts.speak(null, null)
 
@@ -76,7 +77,7 @@ class FolketsTextToSpeechTests {
     fun `speech does not work if the language is missing`() {
         val realListener = FolketsTextToSpeechInitListener()
         realListener.onInit(TextToSpeech.SUCCESS)
-        val folketsTts = FolketsTextToSpeech(mockedTts, realListener)
+        val folketsTts = FolketsTextToSpeech(mockedTts, realListener, null)
 
         val ttsStatus = folketsTts.speak(null, "foto")
 
@@ -89,7 +90,7 @@ class FolketsTextToSpeechTests {
     fun `speech does not work if the phrase is missing`() {
         val realListener = FolketsTextToSpeechInitListener()
         realListener.onInit(TextToSpeech.SUCCESS)
-        val folketsTts = FolketsTextToSpeech(mockedTts, realListener)
+        val folketsTts = FolketsTextToSpeech(mockedTts, realListener, null)
 
         val ttsStatus = folketsTts.speak(Language.ENGLISH, "")
 
@@ -105,7 +106,7 @@ class FolketsTextToSpeechTests {
 
         `when`(mockedTts.isLanguageAvailable(ArgumentMatchers.any())).thenReturn(TextToSpeech.LANG_MISSING_DATA)
 
-        val folketsTts = FolketsTextToSpeech(mockedTts, realListener)
+        val folketsTts = FolketsTextToSpeech(mockedTts, realListener, null)
         val ttsStatus = folketsTts.speak(Language.ENGLISH, "train")
 
         assertThat(ttsStatus).isNotNull()
@@ -119,7 +120,7 @@ class FolketsTextToSpeechTests {
 
         `when`(mockedTts.isLanguageAvailable(ArgumentMatchers.any())).thenReturn(TextToSpeech.LANG_NOT_SUPPORTED)
 
-        val folketsTts = FolketsTextToSpeech(mockedTts, realListener)
+        val folketsTts = FolketsTextToSpeech(mockedTts, realListener, null)
         val ttsStatus = folketsTts.speak(Language.SWEDISH, "tåg")
 
         assertThat(ttsStatus).isNotNull()
@@ -132,7 +133,7 @@ class FolketsTextToSpeechTests {
 
         val realListener = FolketsTextToSpeechInitListener()
         realListener.onInit(TextToSpeech.SUCCESS)
-        val folketsTts = FolketsTextToSpeech(mockedTts, realListener)
+        val folketsTts = FolketsTextToSpeech(mockedTts, realListener, null)
 
         val ttsStatus = folketsTts.speak(Language.ENGLISH, "Ireland")
 
@@ -152,7 +153,7 @@ class FolketsTextToSpeechTests {
 
         val realListener = FolketsTextToSpeechInitListener()
         realListener.onInit(TextToSpeech.SUCCESS)
-        val folketsTts = FolketsTextToSpeech(mockedTts, realListener)
+        val folketsTts = FolketsTextToSpeech(mockedTts, realListener, null)
 
         val ttsStatus = folketsTts.speak(Language.SWEDISH, "Sverige")
 
@@ -168,7 +169,7 @@ class FolketsTextToSpeechTests {
 
         val realListener = FolketsTextToSpeechInitListener()
         realListener.onInit(TextToSpeech.SUCCESS)
-        val folketsTts = FolketsTextToSpeech(mockedTts, realListener)
+        val folketsTts = FolketsTextToSpeech(mockedTts, realListener, null)
 
         val ttsStatus = folketsTts.speak(Language.ENGLISH, "Dublin")
 
@@ -188,7 +189,7 @@ class FolketsTextToSpeechTests {
 
         val realListener = FolketsTextToSpeechInitListener()
         realListener.onInit(TextToSpeech.SUCCESS)
-        val folketsTts = FolketsTextToSpeech(mockedTts, realListener)
+        val folketsTts = FolketsTextToSpeech(mockedTts, realListener, null)
 
         val ttsStatus = folketsTts.speak(Language.SWEDISH, "Göteborg")
 
@@ -209,5 +210,55 @@ class FolketsTextToSpeechTests {
 
         val params = paramsCaptor.value
         assertThat(params).isNull()
+    }
+
+    @Test
+    fun `fabric provider is null-safe when speech is successful`() {
+        `when`(mockedTts.language).thenReturn(Language.SWEDISH.locale)
+
+        val realListener = FolketsTextToSpeechInitListener()
+        realListener.onInit(TextToSpeech.SUCCESS)
+        val folketsTts = FolketsTextToSpeech(mockedTts, realListener, null)
+
+        folketsTts.speak(Language.SWEDISH, "Göteborg")
+
+        val ttsStatus = folketsTts.speak(Language.SWEDISH, "Göteborg")
+
+        assertThat(ttsStatus).isNotNull()
+        assertThat(ttsStatus).isEqualTo(FolketsTextToSpeech.SpeechStatus.SUCCESS)
+    }
+
+    @Test
+    fun `fabric provider is called when speech is a success`() {
+        val answers = mock(Answers::class.java)
+        val populator = mock(EventPopulator::class.java)
+        val fabricProvider = spy(DefaultFabricProvider(answers, populator))
+
+        `when`(fabricProvider.isInitialised).thenReturn(true)
+        `when`(mockedTts.language).thenReturn(Language.SWEDISH.locale)
+
+        val realListener = FolketsTextToSpeechInitListener()
+        realListener.onInit(TextToSpeech.SUCCESS)
+
+        val folketsTts = FolketsTextToSpeech(mockedTts, realListener, fabricProvider)
+        val ttsStatus = folketsTts.speak(Language.SWEDISH, "Göteborg")
+
+        assertThat(ttsStatus).isNotNull()
+        assertThat(ttsStatus).isEqualTo(FolketsTextToSpeech.SpeechStatus.SUCCESS)
+
+        val languageCodeCaptor = ArgumentCaptor.forClass(String::class.java)
+        val phraseCaptor = ArgumentCaptor.forClass(String::class.java)
+
+        verify(fabricProvider).logTextToSpeechEvent(
+                languageCodeCaptor.capture(), phraseCaptor.capture())
+
+        val languageCode = languageCodeCaptor.value
+        val phrase = phraseCaptor.value
+
+        assertThat(languageCode).isNotNull()
+        assertThat(languageCode).isEqualTo("sv")
+
+        assertThat(phrase).isNotNull()
+        assertThat(phrase).isEqualTo("Göteborg")
     }
 }

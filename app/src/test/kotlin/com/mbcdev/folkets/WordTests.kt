@@ -2,8 +2,11 @@ package com.mbcdev.folkets
 
 import android.database.Cursor
 import com.google.common.truth.Truth.assertThat
+import junitparams.JUnitParamsRunner
+import junitparams.Parameters
 import org.junit.Before
 import org.junit.Test
+import org.junit.runner.RunWith
 import org.mockito.Mockito.`when`
 import org.mockito.Mockito.mock
 
@@ -12,6 +15,7 @@ import org.mockito.Mockito.mock
  *
  * Created by barry on 14/10/2016.
  */
+@RunWith(JUnitParamsRunner::class)
 class WordTests {
 
     lateinit var mockCursor: Cursor
@@ -301,4 +305,40 @@ class WordTests {
         val word = Word.getTestingWord("petaQ", "tlh")
         assertThat(word.flag).isEqualTo(R.drawable.flag_uk)
     }
+
+    @Test
+    fun `source language should be en`() {
+        val word = Word.getTestingWord("Chicken", "en")
+        assertThat(word.sourceLanguage).isEqualTo("en")
+    }
+
+    @Test
+    fun `source language should be sv`() {
+        val word = Word.getTestingWord("Kyckling", "sv")
+        assertThat(word.sourceLanguage).isEqualTo("sv")
+    }
+
+    @Test
+    @Parameters(
+            "a,a,0",
+            "a,A,0",
+            "A,a,0",
+            "A,A,0",
+            "a,b,-1",
+            "a,B,-1",
+            "A,b,-1",
+            "A,B,-1",
+            "b,a,1",
+            "b,A,1",
+            "B,a,1",
+            "B,A,1"
+    )
+    fun `words should be sorted alphabetically and ignoring case`(
+            firstString : String, secondString : String, expectedOrder : Int) {
+        val firstWord = Word.getTestingWord(firstString, "en")
+        val secondWord = Word.getTestingWord(secondString, "en")
+
+        assertThat(firstWord.compareTo(secondWord)).isEqualTo(expectedOrder)
+    }
+
 }
